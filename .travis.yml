@@ -24,19 +24,14 @@ services:
 matrix:
     fast_finish: true
 
-
-before_install:
-  - export DJANGO_SETTINGS_MODULE=your_project.settings
-  - export PYTHONPATH=$HOME/builds/PNNutkung/Coursing-Field
-  - export PIP_USE_MIRRORS=true
-
 install:
-    - travis_retry pip install $DJANGO
-    - if [[ "$DB_ENGINE" == "django.db.backends.mysql" ]] ; then travis_retry pip install mysqlclient ; fi
-    - travis_retry pip install -e .
+    - pip install -r dev-requirements.txt
+
+before_script:
+  - if [[ "$DB_ENGINE" == "django.db.backends.mysql" ]] ; then mysql -e 'create database test_project'; fi
 
 script:
-    - python manage.py test --noinput
+    - python manage.py test
 
 notifications:
     email: "pipatpol.t@ku.th"
