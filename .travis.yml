@@ -36,7 +36,6 @@ before_script:
 
 script:
     - python manage.py test
-    - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then bash ./travis/run_on_pull_requests; fi'
 
 notifications:
     email: "pipatpol.t@ku.th"
