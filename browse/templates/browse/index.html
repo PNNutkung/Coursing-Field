@@ -5,7 +5,13 @@
         <title>Browse courses</title>
     </head>
     <body>
-        {% if course is None %}
+        {% if latest_course_list %}
+            <ul>
+                {% for course in latest_course_list %}
+                <li>courses.name</li>
+                {% endfor %}
+            </ul>
+        {% else %}
             <p>
                 <strong>No available course.</strong>
             </p>
