@@ -79,7 +79,7 @@ def browseIndex(req):
         'courseThumnail': 'https://upic.me/i/jh/62untitled.jpg',
         'courseRating': 3
     }]
-    paginator = Paginator(example_list, 3)
+    paginator = Paginator(example_list, 4)
     page = req.GET.get('page')
     try:
         courses = paginator.page(page)
