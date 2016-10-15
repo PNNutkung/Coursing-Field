@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404, render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.http import HttpResponse
 from django.views import generic
@@ -10,4 +10,8 @@ class IndexView(generic.ListView):
 
     def get_queryset(self):
         '''Return the last courses.'''
-        return None
+        return [{
+            'courseName': 'Machine Learning',
+            'courseThumnail': 'http://i.imgur.com/TGApdwy.jpg',
+            'courseRating': 4.5
+            }]
