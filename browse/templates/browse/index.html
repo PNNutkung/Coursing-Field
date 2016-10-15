@@ -8,7 +8,9 @@
         {% if latest_course_list %}
             <ul>
                 {% for course in latest_course_list %}
-                <li>courses.name</li>
+                <li>{{course.courseName}}</li>
+                <li><img src="{{course.courseThumnail}}" alt="{{course.courseName}} Thumbnail" /></li>
+                <li>{{course.courseRating}}</li>
                 {% endfor %}
             </ul>
         {% else %}
