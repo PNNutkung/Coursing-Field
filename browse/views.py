@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.http import HttpResponse
 from django.views import generic
-from django.core.paginator import Paginator
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
@@ -88,4 +87,4 @@ def browseIndex(req):
     except EmptyPage:
         courses = paginator.page(paginator.num_pages)
 
-    return render(req ,'browse/index.html', {'pageTitle': 'Browse courses','courses': courses, 'pageRange': paginator.page_range})
+    return render(req ,'browse/index.html', {'pageTitle': 'Browse courses', 'browseFilter': 'All courses','courses': courses, 'pageRange': paginator.page_range})
