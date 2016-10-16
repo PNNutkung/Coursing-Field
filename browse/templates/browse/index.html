@@ -6,14 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{pageTitle}}</title>
     <!-- Latest compiled and minified CSS -->
+    <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <style media="screen">
-    .center-cropped {
-        height: 150px;
-        width: auto;
-        background-position: center center;
-        background-size: cover;
-    }
+        .center-cropped {
+            height: 150px;
+            width: auto;
+            background-position: center center;
+            background-size: cover;
+        }
     </style>
 </head>
 
@@ -86,9 +93,11 @@
             </div>
         </nav>
         {% else %}
-        <p>
-            <strong>No available course.</strong>
-        </p>
+        <div class="row center-block">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <h2><strong>No available course.</strong></h2>
+            </div>
+        </div>
         {% endif %}
     </div>
 </body>
