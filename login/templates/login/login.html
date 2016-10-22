@@ -11,14 +11,21 @@
 
 <body>
     <div class="login-page">
-      <div class="form">
-        <form class="login-form">
-          <input type="text" placeholder="username"/>
-          <input type="password" placeholder="password"/>
-          <button>login</button>
-          <p class="message">Not registered? <a href="#">Create an account</a></p>
+      <h2>Login</h2> {% if error_message %}
+        <p><strong>{{ error_message }}</strong></p> {% endif %}
+        <form action="{% url 'login:login' %}" method="post">
+            {% csrf_token %}
+            <div class="container">
+                <label><b>Username</b></label>
+                <input type="text" placeholder="Enter Username" name="username" required>
+
+                <label><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" name="password" required>
+
+                <button type="submit">Login</button>
+            </div>
         </form>
-      </div>
+        <b<p class="message">Not registered? <a href="#">Create an account</a></p>
     </div>
 </body>
 
