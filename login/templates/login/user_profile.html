@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      {% load static %}
+      <link rel="stylesheet" type="text/css" href="{% static 'login/style.css' %}" />
+        <meta charset="utf-8">
+        <title>Register</title>
+    </head>
+    <body>
+        <h2>User profile</h2>
+        {% if error_message %}<p><strong>{{ error_message }}</strong></p> {% endif %}
+
+
+            {% csrf_token %}
+            <div class="container">
+
+              {{ user.username }} 
+              {{ user.email }}
+              {{ user.first_name }}
+              {{ user.last_name }}
+            </div>
+
+    </body>
+</html>

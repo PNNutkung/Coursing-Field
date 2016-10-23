@@ -1,9 +1,12 @@
 from django.shortcuts import render
 from django.shortcuts import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login as auth_login, logout
+import re
 
 # Create your views here.
-
+user = None
 def index(req):
     return render(req, 'login/login.html')
 
@@ -11,12 +14,14 @@ def index(req):
 def login(req):
     username = req.POST['username']
     password = req.POST['password']
-
-    """if username == "admin":
-        return render(req, 'login.html')
+    global user
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        auth_login(req, user)
+        return HttpResponseRedirect('/login/profile/')
     else:
-        return render(req, 'login/login.html', { 'error_message': 'Invalid username or password'})"""
-    return render(req, 'login/login.html', { 'error_message': 'Invalid username or password'})
+        return render(req, 'login/login.html', { 'error_message': 'Invalid username or password'})
+    #return render(req, 'login/login.html', { 'error_message': 'Invalid username or password'})
     #return HttpResponseRedirect('/login/')
 
 def register(req):
@@ -31,10 +36,10 @@ def create_new_user(req):
     bday = req.POST['bday']
     gender = req.POST['gender']
     user = None
-    return render(req, 'login/login.html', {
+    """return render(req, 'login/login.html', {
         'error_message': 'Register successfully.'
-    })
-    """
+    })"""
+
     try:
         user = User.objects.get(username=username)
     except(User.DoesNotExist):
@@ -46,12 +51,17 @@ def create_new_user(req):
             return render(req, 'login/register.html', {
                 'error_message': 'Your password is not match.'
             })
-        elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
+        elif not re.match(r'[^@]+@[^@]+\.[^@]+', username):
             return render(req, 'login/register.html', {
                 'error_message': 'Your email is not valid.'
             })
         else:
-            user = User.objects.create_user(username, email=email, password=password, first_name=firstname, last_name=lastname)
-            return render(req, 'login/index.html', {
+            user = User.objects.create_user(username, email=username, password=password, first_name=firstname, last_name=lastname)
+            return render(req, 'login/login.html', {
                 'error_message': 'Register successfully.'
-            })"""
+            })
+
+def get_user_profile(request):
+    global user
+    print (user.username)
+    return render(request, 'login/user_profile.html', {'user':user})
