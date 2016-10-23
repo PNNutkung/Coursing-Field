@@ -1,9 +1,12 @@
 from django.shortcuts import render
+from django.shortcuts import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 
 # Create your views here.
 
 def index(req):
     return render(req, 'login/login.html')
+
 
 def login(req):
     username = req.POST['username']
@@ -13,6 +16,8 @@ def login(req):
         return render(req, 'login.html')
     else:
         return render(req, 'login/login.html', { 'error_message': 'Invalid username or password'})"""
+    return render(req, 'login/login.html', { 'error_message': 'Invalid username or password'})
+    #return HttpResponseRedirect('/login/')
 
 def register(req):
     return render(req, 'login/register.html')
