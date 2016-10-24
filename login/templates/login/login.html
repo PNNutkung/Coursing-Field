@@ -13,7 +13,7 @@
     <div class="login-page">
       <h2>Login</h2> {% if error_message %}
         <p><strong>{{ error_message }}</strong></p> {% endif %}
-        <form action="{% url 'login:login' %}" method="post">
+        <form action="/login/do_login/" method="post">
             {% csrf_token %}
             <div class="container">
                 <label><b>Username</b></label>

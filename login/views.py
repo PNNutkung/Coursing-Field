@@ -6,23 +6,21 @@ from django.contrib.auth import authenticate, login as auth_login, logout
 import re
 
 # Create your views here.
-user = None
 def index(req):
-    return render(req, 'login/login.html')
+    return render(req,'login/login.html')
 
 
-def login(req):
+def do_login(req):
     username = req.POST['username']
     password = req.POST['password']
-    global user
+    #return  redirect('login/profile/'+username)
     user = authenticate(username=username, password=password)
     if user is not None:
         auth_login(req, user)
-        return HttpResponseRedirect('/login/profile/')
+        return  HttpResponseRedirect('/login/profile/')
     else:
-        return render(req, 'login/login.html', { 'error_message': 'Invalid username or password'})
-    #return render(req, 'login/login.html', { 'error_message': 'Invalid username or password'})
-    #return HttpResponseRedirect('/login/')
+        return HttpResponseRedirect('/login/', { 'error_message': 'Invalid username or password'})
+
 
 def register(req):
     return render(req, 'login/register.html')
@@ -36,9 +34,6 @@ def create_new_user(req):
     bday = req.POST['bday']
     gender = req.POST['gender']
     user = None
-    """return render(req, 'login/login.html', {
-        'error_message': 'Register successfully.'
-    })"""
 
     try:
         user = User.objects.get(username=username)
@@ -61,7 +56,6 @@ def create_new_user(req):
                 'error_message': 'Register successfully.'
             })
 
-def get_user_profile(request):
-    global user
-    print (user.username)
-    return render(request, 'login/user_profile.html', {'user':user})
+def profile(req):
+    user = req.user
+    return render(req, 'login/user_profile.html', {'user':user})
