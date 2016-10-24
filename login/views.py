@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
+from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout
 import re
 
@@ -19,7 +20,8 @@ def do_login(req):
         auth_login(req, user)
         return  HttpResponseRedirect('/login/profile/')
     else:
-        return HttpResponseRedirect('/login/', { 'error_message': 'Invalid username or password'})
+        messages.add_message(req, messages.INFO, 'Invalid username or password')
+        return HttpResponseRedirect('/login/')
 
 
 def register(req):
@@ -52,9 +54,8 @@ def create_new_user(req):
             })
         else:
             user = User.objects.create_user(username, email=username, password=password, first_name=firstname, last_name=lastname)
-            return render(req, 'login/login.html', {
-                'error_message': 'Register successfully.'
-            })
+            messages.add_message(req, messages.INFO, 'Registeration successfully')
+            return HttpResponseRedirect('/login/')
 
 def profile(req):
     user = req.user
