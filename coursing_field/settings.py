@@ -84,7 +84,14 @@ DATABASES = {
         'OPTIONS': {
             'read_default_file': './my.cnf',
         },
-    }
+    },
+    'test': {
+        'ENGINE': 'django.db.backends.mysql',
+        'OPTIONS': {
+            'read_default_file': './test.cnf',
+            'TEST_NAME': 'auto_tests',
+        },
+    },
 }
 
 
