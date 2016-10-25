@@ -36,11 +36,13 @@
 
 <body>
     <div class="container">
-        {% if errorMessage %}
-            <h2>{{errorMessage}}</h2>
-        {% endif %}
         <h2><strong>Create New Course</strong></h2>
-        <form action="{% url 'course:createNewCourse' %}" method="post" role="form" enctype="multipart/form-data">
+        {% if message %}
+            <div class="alert {% if success %}alert-success{% elif not success %}alert-danger{% endif %}" role="alert">
+                <h3>{{message}}</h3>
+            </div>
+        {% endif %}
+        <form action="{% url 'course:createCourse' %}" method="post" role="form" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-group">
                 <label for="courseName" class="control-label">Course Name:</label>
@@ -61,7 +63,7 @@
             </div>
             <div class="form-group">
                 <label for="courseThumbnail">Course Thumbnails:</label>
-                <input id="courseThumbnail" type="file" name="courseThumbnail" class="from-control" required>
+                <input id="courseThumbnail" type="file" name="courseThumbnail" class="from-control" accept="image/*" required>
             </div>
             <div class="form-group">
                 <label for="coursePrice">Course Price:</label>
