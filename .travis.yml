@@ -1,41 +1,29 @@
-#   A basic travis.yml boilerplate for Django projects
-#
-#   The set-up assumes a postgreSQL database.
-#
-#   Replace the following variables in the code:
-# * your_project_settings
-# * your_github_username
-# * your_repo
-
 language: python
 sudo: false
 python:
-  - "3.5"
+- '3.5'
 cache:
   directories:
-    - $HOME/.cache/pip
-
+  - "$HOME/.cache/pip"
 env:
+  matrix:
   - DJANGO=1.10.1 DB_ENGINE="django.db.backends.mysql" DB_NAME="test_project" DB_USER="travis"
-
+  - secure: WgOZzEMriioqDKKx+1rk33QuJKiUFVI3kZkx/+jBkG0CnXcE3/9SqJiy7Gz1Qxqa5aqc7hkdd8ra/2DrL8pOeQxSWbEi60ItHU5fC22BRdfJkIAgkdo9BDeEm5pWT+bxBIXSHlvyx064fNEX4ivxelr8CVjKbYTy4G5gsGVNQCvMc6GaHxooI8a/a0iSWkS9zf0uXdkZ3LCA6lP7Xm//dwOPT45h+xt3pWYnrnfayb0iFlXP0hFHfvB3QB2UD2y2c2DtCkbM8Ep2+k8fSs3GmwRc0yZmkEQjIJz/4q5yeSXmakqQqwpciJ/rlWROj1m2DywNnjVyTtaXVBOjtEGr2NUuQdbXiW5js3F81kIRY/WVp86E4eImHqYTnKHtvoC9jPdL3owdxiZwuW14gnpL77ljqU50VYhy2T9GdAJkPLjK2+TOduqxVAamYXwVN4rLDg+bnD9FiS2ee9xxPsLarctQF4KteJi4dfauQ9aVqWLFDiuHPb0XXdAozjHzap8gCx7783hmIFwSCOHDcDAxIMnnirVz60SML5WfukPGVUvQTIgO89fQ/KN5tTka7ojLg/nekqmNitZmzjOUycBUJW7Avpfd0nNcytUEyZkh2jpUiEvW6wWr1QvyYBj7QgYY8DQuKzjoZyMJ+J940AtniIVAXCrb5woOdnos8cdltWU=
+  - secure: dIiVg2HV4mXBfv5+xsbo9tgsW9j8JZDpcHO2mvs4MRZp9m59Df1bMFlCOUUHfFkt2hY0Fgv9+LmbT83qaxNDduEFxSqwUi7uqN9yh18jdXJSzpmBudTkWS8deWOY3HGPCdZQ0jk0i92MTMAmQHvnE95ub702lyQNa0jOtahhNiXw5HmId+UdL0tOr42tlWFFFMp0kPk8X1hcZqSzim9+S/c7XefihFPD4pTe1PfGqn1vEGl79e/qDq9m1LuyiK7HExBL/knhReosTMCBP2oW6TrzwMO8rb5Gib3K2ryFWfztawQ831Blyo4wQQ6eQuyB7XoY8EtpWbXfiW5x83fVNPVbTtZYUn+FpIIJ/D2dmh/7yzkpUsVINA9eCLpySaJd7uUM25fy8j9z4ukVNh+4NGLT7nNEwfXdoLzZzJHH1mpmi+Zf57OflMHMBwAZ7c8Qe5F3lWrUqIKo/zRczDdItW951mvFbOiu0+A7O72X9GRtvM39TM7JbW+AK4sHsuO0nvxA27xzd0/mDJp65HnE5s9jMwVAtdxSSEPWrlQaZPyqlE7PTryxAXhIH1WYaKSGiQOSH5wWj4lXc9heoD98AUo5e8MCI6ZTDF3fPotR6uKoqtBe3njHEB8js2RweKwBYJtq3MH0F8jYelAHfaQcmYkpGPV0dJNkcmvnzwcT2RQ=
+  - secure: mpFN57RrfU+LhwMjJhud0EXsgCsHh2U3LnfFCItYG4BJXJRCm7NLnfWVixGLuvwGMOM4LQFDqcNb6DeDoNEcdngqV5xzCroEwLT6mMPeJcvT1I70BlvrMokvA/cfB68Pvqu/WG+dUba/8d+JjcXgSZg1RjSV/3HefB3YoXGsLE1H90bEk9JFlracJjzNnws6p+ADP8qjwT3DWTKsEix7/xb3Ic65TmjBrAQbHdh2tsbYe3rbV4KPDLmxIAftcgx9nOLla+T5XlltWN0RaKpopCd6UD30/8v4+6yjACm2wiUL6h4teBx1h94MS8wcW+0YnG4Lf60+MFAxRvaj4G2C5tJqjsDifR6nvFcv9kmrlgs7IP7Qg4MEA1VxA/mTiF0y2uS10I4Gb9YOt0dYeTkhn7UyB9mbFsopZemO6ZpBG+U+IjYsGjrCQ5VYPiWvdbAhdyoA3e2sJKcN291K56Li1Y8No0SpHnhp+Rp1UZR2hBy25ClvMeaOSNYxd4dwNsFK48mayTrAAoJlewnaw4F09eriTNOsE4fP5BVHoeC80NGUOvqHoY2pVr6X8hka4RVF5e/m/PfjQjk61ilEInnlspFevpwy3HsdrIm/UrKcpCdctwmyTDOyNmQ++aexXqbHyoyQn6kQOJt7WDlWKYFCb6PWnI2Fbo2ehJuk7622TdA=
 branches:
   only:
-    - master
-
+  - master
 services:
-    - mysql
-
+- mysql
 matrix:
-    fast_finish: true
-
+  fast_finish: true
 install:
-  - pip install -r dev-requirements.txt
-
+- pip install -r dev-requirements.txt
 before_script:
-  - if [[ "$DB_ENGINE" == "django.db.backends.mysql" ]] ; then mysql -e 'create database test_project'; fi
-
+- if [[ "$DB_ENGINE" == "django.db.backends.mysql" ]] ; then mysql -e 'create database
+  test_project'; fi
 script:
-    - python manage.py test
-
+- python manage.py test
 notifications:
-    email: false
+  email: false
