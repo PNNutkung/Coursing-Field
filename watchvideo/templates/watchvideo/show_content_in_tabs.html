@@ -19,7 +19,13 @@
         <div class="tab-content">
             <div id="overviewTab" class="tab-pane fade in active">
                 <h3>Overview</h3>
-                <p>This is the overview of this course</p>
+                <p>{{course.courseName}}<br>
+                <p>{{courseInCategory.category</p><br>
+                <video width="400" height="300" controls>
+                    <source src="{{preview.previewVideo.url}}" type="video/mp4">
+                </video>
+                <p>{{course.courseDesc}}</p>
+                <p>Owned by {{course.owner.first_name course.owner.last_name}}</p>
             </div>
             {% for video in videos %}
             <div id="{{video.videoID}}Tab" class="tab-pane fade">
@@ -30,7 +36,7 @@
                 </video>
             </div>
             {% endfor %}
-            <div id="uploadTab" class="tab-pane fade">
+            {% comment %}<div id="uploadTab" class="tab-pane fade">
                 <h3>Upload Form 2</h3>
                 <form action={% url 'course:handle_upload' course.courseID %} method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
@@ -38,7 +44,7 @@
                     <input type="file" name="videoToUpload" required>
                     <input type="submit" value="Upload">
                 </form>
-            </div>
+            </div>{% endcomment %}
         </div>
     </body>
 </html>
