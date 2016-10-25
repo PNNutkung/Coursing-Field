@@ -61,3 +61,9 @@ class TakenCourse(models.Model):
     takenCourseID = models.AutoField(primary_key=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     taker = models.ForeignKey(User, on_delete=models.CASCADE)
+
+class CoursePreview(models.Model):
+    coursePreviewID = models.AutoField(primary_key=True)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    previewVideo = models.FileField(upload_to='previews/')
+    isDelete = models.BooleanField()
