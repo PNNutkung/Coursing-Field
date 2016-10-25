@@ -48,7 +48,7 @@
                 <select id="courseCategory" class="dropdown form-control" name="courseCategory" required>
                     <option value="">Choose Category</option>
                     {% for category in course_category %}
-                        <option value="{{category.value}}">{{category.name}}</option>
+                        <option value="{{category.categoryID}}">{{category.categoryName}}</option>
                     {% endfor %}
                 </select>
             </div>
