@@ -36,6 +36,9 @@
 
 <body>
     <div class="container">
+        {% if errorMessage %}
+            <h2>{{errorMessage}}</h2>
+        {% endif %}
         <h2><strong>Create New Course</strong></h2>
         <form action="{% url 'course:createNewCourse' %}" method="post" role="form" enctype="multipart/form-data">
             {% csrf_token %}
@@ -47,7 +50,7 @@
                 <label for="courseCategory" class="control-label">Course Category:</label>
                 <select id="courseCategory" class="dropdown form-control" name="courseCategory" required>
                     <option value="">Choose Category</option>
-                    {% for category in course_category %}
+                    {% for category in courseCategory %}
                         <option value="{{category.categoryID}}">{{category.categoryName}}</option>
                     {% endfor %}
                 </select>

@@ -3,9 +3,17 @@ from django.urls import reverse
 from mainmodels.models import Category, Course
 # Create your views here.
 def createCourse(req):
-    course_category = Category.objects.all()
-    return render(req, 'course/createCourse.html', {'course_category':course_category})
+    courseCategory = Category.objects.all()
+    return render(req, 'course/createCourse.html', {'course_category':courseCategory})
 
 def createNewCourse(req):
-    #new_course = 
-    return redirect(reverse('course:createCourse'))
+    if req.method is 'POST':
+        courseName = req.POST['courseName']
+        courseCategory = req.POST['courseCategory']
+        courseDesc = req.POST['courseDesc']
+        courseThumbnail = req.FILES['courseThumbnail']
+        coursePrice = req.POST['coursePrice']
+        #new_course =
+        return redirect(reverse('course:createCourse'),{'errorMessage':'Create course successfully.'})
+    else:
+        return redirect(reverse('course:createCourse'),{'errorMessage':'Create course failed.'})
