@@ -1,0 +1,44 @@
+<!DOCTYPE>
+<html>
+    <header>
+        <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
+        <title>{{course.courseName}}</title>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    </header>
+    <body>
+        <ul class='nav nav-tabs'>
+            <li class="active"><a data-toggle="tab" href="#overviewTab">Overview</a></li>
+            {% for video in videos %}
+            <li><a data-toggle="tab" href="#{{video.videoID}}Tab">{{video.videoName}}</a></li>
+            {% endfor %}
+            {% comment %}<li><a data-toggle="tab" href="#uploadTab">Upload</a></li>{% endcomment %}
+        </ul>
+
+        <div class="tab-content">
+            <div id="overviewTab" class="tab-pane fade in active">
+                <h3>Overview</h3>
+                <p>This is the overview of this course</p>
+            </div>
+            {% for video in videos %}
+            <div id="{{video.videoID}}Tab" class="tab-pane fade">
+                <h3>{{video.videoName}}</h3>
+                <p>This is the video description</p>
+                <video width="400" height="300" controls>
+                    <source src="{{video.videoFile.url}}" type="video/mp4">
+                </video>
+            </div>
+            {% endfor %}
+            <div id="uploadTab" class="tab-pane fade">
+                <h3>Upload Form 2</h3>
+                <form action={% url 'course:handle_upload' course.courseID %} method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    Video name: <input type="text" name="videoName" placeholder="Video Name" required><br>   
+                    <input type="file" name="videoToUpload" required>
+                    <input type="submit" value="Upload">
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
