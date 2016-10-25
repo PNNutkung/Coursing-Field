@@ -81,12 +81,10 @@ WSGI_APPLICATION = 'coursing_field.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'pakpon',
-        'USER': 'be9fe3e3e70582',
-        'PASSWORD': '5d452de6',
-        'HOST': 'ap-cdbr-azure-southeast-b.cloudapp.net',
-        'PORT': '3306',
-    },
+        'OPTIONS': {
+            'read_default_file': './my.cnf',
+        },
+    }
 }
 
 
