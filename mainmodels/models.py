@@ -67,3 +67,26 @@ class CoursePreview(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     previewVideo = models.FileField(upload_to='previews/')
     isDelete = models.BooleanField()
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    GENDER_CHOICES = (
+        ('M', 'Male'),
+        ('F', 'Female'),
+        ('Other', 'Other')
+    )
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
+    profilePicture = models.ImageField(upload_to='profilepics/')
+    address = models.CharField(max_length=300)
+    birthDate = models.DateField(auto_now=False, auto_now_add=False)
+    balance = models.DecimalField()
+    isBan = models.BooleanField()
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+@receiver(post_save, sender=Uesr)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
