@@ -147,4 +147,4 @@ STATIC_URL = '/static/'
 
 # Tell the staticfiles app to use S3Boto storage when writing the collected static files (when
 # you run `collectstatic`).
-DEFAULT_FILE_STORAGE = 'webapp.custom_storages.MediaStorage'
+DEFAULT_FILE_STORAGE = 'coursing_field.custom_storages.MediaStorage'
