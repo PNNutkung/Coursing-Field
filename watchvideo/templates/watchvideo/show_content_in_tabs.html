@@ -19,17 +19,29 @@
         <div class="tab-content">
             <div id="overviewTab" class="tab-pane fade in active">
                 <h3>Overview</h3>
-                <p>{{course.courseName}}<br>
-                <p>{{courseInCategory.category.categoryName}}</p><br>
-                {% if preview.previewVideo.url %}
-                    <video width="400" height="300" controls>
-                        <source src="{{preview.previewVideo.url}}" type="video/mp4">
-                    </video>
+                {% if isOwner %}
+                    <form action={% url 'course:edited_course' course.courseID %} method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        Change course's name:<input type="text" name="courseName" placeholder="{{course.courseName}}"><br>
+                        {% comment %}Change course's category:<input type="text" name="category" placeholder="{{inCategory}}"><br>{% endcomment %}
+                        Change preview video: <input type="file" name="previewVideo"><br>
+                        Change course's thumbnail: <input type="file" name="courseThumbnail"><br>
+                        Change course's description:<input type="text" name="courseDesc" placeholder="{{course.courseDesc}}"><br>
+                        <input type="submit" value="Confirm">
+                    </form>
                 {% else %}
-                    <div style="background-image: url({{course.courseThumbnail.url}});"></div>
+                    <p>{{course.courseName}}<br>
+                    <p>{{courseInCategory.category.categoryName}}</p><br>
+                    {% if preview.previewVideo.url %}
+                        <video width="400" height="300" controls>
+                            <source src="{{preview.previewVideo.url}}" type="video/mp4">
+                        </video>
+                    {% else %}
+                        <div style="background-image: url({{course.courseThumbnail.url}});"></div>
+                    {% endif %}
+                    <p>{{course.courseDesc}}</p>
+                    <p>Owned by {{course.owner.first_name}} {{course.owner.last_name}}</p>
                 {% endif %}
-                <p>{{course.courseDesc}}</p>
-                <p>Owned by {{course.owner.first_name}} {{course.owner.last_name}}</p>
             </div>
             {% for video in videos %}
             <div id="{{video.videoID}}Tab" class="tab-pane fade">
