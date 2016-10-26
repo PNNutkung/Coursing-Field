@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-from mainmodels.models import Category, Course, CourseInCategory
+from mainmodels.models import Category, Course, CourseInCategory, TakenCourse
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
+
 # Create your views here.
 def createCourse(req):
     if req.method == 'POST':
@@ -26,3 +28,19 @@ def createCourse(req):
     else:
         courseCategory = Category.objects.all()
         return render(req, 'course/createCourse.html', {'courseCategory':courseCategory})
+
+def view_course(req, courseID):
+    if req.user.is_authenticated:
+        course = Course.objects.get(courseID=courseID)
+        hasTakencourse = False
+        try:
+            takenCourse = TakenCourse.objects.get(course=course,taker=req.user)
+            if takenCourse is not None:
+                hasTakencourse = True
+        except ObjectDoesNotExist:
+            hasTakencourse = False
+        userWithProfile = User.objects.get(id=req.user.id)
+        inCategory = CourseInCategory.objects.get(course=course).category.categoryName
+        return render(req, 'course/viewCourse.html', {'course' : course, 'hasTakenCourse' : hasTakencourse, 'inCategory' : inCategory, 'userWithProfile' : userWithProfile})
+    else:
+        return redirect(reverse('mockaccount:index'))
