@@ -1,0 +1,42 @@
+<!DOCTYPE>
+<html>
+    <header>
+        <meta charset="utf-8">
+        <title>Login</title>
+    </header>
+    <body>
+        {% if isLogin %}
+            <p>You have successfully logged in</p>
+            <form action="{% url 'mockaccount:logout' %}" method="POST">
+                {% csrf_token %}
+                <h2>Profile of {{request.user.username}}</h2>
+                <p>Name:{{request.user.first_name}} {{request.user.last_name}}
+                <p>Gender:{{request.user.profile.gender}}</p>
+                <p>Balance:{{request.user.profile.balance}}</p>
+                <p>Date of birth:{{request.user.profile.birthDate}}</p>
+                <p>Address:{{request.user.profile.address}}</p>
+                <input type='submit' value='Logout'>
+            </form>
+        {% else %}
+            <h1>Login</h1>
+            <form action="{% url 'mockaccount:login' %}" method="POST">
+                {% csrf_token %}
+                Username: <input type="text" name="_username"><br>
+                Password: <input type="password" name="_password"><br>
+                <input type="submit" value='Login'>
+            </form>
+
+            <h1>Register</h1>
+            <form action="{% url 'mockaccount:register' %}" method="POST">
+                {% csrf_token %}
+                Username <input type='text' name='username' required><br>
+                Password <input type='password' name='password' required><br>
+                Firstname <input type='text' name='firstname' required><br>
+                Lastname <input type='text' name='lastname' required><br>
+                Address <input type="text" name="address" required><br>
+                Birthday <input type='date' name='birthday' required><br>
+                <input type='submit' value='Register'>
+            </form>
+        {% endif %}
+    </body>
+</html>

@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
+from decimal import Decimal
 
 class Course(models.Model):
     courseID = models.AutoField(primary_key=True)
@@ -80,10 +80,10 @@ class Profile(models.Model):
     )
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     profilePicture = models.ImageField(upload_to='profilepics/')
-    address = models.CharField(max_length=300)
-    birthDate = models.DateField(auto_now=False, auto_now_add=False)
-    balance = models.DecimalField(max_digits=12, decimal_places=2)
-    isBan = models.BooleanField()
+    address = models.CharField(max_length=300, default="")
+    birthDate = models.DateField(auto_now=False, auto_now_add=True)
+    balance = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal('0.00'))
+    isBan = models.BooleanField(default=False)
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):

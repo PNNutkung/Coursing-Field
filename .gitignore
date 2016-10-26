@@ -105,3 +105,6 @@ tests/report/
 db.sqlite3
 my.cnf
 test.cnf
+
+# Django app module
+528c42d794e53719648730fe594f2368df24c0c2
