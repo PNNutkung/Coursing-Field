@@ -65,6 +65,7 @@
                     <p class="card-text">{{course.courseDesc}}</p>
                     <a href="#" class="card-link">Card link</a>
                     <a href="#" class="card-link">Another link</a>
+                    <a href={% url 'course:view_course' courseID=course.courseID %}>Course page</a>
                     <p>
                         {{course.courseRating}}
                     </p>

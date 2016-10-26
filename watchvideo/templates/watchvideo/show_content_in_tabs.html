@@ -20,12 +20,16 @@
             <div id="overviewTab" class="tab-pane fade in active">
                 <h3>Overview</h3>
                 <p>{{course.courseName}}<br>
-                <p>{{courseInCategory.category</p><br>
-                <video width="400" height="300" controls>
-                    <source src="{{preview.previewVideo.url}}" type="video/mp4">
-                </video>
+                <p>{{courseInCategory.category.categoryName}}</p><br>
+                {% if preview.previewVideo.url %}
+                    <video width="400" height="300" controls>
+                        <source src="{{preview.previewVideo.url}}" type="video/mp4">
+                    </video>
+                {% else %}
+                    <div style="background-image: url({{course.courseThumbnail.url}});"></div>
+                {% endif %}
                 <p>{{course.courseDesc}}</p>
-                <p>Owned by {{course.owner.first_name course.owner.last_name}}</p>
+                <p>Owned by {{course.owner.first_name}} {{course.owner.last_name}}</p>
             </div>
             {% for video in videos %}
             <div id="{{video.videoID}}Tab" class="tab-pane fade">
