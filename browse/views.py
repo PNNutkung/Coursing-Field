@@ -5,7 +5,7 @@ from mainmodels.models import Course
 # Create your views here.
 def browseIndex(req):
     '''Return the last courses.'''
-    courseList = Course.objects.filter(isDelete=False)
+    courseList = Course.objects.filter(isDelete=False).order_by('-createdDate')
     paginator = Paginator(courseList, 4)
     page = req.GET.get('page')
     try:
