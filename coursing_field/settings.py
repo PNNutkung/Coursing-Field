@@ -84,9 +84,19 @@ DATABASES = {
         'OPTIONS': {
             'read_default_file': './my.cnf',
         },
-    }
+    },
 }
 
+import sys
+if 'test' in sys.argv:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'OPTIONS': {
+                'read_default_file': './test.cnf',
+            },
+        },
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
