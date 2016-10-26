@@ -80,7 +80,7 @@ class Profile(models.Model):
     )
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     profilePicture = models.ImageField(upload_to='profilepics/')
-    address = models.CharField(max_length=300)
+    address = models.CharField(max_length=300, default="")
     birthDate = models.DateField(auto_now=False, auto_now_add=True)
     balance = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal('0.00'))
     isBan = models.BooleanField(default=False)
