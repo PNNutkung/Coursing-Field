@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from mainmodels.models import Category, Course, CourseInCategory
-from django.contrib.auth.models import User
 # Create your views here.
 def createCourse(req):
     if req.method == 'POST':
@@ -11,7 +10,7 @@ def createCourse(req):
             courseDesc = req.POST['courseDesc']
             courseThumbnail = req.FILES['courseThumbnail']
             coursePrice = req.POST['coursePrice']
-            owner = User.objects.get(username='nut')
+            owner = req.user
 
             newCourse = Course(courseName=courseName, courseDesc=courseDesc,courseThumbnail=courseThumbnail, owner=owner, coursePrice=coursePrice, isDelete=False)
             newCourse.save()
