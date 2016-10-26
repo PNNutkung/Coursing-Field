@@ -36,8 +36,8 @@ def register(request):
         user.profile.birthDate = birthDate
         user.profile.balance = balance
         user.profile.isBan = isBan
-        # user.save()
         print(user.profile.gender, user.profile.birthDate, user.profile.balance, user.profile.isBan)
+        user.save()
         return redirect(reverse('mockaccount:index'))
     else:
         return HttpResponse('Failed to Register')
