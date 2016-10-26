@@ -6,48 +6,90 @@
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <style media="screen">
+            .center-cropped {
+                height: 350px;
+                width: auto;
+                background-position: center center;
+                background-size: cover;
+            }
+            .list-right {
+                padding-left: 6px;
+                padding-top: 6px;
+                padding-bottom: 6px;
+            }
+        </style>
     </header>
     <body>
-        <h1>{{course.courseName}}</h1>
-        <p>Rating </p>
-        <p>Owned by {{course.owner.first_name}} {{course.owner.last_name}}</p>
-        <p>Category {{inCategory}} </p>
-        <div style="background-image: url({{course.courseThumbnail.url}});"></div>
-        <p>{{course.coursePrice}}
-        {% if hasTakenCourse %}
-            <a class="btn" href={% url 'watchvideo:show_contents_in_tabs' courseID=course.courseID %}>Learn Now</a>
-        {% else %}
-            {% comment %}<a class="btn" href="{% url 'takecourse:take_course' {{course.courseID}} %}" class="button">Take course</a>{% endcomment %}
-            <button type='button' class='btn' data-toggle='modal' data-target='#confirmPurchaseModal'>Take Course Now</button>
+        <div class="container">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <h1>{{course.courseName}}</h1>
+                <p>Rating </p>
+                <p>Instructed by {{course.owner}}</p>
+                <p><b>Category:</b> {{inCategory}}</p>
+            </div>
+        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+            <div class="center-cropped" style="background-image: url({{course.courseThumbnail.url}});"></div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+            <span><h3><b>฿ {{course.coursePrice}}</b></h3></span>
+            {% if hasTakenCourse %}
+                <a class="btn btn-success" href={% url 'watchvideo:show_contents_in_tabs' courseID=course.courseID %}>Learn Now</a>
+            {% else %}
+                <button type='button' class='btn btn-block btn btn-success' data-toggle='modal' data-target='#confirmPurchaseModal'>Take This Course</button>
 
-            <div id="confirmPurchaseModal" class="modal fade" role="dialog">
-                <div class="modal-dialog">
-                    {% comment %}Modal content{% endcomment %}
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">
-                                <span aria-hidden="true">&times;</span>
-                                <span class="sr-only">Close</span>
-                            </button>
-                            <h4 class="modal-title" id="myModalLabel">
-                                Confirm purchasing of {{course.courseName}}
-                            </h4>
-                        </div>
-                        <div class='modal-body'>
-                            <form action={% url 'takecourse:take_course' courseID=course.courseID %} method="POST">
-                                {% csrf_token %}
-                                {{course.courseName}}<br>
-                                Insert coupon:<input type="text" name="coupon"><br>
-                                Your balance {{userWithProfile.profile.balance}}<br>
-                                You Pay      {{course.coursePrice}}<br>
-                                Left balance {{userWithProfile..profile.balance}}<br>
-                                <input type="submit" value="Confirm">
-                            </form>
+                <div id="confirmPurchaseModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                        {% comment %}Modal content{% endcomment %}
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">
+                                    <span aria-hidden="true">&times;</span>
+                                    <span class="sr-only">Close</span>
+                                </button>
+                                <h4 class="modal-title" id="myModalLabel">
+                                    Confirm purchasing of {{course.courseName}}
+                                </h4>
+                            </div>
+                            <div class='modal-body'>
+                                <form action={% url 'takecourse:take_course' courseID=course.courseID %} method="POST">
+                                    {% csrf_token %}
+                                    <table class="list">
+                                        <tr class="list-item">
+                                            <td class="list-left"><b>Course name</b></td>
+                                            <td class="list-right">{{course.courseName}}</td>
+                                        </tr>
+                                        <tr class="list-item">
+                                            <td class="list-left"><b>Insert coupon</b></td>
+                                            <td class="list-right"><input type="text" name="coupon"></td>
+                                        </tr>
+                                        <tr class="list-item">
+                                            <td class="list-left"><b>Your balance</b></td>
+                                            <td class="list-right">{{userWithProfile.profile.balance}}</td>
+                                        </tr>
+                                        <tr class="list-item">
+                                            <td class="list-left"><b>You Pay</b></td>
+                                            <td class="list-right">฿ {{course.coursePrice}}</td>
+                                        </tr>
+                                        <tr class="list-item">
+                                            <td class="list-left"><b>Left balance</b></td>
+                                            <td class="list-right">฿ {{leftBalance}}</td>
+                                        </tr>
+                                    </table>
+                                    <input type="submit" class="btn btn-block btn-primary" value="Confirm">
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        {% endif %}
-        <p>{{course.courseDesc}}</p>
+            {% endif %}
+        </div>
+        <div class="col-sm-12 col-sm-12 col-md-12 col-lg-12">
+            <h2><b>Course description</b></h2>
+            <p>
+                {{course.courseDesc}}
+            </p>
+        </div>
+    </div>
     </body>
 </html>
