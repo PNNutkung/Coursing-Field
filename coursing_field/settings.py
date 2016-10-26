@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'mainmodels.apps.MainmodelsConfig',
+    'mockaccount.apps.MockaccountConfig',
     'watchvideo.apps.WatchvideoConfig',
     'browse.apps.BrowseConfig',
     'course.apps.CourseConfig',
