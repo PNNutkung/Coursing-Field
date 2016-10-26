@@ -89,6 +89,18 @@ def edited_course(req, courseID):
         if newCourseDesc is not None:
             course.courseDesc = newCourseDesc
         course.save()
-        return redirect(reverse('course:manage_course'))
+        return redirect(reverse('course:manage_course', kwargs={'courseID' : courseID }))
     else:
         return HttpResponse('Failed to post.')
+
+def upload_video(req, courseID):
+    if req.method == 'POST':
+        videoName = req.POST['videoName']
+        videoFile = req.FILES['videoToUpload']
+        course = Course.objects.get(courseID=courseID)
+        new_video = Video(videoName=videoName,videoFile=videoFile,course=course,isDelete=False)    
+        new_video.save()
+        return redirect(reverse('course:manage_course', kwargs={'courseID' : courseID }))
+    else:
+        return HttpResponse('Failed to post.')
+    
