@@ -3,7 +3,7 @@ from django.urls import reverse
 from mainmodels.models import Category, Course, CourseInCategory, TakenCourse, Video, CoursePreview, Review
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Create your views here.
 def createCourse(req):
     if not req.user.is_authenticated:
@@ -51,8 +51,39 @@ def view_course(req, courseID):
 
         numberOfLectures = Video.objects.filter(course=course).count()
 
-        #reviews = Review.objects.filter()
-        return render(req, 'course/viewCourse.html', {'course' : course, 'hasTakenCourse' : hasTakencourse, 'inCategory' : inCategory, 'userWithProfile' : userWithProfile, 'leftBalance': leftBalance,'numberOfLectures':numberOfLectures,})
+        reviewList = Review.objects.filter(course=course).order_by('-reviewDate')
+        reviewPaginator = Paginator(reviewList, 5)
+        page = req.GET.get('page')
+        try:
+            reviews = reviewPaginator.page(page)
+        except PageNotAnInteger:
+            reviews = reviewPaginator.page(1)
+        except EmptyPage:
+            reviews = reviewPaginator.page(paginator.num_pages)
+
+        try:
+            averageRating = reviewList.aggregate(Avg('rating'))
+        except:
+            averageRating = 0
+
+        reviewsCount = Review.objects.filter(course=course).count()
+
+        try:
+            fiveStarRate = {'star':'5 Stars','percentage':int(Review.objects.filter(course=course,rating=5).count()/reviewsCount)}
+
+            fourStarRate = {'star':'4 Stars','percentage':int(Review.objects.filter(course=course,rating=4).count()/reviewsCount)}
+
+            threeStarRate = {'star':'3 Stars','percentage':int(Review.objects.filter(course=course,rating=3).count()/reviewsCount)}
+
+            twoStarRate = {'star':'2 Stars','percentage':int(Review.objects.filter(course=course,rating=2).count()/reviewsCount)}
+
+            oneStarRate = {'star':'1 Star','percentage':int(Review.objects.filter(course=course,rating=1).count()/reviewsCount)}
+
+            reviewRateLevel = [fiveStarRate, fourStarRate, threeStarRate, twoStarRate, oneStarRate]
+        except:
+            reviewRateLevel = []
+
+        return render(req, 'course/viewCourse.html', {'course' : course, 'hasTakenCourse' : hasTakencourse, 'inCategory' : inCategory, 'userWithProfile' : userWithProfile, 'leftBalance': leftBalance,'numberOfLectures':numberOfLectures, 'reviews':reviews, 'averageRating': averageRating,'reviewRateLevel':reviewRateLevel,})
     else:
         return redirect(reverse('mockaccount:index'))
 
