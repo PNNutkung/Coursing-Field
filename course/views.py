@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-from mainmodels.models import Category, Course, CourseInCategory, TakenCourse, Video, CoursePreview
+from mainmodels.models import Category, Course, CourseInCategory, TakenCourse, Video, CoursePreview, Review
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -48,7 +48,11 @@ def view_course(req, courseID):
         userWithProfile = User.objects.get(id=req.user.id)
         inCategory = CourseInCategory.objects.get(course=course).category.categoryName
         leftBalance = int(userWithProfile.profile.balance - course.coursePrice)
-        return render(req, 'course/viewCourse.html', {'course' : course, 'hasTakenCourse' : hasTakencourse, 'inCategory' : inCategory, 'userWithProfile' : userWithProfile, 'leftBalance': leftBalance})
+
+        numberOfLectures = Video.objects.filter(course=course).count()
+
+        #reviews = Review.objects.filter()
+        return render(req, 'course/viewCourse.html', {'course' : course, 'hasTakenCourse' : hasTakencourse, 'inCategory' : inCategory, 'userWithProfile' : userWithProfile, 'leftBalance': leftBalance,'numberOfLectures':numberOfLectures,})
     else:
         return redirect(reverse('mockaccount:index'))
 
