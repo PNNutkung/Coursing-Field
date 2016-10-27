@@ -48,6 +48,7 @@ class Review(models.Model):
     reviewID = models.AutoField(primary_key=True)
     reviewDesc = models.CharField(max_length=250)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
     rating = models.IntegerField()
     reviewDate = models.DateTimeField(auto_now=False,auto_now_add=True)
     isDelete = models.BooleanField()
