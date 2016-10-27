@@ -13,23 +13,33 @@
             {% for video in videos %}
             <li><a data-toggle="tab" href="#{{video.videoID}}Tab">{{video.videoName}}</a></li>
             {% endfor %}
-            {% comment %}<li><a data-toggle="tab" href="#uploadTab">Upload</a></li>{% endcomment %}
+            {% if isOwner %}
+                <li><a data-toggle="tab" href="#uploadTab">Upload</a></li>
+            {% endif %}
         </ul>
 
         <div class="tab-content">
             <div id="overviewTab" class="tab-pane fade in active">
                 <h3>Overview</h3>
-                <p>{{course.courseName}}<br>
-                <p>{{courseInCategory.category.categoryName}}</p><br>
-                {% if preview.previewVideo.url %}
+                {% if isOwner %}
+                    <form action={% url 'course:edited_course' course.courseID %} method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        Change course's name:<input type="text" name="courseName" placeholder="{{course.courseName}}"><br>
+                        {% comment %}Change course's category:<input type="text" name="category" placeholder="{{inCategory}}"><br>{% endcomment %}
+                        Change preview video: <input type="file" name="previewVideo"><br>
+                        Change course's thumbnail: <input type="file" name="courseThumbnail"><br>
+                        Change course's description:<input type="text" name="courseDesc" placeholder="{{course.courseDesc}}"><br>
+                        <input type="submit" value="Confirm">
+                    </form>
+                {% else %}
+                    <p>{{course.courseName}}<br>
+                    <p>{{courseInCategory.category.categoryName}}</p><br>
                     <video width="400" height="300" controls>
                         <source src="{{preview.previewVideo.url}}" type="video/mp4">
                     </video>
-                {% else %}
-                    <div style="background-image: url({{course.courseThumbnail.url}});"></div>
+                    <p>{{course.courseDesc}}</p>
+                    <p>Owned by {{course.owner.first_name}} {{course.owner.last_name}}</p>
                 {% endif %}
-                <p>{{course.courseDesc}}</p>
-                <p>Owned by {{course.owner.first_name}} {{course.owner.last_name}}</p>
             </div>
             {% for video in videos %}
             <div id="{{video.videoID}}Tab" class="tab-pane fade">
@@ -40,15 +50,17 @@
                 </video>
             </div>
             {% endfor %}
-            {% comment %}<div id="uploadTab" class="tab-pane fade">
-                <h3>Upload Form 2</h3>
-                <form action={% url 'course:handle_upload' course.courseID %} method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    Video name: <input type="text" name="videoName" placeholder="Video Name" required><br>   
-                    <input type="file" name="videoToUpload" required>
-                    <input type="submit" value="Upload">
-                </form>
-            </div>{% endcomment %}
+            {% if isOwner %}
+                <div id="uploadTab" class="tab-pane fade">
+                    <h3>Upload New Video</h3>
+                    <form action={% url 'course:upload_video' courseID=course.courseID %} method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        Video name: <input type="text" name="videoName" placeholder="Video Name" required><br>   
+                        <input type="file" name="videoToUpload" required>
+                        <input type="submit" value="Upload">
+                    </form>
+                </div>
+            {% endif %}
         </div>
     </body>
 </html>

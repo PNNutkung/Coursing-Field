@@ -10,7 +10,7 @@ def show_content_in_tabs(request, courseID):
         if hasTakenCourse(request.user, course):
             # course = Course.objects.get(courseID=courseID)
             videos = Video.objects.filter(course=course)
-            preview = CoursePreview.objects.filter(course=course)
+            preview = CoursePreview.objects.get(course=course,isDelete=False)
             courseInCategory = get_object_or_404(CourseInCategory, course=course)
             # courseInCategory = courseInCategory.objects.get(course=course)
             return render(request, 
