@@ -21,7 +21,6 @@
         </style>
     </header>
     <body>
-<<<<<<< HEAD
         <div class="container">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <h1>{{course.courseName}}</h1>
@@ -38,22 +37,6 @@
                 <a class="btn btn-success" href={% url 'watchvideo:show_contents_in_tabs' courseID=course.courseID %}>Learn Now</a>
             {% else %}
                 <button type='button' class='btn btn-block btn btn-success' data-toggle='modal' data-target='#confirmPurchaseModal'>Take This Course</button>
-=======
-        <h1>{{course.courseName}}</h1>
-        <p>Rating </p>
-        <p>Owned by {{course.owner.first_name}} {{course.owner.last_name}}</p>
-        <p>Category {{inCategory}} </p>
-        <div style="background-image: url({{course.courseThumbnail.url}});"></div>
-        <p>{{course.coursePrice}}</p><br>
-        {% if isOwner %}
-            <a class="btn" href={% url 'course:manage_course' courseID=course.courseID %}>Edit Course</a>
-        {% else %}
-            {% if hasTakenCourse %}
-                <a class="btn" href={% url 'watchvideo:show_contents_in_tabs' courseID=course.courseID %}>Learn Now</a>
-            {% else %}
-                {% comment %}<a class="btn" href="{% url 'takecourse:take_course' {{course.courseID}} %}" class="button">Take course</a>{% endcomment %}
-                <button type='button' class='btn' data-toggle='modal' data-target='#confirmPurchaseModal'>Take Course Now</button>
->>>>>>> mockaccount
 
                 <div id="confirmPurchaseModal" class="modal fade" role="dialog">
                     <div class="modal-dialog">
@@ -71,7 +54,6 @@
                             <div class='modal-body'>
                                 <form action={% url 'takecourse:take_course' courseID=course.courseID %} method="POST">
                                     {% csrf_token %}
-<<<<<<< HEAD
                                     <table class="list">
                                         <tr class="list-item">
                                             <td class="list-left"><b>Course name</b></td>
@@ -95,21 +77,22 @@
                                         </tr>
                                     </table>
                                     <input type="submit" class="btn btn-block btn-primary" value="Confirm">
-=======
-                                    {{course.courseName}}<br>
-                                    Insert coupon:<input type="text" name="coupon"><br>
-                                    Your balance {{userWithProfile.profile.balance}}<br>
-                                    You Pay      {{course.coursePrice}}<br>
-                                    Left balance {{userWithProfile..profile.balance}}<br>
-                                    <input type="submit" value="Confirm">
->>>>>>> mockaccount
                                 </form>
                             </div>
                         </div>
                     </div>
                 </div>
             {% endif %}
-<<<<<<< HEAD
+            <table>
+                <tr>
+                    <td>
+                        <span>Lectures</span>
+                    </td>
+                    <td>
+                        <span><b>{{numberOfLectures}}</b></span>
+                    </td>
+                </tr>
+            </table>
         </div>
         <div class="col-sm-12 col-sm-12 col-md-12 col-lg-12">
             <h2><b>Course description</b></h2>
@@ -118,9 +101,5 @@
             </p>
         </div>
     </div>
-=======
-        {% endif %}
-        <p>{{course.courseDesc}}</p>
->>>>>>> mockaccount
     </body>
 </html>
