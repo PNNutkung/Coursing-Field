@@ -43,11 +43,23 @@
             </div>
             {% for video in videos %}
             <div id="{{video.videoID}}Tab" class="tab-pane fade">
-                <h3>{{video.videoName}}</h3>
-                <p>This is the video description</p>
-                <video width="400" height="300" controls>
-                    <source src="{{video.videoFile.url}}" type="video/mp4">
-                </video>
+                {% if isOwner %}
+                    <form action={% url 'course:edited_course' course.courseID %} method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        Change course's name:<input type="text" name="courseName" placeholder="{{course.courseName}}"><br>
+                        {% comment %}Change course's category:<input type="text" name="category" placeholder="{{inCategory}}"><br>{% endcomment %}
+                        Change preview video: <input type="file" name="previewVideo"><br>
+                        Change course's thumbnail: <input type="file" name="courseThumbnail"><br>
+                        Change course's description:<input type="text" name="courseDesc" placeholder="{{course.courseDesc}}"><br>
+                        <input type="submit" value="Confirm">
+                    </form>
+                {% else %}
+                    <h3>{{video.videoName}}</h3>
+                    <p>This is the video description</p>
+                    <video width="400" height="300" controls>
+                        <source src="{{video.videoFile.url}}" type="video/mp4">
+                    </video>
+                {% endif %}
             </div>
             {% endfor %}
             {% if isOwner %}
