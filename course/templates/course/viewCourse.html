@@ -106,11 +106,11 @@
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <h2><b>Reviews</b></h2>
-            {% if averageRating > 0 %}
+            {% if reviews %}
             <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                 <span class="hm">Average Rating</span>
                 <div class="average-rate">
-                    <h1><b>{{averageRating}}</b></h1>
+                    <h1><b>{{averageRating.rating__avg|floatformat:2}}</b></h1>
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
@@ -140,12 +140,12 @@
                     <li class="review">
                         <div class="info-container">
                             <div class="avatar">
-                                <img src="{{review.owner.profile.profilePicture.url}}" alt="{{review.owner}}\'s avatar" />
+                                <img src="{{review.owner.profilePicture.url}}" alt="{{review.owner}}'s avatar" />
                             </div>
                         </div>
                         <div class="user-details">
                             <ul>
-                                <li class="username ellipsis">{{review.owner.profile.first_name}} {{review.owner.profile.last_name}}</li>
+                                <li class="username ellipsis">{{review.owner.first_name}} {{review.owner.last_name}}</li>
                                 <li class="review-create">{{review.reviewDate}}</li>
                             </ul>
                         </div>
@@ -164,8 +164,8 @@
             <div class="col-sm-12 col-xs-12 col-md-12 col-lg-12">
                 <nav aria-label="Page navigation">
                     <ul class="pager">
-                        <li {% if not reviews.has_previous %} class="disabled" {% endif %}><a {% if reviews.has_previous %}href="?page={{ reviews.previous_page_number }}" {% endif %} aria-label="Previous">Previous</a></li>
-                        <li {% if not reviews.has_next %} class="disabled" {% endif %}><a {% if reviews.has_next %}href="?page={{ reviews.next_page_number }}" {% endif %} aria-label="Next">Next</a></li>
+                        <li {% if not reviews.has_previous %} class="disabled" {% endif %}><a {% if reviews.has_previous %}href="?reviewPage={{ reviews.previous_page_number }}" {% endif %} aria-label="Previous">Previous</a></li>
+                        <li {% if not reviews.has_next %} class="disabled" {% endif %}><a {% if reviews.has_next %}href="?reviewPage={{ reviews.next_page_number }}" {% endif %} aria-label="Next">Next</a></li>
                     </ul>
                 </nav>
             </div>
@@ -176,8 +176,19 @@
             {% if hasTakenCourse %}
             <form action="{% url 'course:reviewCourse' courseID=course.courseID %}" method="post" role="form">
                 {% csrf_token %}
+                <h2><label for="reviewDesc" class="control-label">Review this course</label></h2>
                 <div class="form-group">
-                    <label for="reviewDesc" class="control-label">Reviews this course</label>
+                    <label for="reviewRating" class="control-label">Give star(s) to this course</label>
+                    <select id="reviewRating" class="dropdown form-control" name="reviewRating" required>
+                        <option value="">Rate for this course</option>
+                            <option value="5">5 Stars</option>
+                            <option value="4">4 Stars</option>
+                            <option value="3">3 Stars</option>
+                            <option value="2">2 Stars</option>
+                            <option value="1">1 Star</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <textarea id="reviewDesc" name="reviewDesc" rows="10" class="form-control" placeholder="Say something to this course..." required></textarea>
                 </div>
                 <input type="submit" class="btn btn-block btn-primary" name="submitReview" value="Review"/>
