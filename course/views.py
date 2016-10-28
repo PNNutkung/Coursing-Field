@@ -3,7 +3,8 @@ from django.urls import reverse
 from mainmodels.models import Category, Course, CourseInCategory, TakenCourse, Video, CoursePreview, Review
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Avg
 # Create your views here.
 def createCourse(req):
     if not req.user.is_authenticated:
@@ -51,8 +52,39 @@ def view_course(req, courseID):
 
         numberOfLectures = Video.objects.filter(course=course).count()
 
-        #reviews = Review.objects.filter()
-        return render(req, 'course/viewCourse.html', {'course' : course, 'hasTakenCourse' : hasTakencourse, 'inCategory' : inCategory, 'userWithProfile' : userWithProfile, 'leftBalance': leftBalance,'numberOfLectures':numberOfLectures,})
+        reviewList = Review.objects.filter(course=course).order_by('-reviewDate')
+        reviewPaginator = Paginator(reviewList, 5)
+        page = req.GET.get('reviewPage')
+        try:
+            reviews = reviewPaginator.page(page)
+        except PageNotAnInteger:
+            reviews = reviewPaginator.page(1)
+        except EmptyPage:
+            reviews = reviewPaginator.page(paginator.num_pages)
+
+        try:
+            averageRating = Review.objects.filter(course=course).aggregate(Avg('rating'))
+        except:
+            averageRating = 0
+
+        reviewsCount = Review.objects.filter(course=course).count()
+
+        try:
+            fiveStarRate = {'star':'5 Stars','percentage':int(float(Review.objects.filter(course=course,rating=5).count()/reviewsCount)*100)}
+
+            fourStarRate = {'star':'4 Stars','percentage':int(float(Review.objects.filter(course=course,rating=4).count()/reviewsCount)*100)}
+
+            threeStarRate = {'star':'3 Stars','percentage':int(float(Review.objects.filter(course=course,rating=3).count()/reviewsCount)*100)}
+
+            twoStarRate = {'star':'2 Stars','percentage':int(float(Review.objects.filter(course=course,rating=2).count()/reviewsCount)*100)}
+
+            oneStarRate = {'star':'1 Star','percentage':int(float(Review.objects.filter(course=course,rating=1).count()/reviewsCount)*100)}
+
+            reviewRateLevel = [fiveStarRate, fourStarRate, threeStarRate, twoStarRate, oneStarRate]
+        except:
+            reviewRateLevel = []
+
+        return render(req, 'course/viewCourse.html', {'course' : course, 'hasTakenCourse' : hasTakencourse, 'inCategory' : inCategory, 'userWithProfile' : userWithProfile, 'leftBalance': leftBalance,'numberOfLectures':numberOfLectures, 'reviews':reviews, 'averageRating': averageRating,'reviewRateLevel':reviewRateLevel,})
     else:
         return redirect(reverse('mockaccount:index'))
 
@@ -111,3 +143,12 @@ def upload_video(req, courseID):
         return redirect(reverse('course:manage_course', kwargs={'courseID' : courseID }))
     else:
         return HttpResponse('Failed to post.')
+
+def reviewCourse(req, courseID):
+    if req.method == 'POST':
+        course = Course.objects.get(courseID=courseID)
+        reviewDesc = req.POST['reviewDesc']
+        reviewRate = req.POST['reviewRating']
+        newReview = Review(reviewDesc=reviewDesc, owner=req.user, course=course, rating=reviewRate, isDelete=False)
+        newReview.save()
+    return redirect(reverse('course:view_course', kwargs={'courseID': courseID}))
