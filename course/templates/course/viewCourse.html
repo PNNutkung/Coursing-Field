@@ -172,6 +172,17 @@
             {% else %}
             <span><h2>There is no review.</h2></span>
             {% endif %}
+
+            {% if hasTakenCourse %}
+            <form action="{% url 'course:reviewCourse' courseID=course.courseID %}" method="post" role="form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="reviewDesc" class="control-label">Reviews this course</label>
+                    <textarea id="reviewDesc" name="reviewDesc" rows="10" class="form-control" placeholder="Say something to this course..." required></textarea>
+                </div>
+                <input type="submit" class="btn btn-block btn-primary" name="submitReview" value="Review"/>
+            </form>
+            {% endif %}
         </div>
     </div>
     </body>

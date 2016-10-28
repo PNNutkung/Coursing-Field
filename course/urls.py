@@ -8,4 +8,5 @@ urlpatterns = [
     url(r'^(?P<courseID>[0-9]+)/manage/$', views.manage_course, name='manage_course'),
     url(r'^(?P<courseID>[0-9]+)/edited_course/$', views.edited_course, name='edited_course'),
     url(r'^(?P<courseID>[0-9]+)/upload/$', views.upload_video, name='upload_video'),
+    url(r'^review/(?P<courseID>[0-9]+)/$', views.reviewCourse, name='reviewCourse'),
 ]

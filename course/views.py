@@ -142,3 +142,6 @@ def upload_video(req, courseID):
         return redirect(reverse('course:manage_course', kwargs={'courseID' : courseID }))
     else:
         return HttpResponse('Failed to post.')
+
+def reviewCourse(req, courseID):
+    return redirect(reverse('course:view_course', kwargs={'courseID': courseID}))
