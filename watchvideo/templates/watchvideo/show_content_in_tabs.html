@@ -53,33 +53,31 @@
                             <source src="{{lecture.video.videoFile.url}}" type="video/mp4">
                         </video>
                     {% endif %}
-                    {% if lecture.comments %}
-                        {% for comment in lecture.comments %}
-                            <li>
-                                <div class="info-container">
-                                    <div class="avatar">
-                                        <img src="{{comment.owner.profilePicture.url}}" alt="{{comment.owner}}'s avatar" />
-                                    </div>
+                    {% for comment in lecture.comments %}
+                        <li>
+                            <div class="info-container">
+                                <div class="avatar">
+                                    <img src="{{comment.owner.profilePicture.url}}" alt="{{comment.owner}}'s avatar" />
                                 </div>
-                                <div class="user-details">
-                                    <ul>
-                                        <li class="username ellipsis">{{comment.owner.first_name}} {{comment.owner.last_name}}</li>
-                                        <li class="comment-create">{{comment.commentDate}}</li>
-                                    </ul>
-                                </div>
-                                <div class="comment-container">
-                                    <p>
-                                        {{comment.commentDesc}}
-                                    </p>
-                                </div>
-                            </li>
-                        {% endfor %}
-                    {% endif %}
+                            </div>
+                            <div class="user-details">
+                                <ul>
+                                    <li class="username ellipsis">{{comment.owner.first_name}} {{comment.owner.last_name}}</li>
+                                    <li class="comment-create">{{comment.commentDate}}</li>
+                                </ul>
+                            </div>
+                            <div class="comment-container">
+                                <p>
+                                    {{comment.commentDesc}}
+                                </p>
+                            </div>
+                        </li>
+                    {% endfor %}
                     <form action={% url 'course:comment_on_video' courseID=course.courseID videoID=lecture.video.videoID %} method="POST" >
                         {% csrf_token %}
                         <h2><label for="commentDesc" class="control-label">Comment Section</label></h2>
                         <div class="form-group">
-                            <textarea id="commentDesc" name="commentDesc" rows="10" class="form-control" placeholder="Give your opinion about this viedo..." required></textarea>
+                            <textarea id="commentDesc" name="commentDesc" rows="10" class="form-control" placeholder="Give your opinion about this video..." required></textarea>
                         </div>
                         <input type="submit" class="btn btn-block btn-primary" name="submitComment" value="Comment"/>
                     </form>

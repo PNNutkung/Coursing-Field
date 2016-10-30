@@ -15,8 +15,9 @@ def show_content_in_tabs(request, courseID):
             # courseInCategory = courseInCategory.objects.get(course=course)
             commentsList = []
             for video in videos:
-                commentsOfVideo = Comment.objects.filter(video=video,isDelete=False)
+                commentsOfVideo = Comment.objects.filter(video=video, isDelete=False)
                 commentsList.append(commentsOfVideo)
+            print("Comments #",len(commentsList))
             lecturesList = [{'video' : t[0], 'comments' : t[1]} for t in zip (videos,commentsList)]
             return render(request, 
                 'watchvideo/show_content_in_tabs.html', 
