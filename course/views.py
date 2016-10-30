@@ -113,12 +113,11 @@ def manage_course(req, courseID):
 def edited_course(req, courseID):
     if req.method == 'POST':
         course = Course.objects.get(courseID=courseID)
-        newCourseName = req.POST.get('courseName',None)
-        if newCourseName is not None:
+        newCourseName = req.POST.get('courseName')
+        if len(newCourseName) > 0:
             course.courseName = newCourseName
-        # Missing Category might have to delete old one before insert new CourseInCategory
-        newCategoryID = req.POST.get('courseCategory',None)
-        if newCategoryID is not None:
+        newCategoryID = req.POST.get('courseCategory')
+        if len(newCategoryID) > 0:
             try:
                 courseInCategory = CourseInCategory.objects.get(course=course)
                 category = Category.objects.get(categoryID=newCategoryID)
@@ -142,8 +141,8 @@ def edited_course(req, courseID):
         newCourseThumbnail = req.FILES.get('courseThumbnail')
         if newCourseThumbnail is not None:
             course.courseThumbnail = newCourseThumbnail
-        newCourseDesc = req.POST.get('courseDesc',None)
-        if newCourseDesc is not None:
+        newCourseDesc = req.POST.get('courseDesc')
+        if len(newCourseDesc) > 0:
             course.courseDesc = newCourseDesc
         course.save()
         return redirect(reverse('course:manage_course', kwargs={'courseID' : courseID }))
