@@ -27,7 +27,7 @@
                         Change course's name:<input type="text" name="courseName" placeholder="{{course.courseName}}"><br>
                         <div class="form-group">
                             <label for="courseCategory" class="control-label">Change Category: Current [{{inCategory}}]</label>
-                            <select id="courseCategory" class="dropdown form-control" name="courseCategory" required>
+                            <select id="courseCategory" class="dropdown form-control" name="courseCategory">
                                 <option value="">Choose Category</option>
                                 {% for category in categories %}
                                     <option value="{{category.categoryID}}">{{category.categoryName}}</option>
@@ -49,12 +49,16 @@
                     <p>Owned by {{course.owner.first_name}} {{course.owner.last_name}}</p>
                 {% endif %}
             </div>
-            {% comment %}{% for video in videos %}{% endcomment %}
             {% for lecture in lecturesList %}
                 <div id="{{lecture.video.videoID}}Tab" class="tab-pane fade">
                     {% if isOwner %}
                         Edit Video [{{lecture.video.videoName}}]
-                        
+                        <form action={% url 'course:edited_course' course.courseID %} method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            Change course's name:<input type="text" name="videoName" placeholder="{{lecture.video.videoName}}"><br>
+                            Change video: <input type="file" name="videoFile"><br>
+                        <input type="submit" value="Edit">
+                    </form>
                     {% else %}
                         <h3>{{lecture.video.videoName}}</h3>
                         <p>This is the video description</p>

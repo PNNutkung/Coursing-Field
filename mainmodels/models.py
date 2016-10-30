@@ -94,3 +94,9 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+
+class OrderVideoInCourse(models.Model):
+    orderVideoInCourseID = models.AutoField(primary_key=True)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    video = models.ForeignKey(Video, on_delete=models.CASCADE)
+    orderNo = models.IntegerField()
