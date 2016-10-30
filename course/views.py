@@ -152,3 +152,15 @@ def reviewCourse(req, courseID):
         newReview = Review(reviewDesc=reviewDesc, owner=req.user, course=course, rating=reviewRate, isDelete=False)
         newReview.save()
     return redirect(reverse('course:view_course', kwargs={'courseID': courseID}))
+
+def comment_on_video(req, courseID, videoID):
+    if req.method == 'POST':
+        commentDesc = req.POST.get('comment','')
+        video = Video.objects.get(videoID=videoID)
+        comment = Comment(owner=req.user,video=video,commentDesc=commentDesc,isDelete=False)
+        if req.user.id == courseID:
+            return redirect(reverse('course:manage_course', kwargs={'courseID' : courseID }))
+        else:
+            return redirect(reverse('watchvideo:show_content_in_tabs', kwargs={'courseID' : courseID } ))
+    else:
+        return HttpResponse('Failed to post.')
