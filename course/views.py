@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-from mainmodels.models import Category, Course, CourseInCategory, TakenCourse, Video, CoursePreview, Review
+from mainmodels.models import *
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -152,3 +152,17 @@ def reviewCourse(req, courseID):
         newReview = Review(reviewDesc=reviewDesc, owner=req.user, course=course, rating=reviewRate, isDelete=False)
         newReview.save()
     return redirect(reverse('course:view_course', kwargs={'courseID': courseID}))
+
+def comment_on_video(req, courseID, videoID):
+    if req.method == 'POST':
+        commentDesc = req.POST.get('commentDesc','')
+        video = Video.objects.get(videoID=videoID)
+        comment = Comment(owner=req.user,video=video,commentDesc=commentDesc,isDelete=False)
+        comment.save()
+        print( comment.commentDesc )
+        if req.user.id == courseID:
+            return redirect(reverse('course:manage_course', kwargs={'courseID' : courseID } ))
+        else:
+            return redirect(reverse('watchvideo:show_contents_in_tabs', kwargs={'courseID' : courseID } ))
+    else:
+        return HttpResponse('Failed to post.')

@@ -41,26 +41,47 @@
                     <p>Owned by {{course.owner.first_name}} {{course.owner.last_name}}</p>
                 {% endif %}
             </div>
-            {% for video in videos %}
-            <div id="{{video.videoID}}Tab" class="tab-pane fade">
-                {% if isOwner %}
-                    <form action={% url 'course:edited_course' course.courseID %} method="POST" enctype="multipart/form-data">
+            {% comment %}{% for video in videos %}{% endcomment %}
+            {% for lecture in lecturesList %}
+                <div id="{{lecture.video.videoID}}Tab" class="tab-pane fade">
+                    {% if isOwner %}
+                        Edit Video [{{lecture.video.videoName}}]
+                    {% else %}
+                        <h3>{{lecture.video.videoName}}</h3>
+                        <p>This is the video description</p>
+                        <video width="400" height="300" controls>
+                            <source src="{{lecture.video.videoFile.url}}" type="video/mp4">
+                        </video>
+                    {% endif %}
+                    {% for comment in lecture.comments %}
+                        <li>
+                            <div class="info-container">
+                                <div class="avatar">
+                                    <img src="{{comment.owner.profilePicture.url}}" alt="{{comment.owner}}'s avatar" />
+                                </div>
+                            </div>
+                            <div class="user-details">
+                                <ul>
+                                    <li class="username ellipsis">{{comment.owner.first_name}} {{comment.owner.last_name}}</li>
+                                    <li class="comment-create">{{comment.commentDate}}</li>
+                                </ul>
+                            </div>
+                            <div class="comment-container">
+                                <p>
+                                    {{comment.commentDesc}}
+                                </p>
+                            </div>
+                        </li>
+                    {% endfor %}
+                    <form action={% url 'course:comment_on_video' courseID=course.courseID videoID=lecture.video.videoID %} method="POST" >
                         {% csrf_token %}
-                        Change course's name:<input type="text" name="courseName" placeholder="{{course.courseName}}"><br>
-                        {% comment %}Change course's category:<input type="text" name="category" placeholder="{{inCategory}}"><br>{% endcomment %}
-                        Change preview video: <input type="file" name="previewVideo"><br>
-                        Change course's thumbnail: <input type="file" name="courseThumbnail"><br>
-                        Change course's description:<input type="text" name="courseDesc" placeholder="{{course.courseDesc}}"><br>
-                        <input type="submit" value="Confirm">
+                        <h2><label for="commentDesc" class="control-label">Comment Section</label></h2>
+                        <div class="form-group">
+                            <textarea id="commentDesc" name="commentDesc" rows="10" class="form-control" placeholder="Give your opinion about this video..." required></textarea>
+                        </div>
+                        <input type="submit" class="btn btn-block btn-primary" name="submitComment" value="Comment"/>
                     </form>
-                {% else %}
-                    <h3>{{video.videoName}}</h3>
-                    <p>This is the video description</p>
-                    <video width="400" height="300" controls>
-                        <source src="{{video.videoFile.url}}" type="video/mp4">
-                    </video>
-                {% endif %}
-            </div>
+                </div>
             {% endfor %}
             {% if isOwner %}
                 <div id="uploadTab" class="tab-pane fade">

@@ -9,13 +9,19 @@ def show_content_in_tabs(request, courseID):
         course = get_object_or_404(Course, courseID=courseID)
         if hasTakenCourse(request.user, course):
             # course = Course.objects.get(courseID=courseID)
-            videos = Video.objects.filter(course=course)
+            videos = Video.objects.filter(course=course,isDelete=False)
             preview = CoursePreview.objects.get(course=course,isDelete=False)
             courseInCategory = get_object_or_404(CourseInCategory, course=course)
             # courseInCategory = courseInCategory.objects.get(course=course)
+            commentsList = []
+            for video in videos:
+                commentsOfVideo = Comment.objects.filter(video=video, isDelete=False)
+                commentsList.append(commentsOfVideo)
+            print("Comments #",len(commentsList))
+            lecturesList = [{'video' : t[0], 'comments' : t[1]} for t in zip (videos,commentsList)]
             return render(request, 
                 'watchvideo/show_content_in_tabs.html', 
-                {'course' : course, 'videos' : videos, 'preview' : preview, 'courseInCategory' : courseInCategory}
+                {'course' : course, 'videos' : videos, 'preview' : preview, 'courseInCategory' : courseInCategory, 'lecturesList' : lecturesList}
             )
         else:
             return HttpResponse('Redirect to purchase page')
