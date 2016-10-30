@@ -38,6 +38,7 @@ def view_course(req, courseID):
         course = Course.objects.get(courseID=courseID)
         isOwner = False
         if req.user.id == course.owner.id:
+            print("You are owner of this course")
             isOwner = True
         hasTakencourse = False
         try:
@@ -84,32 +85,48 @@ def view_course(req, courseID):
         except:
             reviewRateLevel = []
 
-        return render(req, 'course/viewCourse.html', {'course' : course, 'hasTakenCourse' : hasTakencourse, 'inCategory' : inCategory, 'userWithProfile' : userWithProfile, 'leftBalance': leftBalance,'numberOfLectures':numberOfLectures, 'reviews':reviews, 'averageRating': averageRating,'reviewRateLevel':reviewRateLevel,})
+        return render(req, 'course/viewCourse.html', {'course' : course, 'hasTakenCourse' : hasTakencourse, 'inCategory' : inCategory, 'userWithProfile' : userWithProfile, 'leftBalance': leftBalance,'numberOfLectures':numberOfLectures, 'reviews':reviews, 'averageRating': averageRating,'reviewRateLevel':reviewRateLevel, 'isOwner' : isOwner, })
     else:
         return redirect(reverse('mockaccount:index'))
 
 def manage_course(req, courseID):
     if req.user.is_authenticated:
         course = Course.objects.get(courseID=courseID)
-        videos = Video.objects.filter(course=course)
-        inCategory = CourseInCategory.objects.get(course=course).category.categoryName
         isOwner = False
         if req.user.id == course.owner.id:
+            print("You are the owner of this course")
             isOwner = True
         else:
             return redirect(reverse('course:view_course'))
-        return render(req, 'watchvideo/show_content_in_tabs.html',{ 'course' : course, 'videos' : videos, 'isOwner' : isOwner, 'inCategory' : inCategory })
+        videos = Video.objects.filter(course=course)
+        commentsList = []
+        inCategory = CourseInCategory.objects.get(course=course).category.categoryName
+        categories = Category.objects.all()
+        for video in videos:
+            commentsOfVideo = Comment.objects.filter(video=video, isDelete=False)
+            commentsList.append(commentsOfVideo)
+        lecturesList = [{'video' : t[0], 'comments' : t[1]} for t in zip (videos,commentsList)]
+        return render(req, 'watchvideo/show_content_in_tabs.html',{ 'course' : course, 'lecturesList' : lecturesList, 'isOwner' : isOwner, 'inCategory' : inCategory, 'categories' : categories, })
     else:
         return redirect(reverse('mockaccount:index'))
 
 def edited_course(req, courseID):
     if req.method == 'POST':
         course = Course.objects.get(courseID=courseID)
-        newCourseName = req.POST.get('courseName')
+        newCourseName = req.POST.get('courseName',None)
         if newCourseName is not None:
             course.courseName = newCourseName
         # Missing Category might have to delete old one before insert new CourseInCategory
-        newPreviewVideo = req.FILES.get('previewVideo')
+        newCategoryID = req.POST.get('courseCategory',None)
+        if newCategoryID is not None:
+            try:
+                courseInCategory = CourseInCategory.objects.get(course=course)
+                category = Category.objects.get(categoryID=newCategoryID)
+                courseInCategory.category = category
+                courseInCategory.save()
+            except ObjectDoesNotExist:
+                print("Object does not exist")
+        newPreviewVideo = req.FILES.get('previewVideo',None)
         if newPreviewVideo is not None:
             try:
                 #Assume there is only one preview video. Any old ones should be labeled isDelete=True
@@ -125,7 +142,7 @@ def edited_course(req, courseID):
         newCourseThumbnail = req.FILES.get('courseThumbnail')
         if newCourseThumbnail is not None:
             course.courseThumbnail = newCourseThumbnail
-        newCourseDesc = req.POST.get('courseDesc')
+        newCourseDesc = req.POST.get('courseDesc',None)
         if newCourseDesc is not None:
             course.courseDesc = newCourseDesc
         course.save()
@@ -166,3 +183,6 @@ def comment_on_video(req, courseID, videoID):
             return redirect(reverse('watchvideo:show_contents_in_tabs', kwargs={'courseID' : courseID } ))
     else:
         return HttpResponse('Failed to post.')
+
+def edited_video(req, courseID, videoID):
+    return redirect(reverse('course:manage_course', kwargs={'courseID' : courseID } ))
