@@ -23,10 +23,9 @@ def register(request):
         email = request.POST.get('email')
         gender = request.POST.get('gender', 'M')
         profilePicture = request.FILES.get('profilepicture')
-        address = request.POST.get('address')
+        address = request.POST.get('address','')
         birthDate_str = request.POST.get('birthday')
         birthDate = datetime.strptime(birthDate_str, '%Y-%m-%d').date()
-        print(birthDate)
         balance = 0.00
         isBan = False
         user = User.objects.create_user(username=username,password=password,email=email,first_name=firstname,last_name=lastname)

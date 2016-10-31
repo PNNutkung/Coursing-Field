@@ -10,16 +10,29 @@ class Category(models.Model):
 
 class Course(models.Model):
     courseID = models.AutoField(primary_key=True)
+    def get_upload_path_thumbnail(instance, filename):
+        name, ext = filename.split('.')
+        file_path = 'thumbnails/{courseID}/{name}.{ext}'.format(
+            courseID=instance.courseID, name=name, ext=ext
+        )
+        return file_path
+    def get_upload_path_preview(instance, filename):
+        name, ext = filename.split('.')
+        file_path = 'previews/{courseID}/{name}.{ext}'.format(
+            courseID=instance.courseID, name=name, ext=ext
+        )
+        return file_path
     courseName = models.CharField(max_length=50)
     courseShortDesc = models.CharField(max_length=50)
     courseFullDesc = models.TextField()
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    courseThumbnail = models.ImageField(upload_to='thumbnails/')
-    previewVideoFile = models.FileField(upload_to='previews/')
+    courseThumbnail = models.ImageField(upload_to=get_upload_path_thumbnail)
+    previewVideoFile = models.FileField(upload_to=get_upload_path_preview)
     coursePrice = models.FloatField()
     createdDate = models.DateTimeField(auto_now=False, auto_now_add=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     isDelete = models.BooleanField()
+    isPublish = models.BooleanField()
     discountPercentage = models.IntegerField()
     discountPrice = models.FloatField()
 
@@ -97,11 +110,17 @@ class Review(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    bio = models.CharField(max_length=255, default="")
-    profilePicture = models.ImageField(upload_to='profilepics/')
-    address = models.CharField(max_length=255, default="")
+    bio = models.CharField(max_length=255, default="Your bio")
+    def get_upload_path_profilepicture(instance, filename):
+        name, ext = filename.split('.')
+        file_path = 'profilepictures/{userID}/{name}.{ext}'.format(
+            userID=instance.user.id, name=name, ext=ext
+        )
+        return file_path
+    profilePicture = models.ImageField(upload_to=get_upload_path_profilepicture)
+    address = models.CharField(max_length=255, default="Your address")
     birthDate = models.DateField(auto_now=False, auto_now_add=True)
-    balance = models.FloatField()
+    balance = models.FloatField(default=0.00)
     gender = models.CharField(max_length=1)
     # balance = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal('0.00'))
     isBan = models.BooleanField(default=False)
