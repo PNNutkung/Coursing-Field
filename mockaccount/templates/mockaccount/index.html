@@ -33,8 +33,14 @@
                 Password <input type='password' name='password' required><br>
                 Firstname <input type='text' name='firstname' required><br>
                 Lastname <input type='text' name='lastname' required><br>
-                Address <input type="text" name="address" required><br>
                 Birthday <input type='date' name='birthday' required><br>
+                Gender 
+                <select name='gender' required>
+                    <option value="">Select Gender</option>
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
+                    <option value="O">Other</option>
+                </select>
                 <input type='submit' value='Register'>
             </form>
         {% endif %}
