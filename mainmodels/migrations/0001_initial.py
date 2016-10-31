@@ -41,8 +41,8 @@ class Migration(migrations.Migration):
                 ('courseName', models.CharField(max_length=50)),
                 ('courseShortDesc', models.CharField(max_length=50)),
                 ('courseFullDesc', models.TextField()),
-                ('courseThumbnail', models.ImageField(upload_to=mainmodels.models.Course.get_upload_path_thumbnail)),
-                ('previewVideoFile', models.FileField(upload_to=mainmodels.models.Course.get_upload_path_preview)),
+                ('courseThumbnail', models.ImageField(upload_to=mainmodels.models.get_upload_path_thumbnail)),
+                ('previewVideoFile', models.FileField(upload_to=mainmodels.models.get_upload_path_preview)),
                 ('coursePrice', models.FloatField()),
                 ('createdDate', models.DateTimeField(auto_now_add=True)),
                 ('isDelete', models.BooleanField()),
@@ -74,7 +74,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('bio', models.CharField(default='Your bio', max_length=255)),
-                ('profilePicture', models.ImageField(upload_to=mainmodels.models.Profile.get_upload_path_profilepicture)),
+                ('profilePicture', models.ImageField(upload_to=mainmodels.models.get_upload_path_profilepicture)),
                 ('address', models.CharField(default='Your address', max_length=255)),
                 ('birthDate', models.DateField(auto_now_add=True)),
                 ('balance', models.FloatField(default=0.0)),
@@ -112,7 +112,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('videoID', models.AutoField(primary_key=True, serialize=False)),
                 ('videoName', models.CharField(max_length=50)),
-                ('videoFile', models.FileField(upload_to=mainmodels.models.Video.get_upload_path)),
+                ('videoFile', models.FileField(upload_to=mainmodels.models.get_upload_path_video)),
                 ('videoDesc', models.CharField(max_length=250)),
                 ('createdDate', models.DateTimeField(auto_now_add=True)),
                 ('isDelete', models.BooleanField()),
