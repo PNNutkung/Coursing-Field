@@ -10,8 +10,8 @@
     <body>
         <ul class='nav nav-tabs'>
             <li class="active"><a data-toggle="tab" href="#overviewTab">Overview</a></li>
-            {% for video in videos %}
-            <li><a data-toggle="tab" href="#{{video.videoID}}Tab">{{video.videoName}}</a></li>
+            {% for lecture in lecturesList %}
+            <li><a data-toggle="tab" href="#{{lecture.video.videoID}}Tab">{{lecture.video.videoName}}</a></li>
             {% endfor %}
             {% if isOwner %}
                 <li><a data-toggle="tab" href="#uploadTab">Upload</a></li>
@@ -25,7 +25,15 @@
                     <form action={% url 'course:edited_course' course.courseID %} method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         Change course's name:<input type="text" name="courseName" placeholder="{{course.courseName}}"><br>
-                        {% comment %}Change course's category:<input type="text" name="category" placeholder="{{inCategory}}"><br>{% endcomment %}
+                        <div class="form-group">
+                            <label for="courseCategory" class="control-label">Change Category: Current [{{inCategory}}]</label>
+                            <select id="courseCategory" class="dropdown form-control" name="courseCategory">
+                                <option value="">Choose Category</option>
+                                {% for category in categories %}
+                                    <option value="{{category.categoryID}}">{{category.categoryName}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
                         Change preview video: <input type="file" name="previewVideo"><br>
                         Change course's thumbnail: <input type="file" name="courseThumbnail"><br>
                         Change course's description:<input type="text" name="courseDesc" placeholder="{{course.courseDesc}}"><br>
@@ -41,11 +49,16 @@
                     <p>Owned by {{course.owner.first_name}} {{course.owner.last_name}}</p>
                 {% endif %}
             </div>
-            {% comment %}{% for video in videos %}{% endcomment %}
             {% for lecture in lecturesList %}
                 <div id="{{lecture.video.videoID}}Tab" class="tab-pane fade">
                     {% if isOwner %}
                         Edit Video [{{lecture.video.videoName}}]
+                        <form action={% url 'course:edited_course' course.courseID %} method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            Change course's name:<input type="text" name="videoName" placeholder="{{lecture.video.videoName}}"><br>
+                            Change video: <input type="file" name="videoFile"><br>
+                        <input type="submit" value="Edit">
+                    </form>
                     {% else %}
                         <h3>{{lecture.video.videoName}}</h3>
                         <p>This is the video description</p>
@@ -53,6 +66,7 @@
                             <source src="{{lecture.video.videoFile.url}}" type="video/mp4">
                         </video>
                     {% endif %}
+                    <h3>Comment Section</h3>
                     {% for comment in lecture.comments %}
                         <li>
                             <div class="info-container">
@@ -75,7 +89,6 @@
                     {% endfor %}
                     <form action={% url 'course:comment_on_video' courseID=course.courseID videoID=lecture.video.videoID %} method="POST" >
                         {% csrf_token %}
-                        <h2><label for="commentDesc" class="control-label">Comment Section</label></h2>
                         <div class="form-group">
                             <textarea id="commentDesc" name="commentDesc" rows="10" class="form-control" placeholder="Give your opinion about this video..." required></textarea>
                         </div>
