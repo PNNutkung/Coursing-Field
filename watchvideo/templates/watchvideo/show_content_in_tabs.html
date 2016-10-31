@@ -6,6 +6,11 @@
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <script type="text/javascript">
+            
+            var orderVideoSelect = document.getElementByClassName('orderVideo');
+
+        </script>
     </header>
     <body>
         <ul class='nav nav-tabs'>
@@ -38,6 +43,19 @@
                         Change course's thumbnail: <input type="file" name="courseThumbnail"><br>
                         Change course's description:<input type="text" name="courseDesc" placeholder="{{course.courseDesc}}"><br>
                         <input type="submit" value="Confirm">
+                    </form>
+                    <form action={% url 'course:reordered_video' course.courseID %} method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <p>Reorder course's videos</p>
+                        {% for lecture in lecturesList %}
+                            {{lecture.video.videoName}}
+                            <select class='dropdown orderVideo' name='{{lecture.video.videoID}}'>
+                                {% for orderNo in orderNoList %}
+                                    <option value="{{orderNo}}">{{orderNo}}</option>
+                                {% endfor %}
+                            </select><br>
+                        {% endfor %}
+                        <input type="submit" value="Reorder">
                     </form>
                 {% else %}
                     <p>{{course.courseName}}<br>
