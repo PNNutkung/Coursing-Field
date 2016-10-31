@@ -4,37 +4,52 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from decimal import Decimal
 
+def get_upload_path_thumbnail(instance, filename):
+    name, ext = filename.split('.')
+    file_path = 'thumbnails/{courseID}/{name}.{ext}'.format(
+        courseID=instance.courseID, name=name, ext=ext
+    )
+    return file_path
+def get_upload_path_preview(instance, filename):
+    name, ext = filename.split('.')
+    file_path = 'previews/{courseID}/{name}.{ext}'.format(
+        courseID=instance.courseID, name=name, ext=ext
+    )
+    return file_path
+
+def get_upload_path_video(instance, filename):
+    name, ext = filename.split('.')
+    file_path = 'videos/{courseID}/{name}.{ext}'.format(
+        courseID=instance.course.courseID, name=name, ext=ext
+    )
+    return file_path
+
+def get_upload_path_profilepicture(instance, filename):
+    name, ext = filename.split('.')
+    file_path = 'profilepictures/{userID}/{name}.{ext}'.format(
+        userID=instance.user.id, name=name, ext=ext
+    )
+    return file_path
+
 class Category(models.Model):
     categoryID = models.AutoField(primary_key=True)
     categoryName = models.CharField(max_length=200)
 
 class Course(models.Model):
     courseID = models.AutoField(primary_key=True)
-    def get_upload_path_thumbnail(instance, filename):
-        name, ext = filename.split('.')
-        file_path = 'thumbnails/{courseID}/{name}.{ext}'.format(
-            courseID=instance.courseID, name=name, ext=ext
-        )
-        return file_path
-    def get_upload_path_preview(instance, filename):
-        name, ext = filename.split('.')
-        file_path = 'previews/{courseID}/{name}.{ext}'.format(
-            courseID=instance.courseID, name=name, ext=ext
-        )
-        return file_path
-    courseName = models.CharField(max_length=50)
-    courseShortDesc = models.CharField(max_length=50)
-    courseFullDesc = models.TextField()
+    courseName = models.CharField(max_length=50, default='Course name')
+    courseShortDesc = models.CharField(max_length=50, default='Course short description')
+    courseFullDesc = models.TextField(default='Course full description')
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    courseThumbnail = models.ImageField(upload_to=get_upload_path_thumbnail)
-    previewVideoFile = models.FileField(upload_to=get_upload_path_preview)
-    coursePrice = models.FloatField()
+    courseThumbnail = models.ImageField(upload_to=get_upload_path_thumbnail, default='thumbnails/dummies/untitled.png')
+    previewVideoFile = models.FileField(upload_to=get_upload_path_preview, default='previews/dummies/blankvideo.mp4')
+    coursePrice = models.FloatField(default=0.00)
     createdDate = models.DateTimeField(auto_now=False, auto_now_add=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    isDelete = models.BooleanField()
-    isPublish = models.BooleanField()
-    discountPercentage = models.IntegerField()
-    discountPrice = models.FloatField()
+    isDelete = models.BooleanField(default=False)
+    isPublish = models.BooleanField(default=False)
+    discountPercentage = models.IntegerField(default=0)
+    discountPrice = models.FloatField(default=0.00)
 
 class FeaturedCourse(models.Model):
     featuredCourseID = models.AutoField(primary_key=True)
@@ -43,86 +58,47 @@ class FeaturedCourse(models.Model):
 
 class Video(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    def get_upload_path(instance, filename):
-        name, ext = filename.split('.')
-        file_path = 'videos/{courseID}/{name}.{ext}'.format(
-            courseID=instance.course.courseID, name=name, ext=ext
-        )
-        return file_path
     videoID = models.AutoField(primary_key=True)
-    videoName = models.CharField(max_length=50)
-    videoFile = models.FileField(upload_to=get_upload_path)
-    videoDesc = models.CharField(max_length=250)
+    videoName = models.CharField(max_length=50, default='video name')
+    videoFile = models.FileField(upload_to=get_upload_path_video, default='previews/dummies/blankvideo.mp4')
+    videoDesc = models.CharField(max_length=250, default='video description')
     createdDate = models.DateTimeField(auto_now=False, auto_now_add=True)
-    isDelete = models.BooleanField()
+    isDelete = models.BooleanField(default=False)
 
 class Comment(models.Model):
     commentID = models.AutoField(primary_key=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     video = models.ForeignKey(Video, on_delete=models.CASCADE)
-    commentDesc = models.CharField(max_length=250)
+    commentDesc = models.CharField(max_length=250, default='your comment')
     commentDate = models.DateTimeField(auto_now=False, auto_now_add=True)
-    isDelete = models.BooleanField()
+    isDelete = models.BooleanField(default=False)
 
 class Transaction(models.Model):
     transactionID = models.AutoField(primary_key=True)
-    courseID = models.IntegerField()
-    coursePrice = models.FloatField()
-    takerID = models.IntegerField()
-    takerBalanceBeforePurchased = models.FloatField()
-    usedCoupon = models.BooleanField()
-    # course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    # taker = models.ForeignKey(User, on_delete=models.CASCADE)
+    courseID = models.IntegerField(default=1)
+    coursePrice = models.FloatField(default=0.00)
+    takerID = models.IntegerField(default=1)
+    takerBalanceBeforePurchased = models.FloatField(default=0.00)
+    usedCoupon = models.BooleanField(default=False)
     transactionDate = models.DateTimeField(auto_now=False, auto_now_add=True)
-
-
-# class CourseInCategory(models.Model):
-#     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-#     course = models.ForeignKey(Course, on_delete=models.CASCADE)
 
 class Review(models.Model):
     reviewID = models.AutoField(primary_key=True)
-    reviewDesc = models.CharField(max_length=255)
+    reviewDesc = models.CharField(max_length=255, default='review description')
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    rating = models.IntegerField()
+    rating = models.IntegerField(default=1)
     reviewedDate = models.DateTimeField(auto_now=False,auto_now_add=True)
-    isDelete = models.BooleanField()
-
-# class Coupon(models.Model):
-#     couponSerial = models.IntegerField(primary_key=True)
-#     couponDesc = models.CharField(max_length=250)
-#     value = models.IntegerField()
-#     percent = models.IntegerField()
-#     createdDate = models.DateTimeField(auto_now=False, auto_now_add=True)
-#     isUsed = models.BooleanField()
-
-# class TakenCourse(models.Model):
-#     takenCourseID = models.AutoField(primary_key=True)
-#     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-#     taker = models.ForeignKey(User, on_delete=models.CASCADE)
-
-# class CoursePreview(models.Model):
-#     coursePreviewID = models.AutoField(primary_key=True)
-#     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-#     previewVideo = models.FileField(upload_to='previews/')
-#     isDelete = models.BooleanField()
+    isDelete = models.BooleanField(default=False)
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.CharField(max_length=255, default="Your bio")
-    def get_upload_path_profilepicture(instance, filename):
-        name, ext = filename.split('.')
-        file_path = 'profilepictures/{userID}/{name}.{ext}'.format(
-            userID=instance.user.id, name=name, ext=ext
-        )
-        return file_path
-    profilePicture = models.ImageField(upload_to=get_upload_path_profilepicture)
+    profilePicture = models.ImageField(upload_to=get_upload_path_profilepicture, default='thumbnails/dummies/untitled.png')
     address = models.CharField(max_length=255, default="Your address")
     birthDate = models.DateField(auto_now=False, auto_now_add=True)
     balance = models.FloatField(default=0.00)
-    gender = models.CharField(max_length=1)
-    # balance = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal('0.00'))
+    gender = models.CharField(max_length=1, default='M')
     isBan = models.BooleanField(default=False)
 
 @receiver(post_save, sender=User)
@@ -138,4 +114,4 @@ class OrderVideoInCourse(models.Model):
     orderVideoInCourseID = models.AutoField(primary_key=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     video = models.ForeignKey(Video, on_delete=models.CASCADE)
-    orderNo = models.IntegerField()
+    orderNo = models.IntegerField(default=0)

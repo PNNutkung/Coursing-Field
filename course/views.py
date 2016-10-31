@@ -15,18 +15,14 @@ def createCourse(req):
             courseName = req.POST['courseName']
             courseCategory = req.POST['courseCategory']
             courseShortDesc = req.POST['courseDesc']
-            courseThumbnail = req.FILES.get('courseThumbnail')
-            if courseThumbnail is None:
-                dummyCourse = Course.objects.get(courseID="11")
-                courseThumbnail = dummyCourse.courseThumbnail
+            # if courseThumbnail is None:
+            #     dummyCourse = Course.objects.get(courseID="11")
+            #     courseThumbnail = dummyCourse.courseThumbnail
             coursePrice = req.POST['coursePrice']
             owner = req.user
             category = Category.objects.get(categoryID=courseCategory)
-            newCourse = Course(courseName=courseName, courseShortDesc=courseShortDesc,courseThumbnail=courseThumbnail, owner=owner, coursePrice=coursePrice, isDelete=False, isPublish=False, category=category, discountPercentage=0, discountPrice=coursePrice)
+            newCourse = Course(courseName=courseName, courseShortDesc=courseShortDesc, owner=owner, coursePrice=coursePrice, isDelete=False, isPublish=False, category=category, discountPercentage=0, discountPrice=coursePrice)
             newCourse.save()
-
-            # newCourseCategory = CourseInCategory(category=category, course=newCourse)
-            # newCourseCategory.save()
 
             return render(req, 'course/createCourse.html', {'courseCategory':courseCategory, 'success': True, 'message': 'Create course successfully.'})
             # except:
@@ -40,22 +36,23 @@ def view_course(req, courseID):
         course = Course.objects.get(courseID=courseID)
         isOwner = False
         if req.user.id == course.owner.id:
-            print("You are owner of this course")
             isOwner = True
         hasTakencourse = False
         try:
-            takenCourse = TakenCourse.objects.get(course=course,taker=req.user)
-            if takenCourse is not None:
+            transaction = Transaction.objects.get(courseID=courseID, takerID=req.user.id)
+            # takenCourse = TakenCourse.objects.get(course=course,taker=req.user)
+            if transaction is not None:
                 hasTakencourse = True
         except ObjectDoesNotExist:
             hasTakencourse = False
         userWithProfile = User.objects.get(id=req.user.id)
-        inCategory = CourseInCategory.objects.get(course=course).category.categoryName
-        leftBalance = int(userWithProfile.profile.balance - course.coursePrice)
-
+        inCategory = course.category.categoryName
+        if course.discountPercentage > 0:
+            leftBalance = int(userWithProfile.profile.balance - course.coursePrice)
+        else:
+            leftBalance = int(userWithProfile.profile.balance - course.discountPrice)
         numberOfLectures = Video.objects.filter(course=course).count()
-
-        reviewList = Review.objects.filter(course=course).order_by('-reviewDate')
+        reviewList = Review.objects.filter(course=course).order_by('-reviewedDate')
         reviewPaginator = Paginator(reviewList, 5)
         page = req.GET.get('reviewPage')
         try:
@@ -102,7 +99,7 @@ def manage_course(req, courseID):
             return redirect(reverse('course:view_course'))
         videos = Video.objects.filter(course=course, isDelete=False)
         commentsList = []
-        inCategory = CourseInCategory.objects.get(course=course).category.categoryName
+        inCategory = course.category.categoryName
         categories = Category.objects.all()
         for video in videos:
             commentsOfVideo = Comment.objects.filter(video=video, isDelete=False)
