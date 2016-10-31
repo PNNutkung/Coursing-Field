@@ -26,17 +26,16 @@
   <nav class="navbar navbar-default navbar-default navbar-fixed-top">
   <div class="container-fluid">
     <div class="col-md-2">
-    <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
         <a class="navbar-brand" href="#"><div id="head">Coursing Field</div></a>
       </div>
     </div>
-    <!-- end header div -->
+
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <div class="col-md-1">
         <ul class="nav navbar-nav">
-          <li><a href="#">Browse</a></li>
+          <li><a href="{% url 'browse:index' %}">Browse</a></li>
         </ul>
       </div>
       <div class="col-md-5">
@@ -48,11 +47,11 @@
       </div>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="#">My Course</a></li>
-        <li><a href="#" style="background-color: limegreen; color: white;">Create Course</a></li>
-        <li><a href="#">Character Name</a></li>
-      </ul><!-- end footer right <--></-->
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
+        <li><a href="{% url 'course:createCourse' %}" style="background-color: limegreen; color: white;">Create Course</a></li>
+        <li><a href="#">{{user}}</a></li>
+      </ul>
+    </div>
+  </div>
 </nav>
 
 {% block body %}
