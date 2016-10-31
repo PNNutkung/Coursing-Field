@@ -1,16 +1,7 @@
-<!DOCTYPE html>
-<html>
+{% extends 'ui/navbar.html' %}
+{% load staticfiles %}
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Create New Course</title>
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+{% block style %}
     <style media="screen">
         .input-icon {
             position: relative;
@@ -32,49 +23,47 @@
             padding-right: 0;
         }
     </style>
-</head>
+{% endblock %}
 
-<body>
-    <div class="container">
-        <h2><strong>Create New Course</strong></h2>
-        {% if message %}
-            <div class="alert {% if success %}alert-success{% elif not success %}alert-danger{% endif %}" role="alert">
-                <h3>{{message}}</h3>
+{% block body %}
+<div class="container">
+    <h2><strong>Create New Course</strong></h2>
+    {% if message %}
+        <div class="alert {% if success %}alert-success{% elif not success %}alert-danger{% endif %}" role="alert">
+            <h3>{{message}}</h3>
+        </div>
+    {% endif %}
+    <form action="{% url 'course:createCourse' %}" method="post" role="form" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="courseName" class="control-label">Course Name:</label>
+            <input id="courseName" type="text" name="courseName" placeholder="Course Name" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="courseCategory" class="control-label">Course Category:</label>
+            <select id="courseCategory" class="dropdown form-control" name="courseCategory" required>
+                <option value="">Choose Category</option>
+                {% for category in courseCategory %}
+                    <option value="{{category.categoryID}}">{{category.categoryName}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="courseDesc" class="control-label">Course Description:</label>
+            <textarea id="courseDesc" name="courseDesc" rows="10" class="form-control" placeholder="Course Description" required></textarea>
+        </div>
+        {% comment %}<div class="form-group">
+            <label for="courseThumbnail">Course Thumbnails:</label>
+            <input id="courseThumbnail" type="file" name="courseThumbnail" class="from-control" accept="image/*" required>
+        </div>{% endcomment %}
+        <div class="form-group">
+            <label for="coursePrice">Course Price:</label>
+            <div class="input-icon">
+                <i>฿</i>
+                <input id="coursePrice" type="number" min="1" step="any" name="coursePrice" class="form-control" placeholder="Course Price" required>
             </div>
-        {% endif %}
-        <form action="{% url 'course:createCourse' %}" method="post" role="form" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="courseName" class="control-label">Course Name:</label>
-                <input id="courseName" type="text" name="courseName" placeholder="Course Name" class="form-control" required>
-            </div>
-            <div class="form-group">
-                <label for="courseCategory" class="control-label">Course Category:</label>
-                <select id="courseCategory" class="dropdown form-control" name="courseCategory" required>
-                    <option value="">Choose Category</option>
-                    {% for category in courseCategory %}
-                        <option value="{{category.categoryID}}">{{category.categoryName}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="courseDesc" class="control-label">Course Description:</label>
-                <textarea id="courseDesc" name="courseDesc" rows="10" class="form-control" placeholder="Course Description" required></textarea>
-            </div>
-            {% comment %}<div class="form-group">
-                <label for="courseThumbnail">Course Thumbnails:</label>
-                <input id="courseThumbnail" type="file" name="courseThumbnail" class="from-control" accept="image/*" required>
-            </div>{% endcomment %}
-            <div class="form-group">
-                <label for="coursePrice">Course Price:</label>
-                <div class="input-icon">
-                    <i>฿</i>
-                    <input id="coursePrice" type="number" min="1" step="any" name="coursePrice" class="form-control" placeholder="Course Price" required>
-                </div>
-            </div>
-            <button type="submit" name="submit" class="btn btn-primary form-control">Create</button>
-        </form>
-    </div>
-</body>
-
-</html>
+        </div>
+        <button type="submit" name="submit" class="btn btn-primary form-control">Create</button>
+    </form>
+</div>
+{% endblock %}
