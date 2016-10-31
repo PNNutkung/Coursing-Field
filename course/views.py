@@ -11,24 +11,26 @@ def createCourse(req):
         return redirect(reverse('mockaccount:index'))
     else:
         if req.method == 'POST':
-            try:
-                courseName = req.POST['courseName']
-                courseCategory = req.POST['courseCategory']
-                courseDesc = req.POST['courseDesc']
-                courseThumbnail = req.FILES['courseThumbnail']
-                coursePrice = req.POST['coursePrice']
-                owner = req.user
+            # try:
+            courseName = req.POST['courseName']
+            courseCategory = req.POST['courseCategory']
+            courseShortDesc = req.POST['courseDesc']
+            courseThumbnail = req.FILES.get('courseThumbnail')
+            if courseThumbnail is None:
+                dummyCourse = Course.objects.get(courseID="11")
+                courseThumbnail = dummyCourse.courseThumbnail
+            coursePrice = req.POST['coursePrice']
+            owner = req.user
+            category = Category.objects.get(categoryID=courseCategory)
+            newCourse = Course(courseName=courseName, courseShortDesc=courseShortDesc,courseThumbnail=courseThumbnail, owner=owner, coursePrice=coursePrice, isDelete=False, isPublish=False, category=category, discountPercentage=0, discountPrice=coursePrice)
+            newCourse.save()
 
-                newCourse = Course(courseName=courseName, courseDesc=courseDesc,courseThumbnail=courseThumbnail, owner=owner, coursePrice=coursePrice, isDelete=False)
-                newCourse.save()
+            # newCourseCategory = CourseInCategory(category=category, course=newCourse)
+            # newCourseCategory.save()
 
-                category = Category.objects.get(categoryID=courseCategory)
-                newCourseCategory = CourseInCategory(category=category, course=newCourse)
-                newCourseCategory.save()
-
-                return render(req, 'course/createCourse.html', {'courseCategory':courseCategory, 'success': True, 'message': 'Create course successfully.'})
-            except:
-                return render(req, 'course/createCourse.html', {'courseCategory':courseCategory, 'success': False, 'message': 'Create course failed.'})
+            return render(req, 'course/createCourse.html', {'courseCategory':courseCategory, 'success': True, 'message': 'Create course successfully.'})
+            # except:
+            #     return render(req, 'course/createCourse.html', {'courseCategory':courseCategory, 'success': False, 'message': 'Create course failed.'})
         else:
             courseCategory = Category.objects.all()
             return render(req, 'course/createCourse.html', {'courseCategory':courseCategory})
