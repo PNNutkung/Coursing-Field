@@ -14,10 +14,10 @@
             {% csrf_token %}
             <div class="container">
 
-              {{ user.username }} 
-              {{ user.email }}
-              {{ user.first_name }}
-              {{ user.last_name }}
+              <label><b>Username: </b></label>{{ user.username }}
+              <label><b>E-mail: </b></label>{{ user.email }}
+              <label><b>First name: </b></label> {{ user.first_name }}
+              <label><b>Last name: </b></label>{{ user.last_name }}
             </div>
 
     </body>
