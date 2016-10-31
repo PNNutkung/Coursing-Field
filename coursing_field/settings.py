@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'mockaccount.apps.MockaccountConfig',
     'takecourse.apps.TakecourseConfig',
     'watchvideo.apps.WatchvideoConfig',
+    'login.apps.LoginConfig',
     'browse.apps.BrowseConfig',
     'course.apps.CourseConfig',
     'django.contrib.admin',
