@@ -57,14 +57,13 @@
             {% for course in courses %}
             <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 card">
                 <div class="card-title">
-                    <h4 class="card-title">{{course.courseName}}</h4>
-                    <h6 class="card-subtitle text-muted">{{course.courseOwner}}</h6>
+                    <h4 class="card-title" style="text-overflow: ellipsis;">{{course.courseName}}</h4>
+                    <h6 class="card-subtitle text-muted">{{course.owner}}</h6>
                 </div>
-                <div class="center-cropped" style="background-image: url({{course.courseThumnail}});"></div>
+                <div class="center-cropped" style="background-image: url({{course.courseThumbnail.url}});"></div>
                 <div class="card-block">
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <a href="#" class="card-link">Card link</a>
-                    <a href="#" class="card-link">Another link</a>
+                    <p class="card-text">{{course.courseDesc}}</p>
+                    <a href={% url 'course:view_course' courseID=course.courseID %}>Course page</a>
                     <p>
                         {{course.courseRating}}
                     </p>

@@ -104,3 +104,6 @@ build/
 tests/report/
 db.sqlite3
 my.cnf
+test.cnf
+
+# Django app module
