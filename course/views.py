@@ -98,7 +98,7 @@ def manage_course(req, courseID):
             isOwner = True
         else:
             return redirect(reverse('course:view_course'))
-        videos = Video.objects.filter(course=course)
+        videos = Video.objects.filter(course=course, isDelete=False)
         commentsList = []
         inCategory = CourseInCategory.objects.get(course=course).category.categoryName
         categories = Category.objects.all()
@@ -106,7 +106,12 @@ def manage_course(req, courseID):
             commentsOfVideo = Comment.objects.filter(video=video, isDelete=False)
             commentsList.append(commentsOfVideo)
         lecturesList = [{'video' : t[0], 'comments' : t[1]} for t in zip (videos,commentsList)]
-        return render(req, 'watchvideo/show_content_in_tabs.html',{ 'course' : course, 'lecturesList' : lecturesList, 'isOwner' : isOwner, 'inCategory' : inCategory, 'categories' : categories, })
+        orderNoList = []
+        orderNo = 1
+        for video in videos:
+            orderNoList.append(orderNo)
+            orderNo += 1
+        return render(req, 'watchvideo/show_content_in_tabs.html',{ 'course' : course, 'lecturesList' : lecturesList, 'isOwner' : isOwner, 'inCategory' : inCategory, 'categories' : categories, 'orderNoList' : orderNoList })
     else:
         return redirect(reverse('mockaccount:index'))
 
@@ -184,4 +189,19 @@ def comment_on_video(req, courseID, videoID):
         return HttpResponse('Failed to post.')
 
 def edited_video(req, courseID, videoID):
+    return redirect(reverse('course:manage_course', kwargs={'courseID' : courseID } ))
+
+def reordered_video(req, courseID):
+    if req.method == 'POST':
+        course = Course.objects.get(courseID=courseID)
+        videos = Video.objects.filter(course=course, isDelete=False)
+        for video in videos:
+            orderNo = int(req.POST.get(video.videoID,'0'))
+            try:
+                orderOfVideo = OrderVideoInCourse.objects.get(video=video)
+                orderOfVideo.orderNo = orderNo
+            except ObjectDoesNotExist:
+                orderOfVideo = OrderVideoInCourse(course=course, video=video, orderNo=orderNo)
+            finally:
+                orderOfVideo.save()
     return redirect(reverse('course:manage_course', kwargs={'courseID' : courseID } ))
