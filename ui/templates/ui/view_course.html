@@ -1,0 +1,86 @@
+{% extends 'ui/navbar.html' %}
+{% load staticfiles %}
+
+{% block style %}
+  <link rel="stylesheet" href="{% static "ui/css/navbar-fixed-side.css" %}"?"{% now "U" %}">
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-3 col-lg-2">
+      <nav class="navbar navbar-default navbar-fixed-side" style="text-align:center;"><br><br><br />
+        <!-- normal collapsible navbar markup -->
+
+        <div class="container">
+          <form class="form-horizontal">
+            <div class="form-group">
+
+              <h3><a href="">Course Overall</a></h2><hr>
+              <h3><a href="">Course Detail</a></h2><hr>
+              <h3><a href="">Lesson 1</a></h2><hr>
+              <h3><a href="">Lesson 2</a></h2><hr>
+              <h3><a href="">Lesson 3</a></h2><hr>
+              <h3><a href="">Lesson 4</a></h2><hr>
+              <h3><a href="">Lesson 5</a></h2><hr>
+              <h3><a href="">Lesson 6</a></h2><hr>
+              <h3><a href="">Lesson 7</a></h2><hr>
+              <h3><a href="#" data-toggle="modal" data-target="#myModal">Upload Video</a></h2><hr>
+            </div>
+          </form>
+        </div>
+
+      </nav>
+    </div>
+    <div class="col-sm-9 col-lg-10" >
+      <div class="container" style="text-align:center; "><br><br><br>
+        Course Overview
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="<moda></moda>l fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="size:200px;">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" id="close_modal" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h2 class="modal-title" id="myModalLabel" style="text-align:center">Upload Your Video</h2>
+      </div>
+      <div class="modal-body"  style="text-align: center;">
+
+        <div class="input-group col-md-offset-3" id="apply_margin">
+          <span class="input-group-addon" >Video Upload</span>
+          <button type="button" class="btn btn-default btn-group btn-group-justified" style="background:transparent">Upload !</button>
+        </div>
+        <br>
+
+
+        <div class="input-group col-md-offset-3" id="apply_margin">
+          <span class="input-group-addon">Password</span>
+          <input type="text" class="form-control" placeholder="Password" aria-describedby="basic-addon1">
+        </div>
+        <br>
+            <button type="button" id="login_button" class="btn btn-primary">Log In</button>
+
+
+      </div>   <!-- End Modal Body -->
+      <div class="modal-footer">
+        <a href="#">Forgot Password?</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br><br><br>
+{% endblock %}
+
+
+{% block script %}
+<script>
+</script>
+
+{% endblock %}
