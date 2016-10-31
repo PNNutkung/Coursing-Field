@@ -1,0 +1,42 @@
+Bootstrap trick for further use
+  - Taps for profile page
+  - Collapse for phone user
+  - Media Object for profile user
+  - Side Nav for left side browing experience http://www.samrayner.com/bootstrap-side-navbar/
+
+<a href="/registration" class="regis-text pointer uk-container-center registration-button-wrapper">Register</a>
+
+  IF THIS INPUT NOT FUKING WORK FOR DATE IN REGISTER USE EASIER ONE ->  <input type="date" style="width:40%;">
+
+  31/10/2016 TODOS
+  - Create Page -> Upload Preview Video
+  - Register -> Biology
+  - Login Page
+  - Profile
+  - View Video
+  - View Course
+  - Admin Page ->
+  - Finish Upload Modal
+
+
+
+  IMPORTANT TODO !
+  -Apply Font
+  -Apply some stuff
+  -Responsive
+  -Device user
+  -Apply GRID to most of undone stuff
+  !!!! TASK !!!!
+  -Profile page - whole - My Course/My Profile/Manage Course
+  -Upload Modal in page + Course Overview
+  -View Video Page
+
+
+  NUT
+3.Upload
+4.View
+5.Profile
+  GUA
+ 2. View video
+ 4. Upload video
+ 5. Profile
