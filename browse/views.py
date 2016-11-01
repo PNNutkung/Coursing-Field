@@ -15,4 +15,7 @@ def browseIndex(req):
     except EmptyPage:
         courses = paginator.page(paginator.num_pages)
 
-    return render(req ,'browse/index.html', {'pageTitle': 'Browse courses', 'browseFilter': 'All courses','courses': courses, 'pageRange': paginator.page_range})
+    return render(req, 'browse/index.html', {'pageTitle': 'Browse courses', 'browseFilter': 'All courses','courses': courses, 'pageRange': paginator.page_range})
+
+def mainIndex(req):
+    return render(req, 'browse/main.html', {'pageTitle': 'Coursing Field'})
