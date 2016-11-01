@@ -10,7 +10,7 @@ class VideoInline(admin.StackedInline):
 class CourseAdmin(admin.ModelAdmin):
     fieldsets = [
         ('Course Informations', {'fields': ['courseName', 'category']}),
-        ('Course Pricing', {'fields': ['discountPercentage', 'discountPrice']}),
+        ('Course Pricing', {'fields': ['coursePrice', 'discountPercentage', 'discountPrice']}),
         ('Course Status', {'fields': ['isDelete', 'isPublish']}),
     ]
     inlines = [VideoInline]
