@@ -2,89 +2,291 @@
 {% load staticfiles %}
 
 {% block style %}
-<style media="screen">
-    .center-cropped {
-        height: 150px;
-        width: auto;
-        background-position: center center;
-        background-size: cover;
-    }
-</style>
+  <link rel="stylesheet" href="{% static "ui/css/browse.css" %}"?"{% now "U" %}">
+  <link rel="stylesheet" href="{% static "ui/css/navbar-fixed-side.css" %}"?"{% now "U" %}">
 {% endblock %}
 
 {% block body %}
-<div class="container">
-    {% if courses %}
-    <div class="row center-block">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <h2>{{browseFilter}}</h2>
-        </div>
-    </div>
+<div class="container-fluid" style="overflow:hidden">
+  <div class="row">
+    <div class="col-sm-3 col-lg-2">
+      <nav class="navbar navbar-default navbar-fixed-side" style="text-align:center;overflow:hidden;">
+        <!-- normal collapsible navbar markup -->
 
-    <nav aria-label="Page navigation">
-        <div class="text-center">
-            <ul class="pagination">
-                <li {% if not courses.has_previous %} class="disabled" {% endif %}>
-                    <a {% if courses.has_previous %}href="?page={{ courses.previous_page_number }}" {% endif %} aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                {% for pageNumber in pageRange %}
-                <li {% if pageNumber == courses.number %} class="active" {% endif %}><a href="?page={{ pageNumber }}">{{ pageNumber }}</a></li>
+        <div class="container" style="text-align:left;">
+          <form class="form-horizontal">
+            <ul class="nav navbar-nav">
+              <h1 style="text-align:center">Categories</h3>
+                {% for category in categories %}
+                  <li><a href="{% url 'browse:browseCategory' categoryID=category.categoryID %}">{{category.categoryName}}</a></li>
                 {% endfor %}
-                <li {% if not courses.has_next %} class="disabled" {% endif %}>
-                    <a {% if courses.has_next %} href="?page={{ courses.next_page_number }}" {% endif %} aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
             </ul>
+          </form>
         </div>
-    </nav>
 
-    <div class="row center-block">
-        {% for course in courses %}
-        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 card">
-            <div class="card-title">
-                <h4 class="card-title" style="text-overflow: ellipsis;">{{course.courseName}}</h4>
-                <h6 class="card-subtitle text-muted">{{course.owner}}</h6>
-            </div>
-            <div class="center-cropped" style="background-image: url({{course.courseThumbnail.url}});"></div>
-            <div class="card-block">
-                <p class="card-text">{{course.courseDesc}}</p>
-                <a href={% url 'course:view_course' courseID=course.courseID %}>Course page</a>
-                <p>
-                    {{course.courseRating}}
-                </p>
-            </div>
-        </div>
-        {% endfor %}
+      </nav>
     </div>
+    <div class="col-sm-9 col-lg-10" style="margin-left:14%" >
+      <div class="container">
 
-    <nav aria-label="Page navigation">
-        <div class="text-center">
-            <ul class="pagination">
-                <li {% if not courses.has_previous %} class="disabled" {% endif %}>
-                    <a {% if courses.has_previous %}href="?page={{ courses.previous_page_number }}" {% endif %} aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                {% for pageNumber in pageRange %}
-                <li {% if pageNumber == courses.number %} class="active" {% endif %}><a href="?page={{ pageNumber }}">{{ pageNumber }}</a></li>
-                {% endfor %}
-                <li {% if not courses.has_next %} class="disabled" {% endif %}>
-                    <a {% if courses.has_next %} href="?page={{ courses.next_page_number }}" {% endif %} aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-    {% else %}
-    <div class="row center-block">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <h2><strong>No available course.</strong></h2>
-        </div>
+          <div class="col-lg-10">
+            <form action="" class="form-horizontal">
+              <div class="col-md-4">
+                <h2 style="vertical-align: middle; font-size:250%;">Categories Name</h2>
+                <hr />
+              </div>
+              <div class="col-md-6" style="padding-top:2.6%;">
+                <div class="dropdown">
+                   <button style="font-size:80%; background:transparent;"class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                     Filter
+                     <span class="caret"></span>
+                   </button>
+                   <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                     <li><a href="#">Most Popular</a></li>
+                     <li><a href="#">Most View</a></li>
+                     <li><a href="#">Most Sales</a></li>
+                     <li><a href="#">Best Free Course</a></li>
+                     <li><a href="#">Best Free Course</a></li>
+                     <li><a href="#">Most Sales</a></li>
+                   </ul>
+                 </div>
+              </div>
+           </form>
+          </div>
+
+          <div class="col-lg-10">
+              <div class="container" id="best_course"style="text-align:center;">
+                <div id="course_text">Feature Course</div>
+                <div id="owl-no1" class="owl-carousel col-md-12">
+                  <div class="well well-sm">
+                    <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:150px; height:150px;"> </a>
+                      <div><h4>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Price : 500 Baht</div>
+                    </div>
+                    <div class="well well-sm">
+                      <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:150px; height:150px; margin-left:5%;"> </a>
+                      <div><h4>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Price : 500 Baht</div>
+                    </div>
+                    <div class="well well-sm">
+                      <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:150px; height:150px; margin-left:5%;"> </a>
+                      <div><h4>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Price : 500 Baht</div>
+                    </div>
+                    <div class="well well-sm">
+                      <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:150px; height:150px; margin-left:5%;"> </a>
+                      <div><h4>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Price : 500 Baht</div>
+                    </div>
+                    <div class="well well-sm">
+                      <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:150px; height:150px; margin-left:5%;"> </a>
+                      <div><h4>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Price : 500 Baht</div>
+                    </div>
+                    <div class="well well-sm">
+                      <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:150px; height:150px; margin-left:5%;"> </a>
+                      <div><h4>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Price : 500 Baht</div>
+                    </div>
+                    <div class="well well-sm">
+                      <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:150px; height:150px; margin-left:5%;"> </a>
+                      <div><h4>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Price : 500 Baht</div>
+                    </div>
+                    <div class="well well-sm">
+                      <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:150px; height:150px; margin-left:5%;"> </a>
+                      <div><h4>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Price : 500 Baht</div>
+                    </div>
+                </div>
+              </div>
+          </div>
+          <div class="col-lg-10">
+              <div class="container" id="best_course"style="text-align:center;">
+                <div id="course_text">Most Popular Course</div>
+                <div id="owl-no2" class="owl-carousel col-md-12">
+                  <div class="well well-sm">
+                    <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:150px; height:150px;"> </a>
+                      <div><h4>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Price : 500 Baht</div>
+                    </div>
+                    <div class="well well-sm">
+                      <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:150px; height:150px; margin-left:5%;"> </a>
+                      <div><h4>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Price : 500 Baht</div>
+                    </div>
+                    <div class="well well-sm">
+                      <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:150px; height:150px; margin-left:5%;"> </a>
+                      <div><h4>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Price : 500 Baht</div>
+                    </div>
+                    <div class="well well-sm">
+                      <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:150px; height:150px; margin-left:5%;"> </a>
+                      <div><h4>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Price : 500 Baht</div>
+                    </div>
+                    <div class="well well-sm">
+                      <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:150px; height:150px; margin-left:5%;"> </a>
+                      <div><h4>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Price : 500 Baht</div>
+                    </div>
+                    <div class="well well-sm">
+                      <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:150px; height:150px; margin-left:5%;"> </a>
+                      <div><h4>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Price : 500 Baht</div>
+                    </div>
+                    <div class="well well-sm">
+                      <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:150px; height:150px; margin-left:5%;"> </a>
+                      <div><h4>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Price : 500 Baht</div>
+                    </div>
+                    <div class="well well-sm">
+                      <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:150px; height:150px; margin-left:5%;"> </a>
+                      <div><h4>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Price : 500 Baht</div>
+                    </div>
+                </div>
+              </div>
+          </div>
+          <div class="col-lg-10">
+              <div class="container" id="best_course"style="text-align:center;">
+                <div id="course_text">Best Rate Course</div>
+                <div id="owl-no3" class="owl-carousel col-md-12">
+                  <div class="well well-sm">
+                    <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:150px; height:150px;"> </a>
+                      <div><h4>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Price : 500 Baht</div>
+                    </div>
+                    <div class="well well-sm">
+                      <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:150px; height:150px; margin-left:5%;"> </a>
+                      <div><h4>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Price : 500 Baht</div>
+                    </div>
+                    <div class="well well-sm">
+                      <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:150px; height:150px; margin-left:5%;"> </a>
+                      <div><h4>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Price : 500 Baht</div>
+                    </div>
+                    <div class="well well-sm">
+                      <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:150px; height:150px; margin-left:5%;"> </a>
+                      <div><h4>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Price : 500 Baht</div>
+                    </div>
+                    <div class="well well-sm">
+                      <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:150px; height:150px; margin-left:5%;"> </a>
+                      <div><h4>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Price : 500 Baht</div>
+                    </div>
+                    <div class="well well-sm">
+                      <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:150px; height:150px; margin-left:5%;"> </a>
+                      <div><h4>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Price : 500 Baht</div>
+                    </div>
+                    <div class="well well-sm">
+                      <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:150px; height:150px; margin-left:5%;"> </a>
+                      <div><h4>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Price : 500 Baht</div>
+                    </div>
+                    <div class="well well-sm">
+                      <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:150px; height:150px; margin-left:5%;"> </a>
+                      <div><h4>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Course Name No.1</div>
+                      <div>Price : 500 Baht</div>
+                    </div>
+                </div>
+              </div>
+          </div>
+
+
+      </div>
+
+      <a href="{% url 'browse:all' %}"><button type="button" class="btn btn-primary btn-block" style=" margin-left:5em">Browse All Course</button></a>
     </div>
-    {% endif %}
+  </div>
 </div>
+
+{% endblock %}
+
+
+{% block script %}
+<script>
+  $(document).ready(function() {
+  $("#owl-no1").owlCarousel({
+      slideSpeed : 300,
+      paginationSpeed : 400,
+      items : 5,
+      margin: 50,
+      dots: true,
+
+  });
+  });
+  $(document).ready(function() {
+  $("#owl-no2").owlCarousel({
+      slideSpeed : 300,
+      paginationSpeed : 400,
+      items : 5,
+      margin: 50,
+      dots: true,
+
+  });
+  });
+  $(document).ready(function() {
+  $("#owl-no3").owlCarousel({
+      slideSpeed : 300,
+      paginationSpeed : 400,
+      items : 5,
+      margin: 50,
+      dots: true,
+
+  });
+  });
+</script>
+
 {% endblock %}

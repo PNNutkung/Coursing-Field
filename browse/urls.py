@@ -3,5 +3,7 @@ from . import views
 
 app_name = 'browse'
 urlpatterns = [
-    url(r'^$', views.browseIndex, name='index'),
+    url(r'^$', views.browseIndex, name='browseIndex'),
+    url(r'^all/$', views.browseAll, name='all'),
+    url(r'^(?P<categoryID>[0-9]+)/$', views.browseCategory, name='browseCategory')
 ]
