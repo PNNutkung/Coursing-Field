@@ -64,7 +64,7 @@
                   <ul class="nav navbar-nav navbar-right">
                       <li><a href="#">My Course</a></li>
                       <li><a href="{% url 'course:createCourse' %}" style="background-color: limegreen; color: white;">Create Course</a></li>
-                      <li><a href="#">{{user}}</a></li>
+                      <li><a href="{% url 'account:profile' %}">{{user}}</a></li>
                   </ul>
               </div>
           </div>
