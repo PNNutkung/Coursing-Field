@@ -17,7 +17,6 @@
             <div class="form-group">
 
               <h3><a href="">Course Overall</a></h2><hr>
-              <h3><a href="">Course Detail</a></h2><hr>
               <h3><a href="">Lesson 1</a></h2><hr>
               <h3><a href="">Lesson 2</a></h2><hr>
               <h3><a href="">Lesson 3</a></h2><hr>
@@ -32,10 +31,64 @@
 
       </nav>
     </div>
-    <div class="col-sm-9 col-lg-10" >
-      <div class="container" style="text-align:center; "><br><br><br>
-        Course Overview
+    <div class="col-sm-9 col-lg-10" style=""><br><br><br>
+      <div class="col-sm-9 col-lg-10" style="text-align:center;margin-left:10%">
+        <h1>Course Name HERE</h1>
       </div>
+        <div class="col-sm-9 col-lg-10" style="margin-bottom:3%">
+          <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:700px; height:400px; margin-left:20%;"> </a>
+        </div>
+        <!-- Course Desciption -->
+        <div class="col-sm-9 col-lg-10" style="text-align:left; margin-left:10%; margin-bottom:3%">
+          <div class="col-lg-4">
+            <div style="font-size:150%">
+              Course Desciption
+            </div>
+          </div>
+          <div class="col-lg-8">
+
+            PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE !
+          </div>
+        </div>
+      <!-- Owner Biology  -->
+      <div class="col-sm-9 col-lg-10" style="text-align:left; margin-left:10%; margin-bottom:3%">
+        <div class="col-lg-4">
+          <div style="font-size:150%">
+            About Course Instuctor
+            <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:120px; height:150px; margin-left:20%;"> </a>
+
+          </div>
+        </div>
+        <br />
+        <div class="col-lg-8" style="">
+          <h4>Instuctor Name Here</h4>
+          PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE !
+        </div>
+      </div>
+
+      <div class="col-sm-9 col-lg-10" style="text-align:left; margin-left:10%">
+        <div class="col-lg-4">
+          <div style="font-size:150%">
+            Update History by Instuctor (For Further Cycle?)
+          </div>
+        </div>
+        <div class="col-lg-8" style="">
+          <h4>Instuctor Name Here</h4>
+          PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE !
+        </div>
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+
     </div>
   </div>
 </div>
@@ -52,30 +105,32 @@
       </div>
       <div class="modal-body"  style="text-align: center;">
 
-        <div class="input-group col-md-offset-3" id="apply_margin">
-          <span class="input-group-addon" >Video Upload</span>
-          <button type="button" class="btn btn-default btn-group btn-group-justified" style="background:transparent">Upload !</button>
-        </div>
-        <br>
 
 
         <div class="input-group col-md-offset-3" id="apply_margin">
-          <span class="input-group-addon">Password</span>
-          <input type="text" class="form-control" placeholder="Password" aria-describedby="basic-addon1">
+          <span class="input-group-addon">Video Name</span>
+          <input type="text" class="form-control" placeholder="" aria-describedby="basic-addon1">
         </div>
         <br>
-            <button type="button" id="login_button" class="btn btn-primary">Log In</button>
+
+        <div class="input-group col-md-offset-3" id="apply_margin">
+          <button type="button" class="btn btn-default btn-group btn-group-justified" style="background:transparent">Choose Your File !</button>
+        </div>
+        <br>
+
+        <div class="input-group col-md-offset-3" id="apply_margin" style="text-align:right">
+          Video name that uploaded
+        </div>
+        <br>
+
+            <button type="button" id="login_button" class="btn btn-primary">Upload</button>
 
 
       </div>   <!-- End Modal Body -->
-      <div class="modal-footer">
-        <a href="#">Forgot Password?</a>
-      </div>
     </div>
   </div>
 </div>
 
-<br><br><br>
 {% endblock %}
 
 
