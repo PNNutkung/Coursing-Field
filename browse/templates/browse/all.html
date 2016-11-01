@@ -1,0 +1,112 @@
+{% extends 'ui/navbar.html' %}
+{% load staticfiles %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static "ui/css/browse.css" %}"?"{% now "U" %}">
+<link rel="stylesheet" href="{% static "ui/css/navbar-fixed-side.css" %}"?"{% now "U" %}">
+<style media="screen">
+    .center-cropped {
+        height: 150px;
+        width: auto;
+        background-position: center center;
+        background-size: cover;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid" style="overflow:hidden">
+  <div class="row">
+    <div class="col-sm-3 col-lg-2">
+      <nav class="navbar navbar-default navbar-fixed-side" style="text-align:center;overflow:hidden;">
+        <div class="container" style="text-align:left;">
+          <form class="form-horizontal">
+            <ul class="nav navbar-nav">
+              <h1 style="text-align:center">Categories</h3>
+              {% for category in categories %}
+                <li><a href="{% url 'browse:browseCategory' categoryID=category.categoryID %}">{{category.categoryName}}</a></li>
+              {% endfor %}
+            </ul>
+          </form>
+        </div>
+      </nav>
+    </div>
+    <div class="col-sm-9 col-lg-10" style="margin-left:14%" >
+      <div class="container">
+          {% if courses %}
+          <div class="row center-block">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                  <h2>{{browseFilter}}</h2>
+              </div>
+          </div>
+
+          <nav aria-label="Page navigation">
+              <div class="text-center">
+                  <ul class="pagination">
+                      <li {% if not courses.has_previous %} class="disabled" {% endif %}>
+                          <a {% if courses.has_previous %}href="?page={{ courses.previous_page_number }}" {% endif %} aria-label="Previous">
+                              <span aria-hidden="true">&laquo;</span>
+                          </a>
+                      </li>
+                      {% for pageNumber in pageRange %}
+                      <li {% if pageNumber == courses.number %} class="active" {% endif %}><a href="?page={{ pageNumber }}">{{ pageNumber }}</a></li>
+                      {% endfor %}
+                      <li {% if not courses.has_next %} class="disabled" {% endif %}>
+                          <a {% if courses.has_next %} href="?page={{ courses.next_page_number }}" {% endif %} aria-label="Next">
+                              <span aria-hidden="true">&raquo;</span>
+                          </a>
+                      </li>
+                  </ul>
+              </div>
+          </nav>
+
+          <div class="row center-block">
+              {% for course in courses %}
+              <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 card">
+                  <div class="card-title">
+                      <h4 class="card-title" style="text-overflow: ellipsis;">{{course.courseName}}</h4>
+                      <h6 class="card-subtitle text-muted">{{course.owner}}</h6>
+                  </div>
+                  <div class="center-cropped" style="background-image: url({{course.courseThumbnail.url}});"></div>
+                  <div class="card-block">
+                      <p class="card-text">{{course.courseDesc}}</p>
+                      <a href={% url 'course:view_course' courseID=course.courseID %}>Course page</a>
+                      <p>
+                          {{course.courseRating}}
+                      </p>
+                  </div>
+              </div>
+              {% endfor %}
+          </div>
+
+          <nav aria-label="Page navigation">
+              <div class="text-center">
+                  <ul class="pagination">
+                      <li {% if not courses.has_previous %} class="disabled" {% endif %}>
+                          <a {% if courses.has_previous %}href="?page={{ courses.previous_page_number }}" {% endif %} aria-label="Previous">
+                              <span aria-hidden="true">&laquo;</span>
+                          </a>
+                      </li>
+                      {% for pageNumber in pageRange %}
+                      <li {% if pageNumber == courses.number %} class="active" {% endif %}><a href="?page={{ pageNumber }}">{{ pageNumber }}</a></li>
+                      {% endfor %}
+                      <li {% if not courses.has_next %} class="disabled" {% endif %}>
+                          <a {% if courses.has_next %} href="?page={{ courses.next_page_number }}" {% endif %} aria-label="Next">
+                              <span aria-hidden="true">&raquo;</span>
+                          </a>
+                      </li>
+                  </ul>
+              </div>
+          </nav>
+          {% else %}
+          <div class="row center-block">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                  <h2><strong>No available course.</strong></h2>
+              </div>
+          </div>
+          {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
