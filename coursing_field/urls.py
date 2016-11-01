@@ -17,6 +17,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 urlpatterns = [
+    url(r'^', include('index.urls')),
     url(r'^browse/', include('browse.urls')),
     url(r'^course/', include('course.urls')),
     url(r'^watchvideo/',include('watchvideo.urls')),

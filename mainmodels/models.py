@@ -34,6 +34,8 @@ def get_upload_path_profilepicture(instance, filename):
 class Category(models.Model):
     categoryID = models.AutoField(primary_key=True)
     categoryName = models.CharField(max_length=200)
+    def __str__(self):
+        return self.categoryName
 
 class Course(models.Model):
     courseID = models.AutoField(primary_key=True)
