@@ -16,3 +16,6 @@ def register(request):
 
 def create(request):
     return render(request , 'ui/create.html')
+
+def profile(request):
+    return render(request , 'ui/profile.html')

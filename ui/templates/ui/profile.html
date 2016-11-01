@@ -1,0 +1,52 @@
+{% extends 'ui/navbar.html' %}
+{% load staticfiles %}
+
+{% block style %}
+  <link rel="stylesheet" href="{% static "ui/css/profile.css" %}"?"{% now "U" %}">
+{% endblock %}
+
+{% block body %}<br /><br /><br />
+<div class="container" id="profile_banner" >
+  <div class=" well" >
+      <div class="col-md-2">
+       <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:120px; height:150px; margin-left:20%;"> </a>
+      </div>
+      <div class="col-md-10" style="margin-bottom:1em;margin-top:4em">
+        <div id="greeting_text"> Greeting NAMEOFUSER LASTNAMEOFUSER </div>
+      </div>
+      <ul class="nav nav-pills">
+        <li role="presentation"><a href="#profile" data-toggle="pill">You Profile</a></li>
+        <li role="presentation"><a href="#teaching" data-toggle="pill">Your Teaching Courses</a></li>
+        <li role="presentation"><a href="#taking" data-toggle="pill">You Taking Courses </a></li>
+      </ul>
+
+    </div>
+    <div class="tab-content">
+      <div id="profile" class="tab-pane fade in active">
+        <h3 style="text-align:center">Profile</h3>
+        <p>Some content.</p>
+      </div>
+      <div id="teaching" class="tab-pane fade">
+        <h3 style="text-align:center">Your Teaching Courses</h3>
+        <p>Some content in menu 1.</p>
+      </div>
+      <div id="taking" class="tab-pane fade">
+        <h3 style="text-align:center">Your Taking Courses</h3>
+        <p>Some content in menu 2.</p>
+      </div>
+    </div>
+
+
+</div>
+
+
+
+
+<br><br><br>
+{% endblock %}
+
+
+{% block script %}
+
+
+{% endblock %}
