@@ -15,24 +15,237 @@
         <div id="greeting_text"> Greeting NAMEOFUSER LASTNAMEOFUSER </div>
       </div>
       <ul class="nav nav-pills">
-        <li role="presentation"><a href="#profile" data-toggle="pill">You Profile</a></li>
+        <li role="presentation"><a href="#profile" data-toggle="pill">Your Profile</a></li>
         <li role="presentation"><a href="#teaching" data-toggle="pill">Your Teaching Courses</a></li>
-        <li role="presentation"><a href="#taking" data-toggle="pill">You Taking Courses </a></li>
+        <li role="presentation"><a href="#taking" data-toggle="pill">Your Taking Courses </a></li>
+        <li role="presentation"><a href="#transaction" data-toggle="pill">You Transaction Log </a></li>
       </ul>
 
     </div>
     <div class="tab-content">
       <div id="profile" class="tab-pane fade in active">
         <h3 style="text-align:center">Profile</h3>
-        <p>Some content.</p>
+        <div class="control-group" id="register_content">
+          <!-- Username -->
+          <div class="controls col-md-12" style="margin-bottom:2%;">
+            <div id="register_legend" >
+              <legend class="" ><h3>Account Information</h3></legend>
+            </div>
+          </div>
+          <!-- Username -->
+          <div class="controls col-md-12" style="margin-bottom:2%;">
+              <div class="col-md-3">
+                <label class="control-label"   style="">Username</label>
+              </div>
+              <div class="col-md-9">
+                <input type="text" id="register_field">
+
+              </div>
+          </div>
+          <!-- Password -->
+          <div class="controls col-md-12" style="margin-bottom:2%;">
+              <div class="col-md-3">
+                <label class="control-label"  style="">Password</label>
+              </div>
+              <div class="col-md-9">
+                <input type="password" id="register_field">
+
+              </div>
+          </div>
+          <!-- Username -->
+          <div class="controls col-md-12" style="margin-bottom:2%;">
+              <div class="col-md-3">
+                <label class="control-label"   style="">Comfirm Password</label>
+              </div>
+              <div class="col-md-9">
+                <input type="password" id="register_field">
+
+              </div>
+          </div>
+          <!-- Username -->
+          <div class="controls col-md-12" style="margin-bottom:2%;">
+              <div class="col-md-3">
+                <label class="control-label"   style="">Email Address</label>
+              </div>
+              <div class="col-md-9">
+                <input type="text" id="register_field">
+
+              </div>
+          </div>
+
+          <div class="controls col-md-12" style="margin-bottom:2%;">
+              <hr />
+          </div>
+          <div class="controls col-md-12" style="margin-bottom:2%;">
+            <div id="register_legend">
+              <legend class="" ><h3>Personal Information</h3></legend>
+            </div>
+          </div>
+
+          <!-- Username -->
+          <div class="controls col-md-12" style="margin-bottom:2%;">
+              <div class="col-md-3">
+                <label class="control-label"   style="">Firstname</label>
+              </div>
+              <div class="col-md-9">
+                <input type="text" id="register_field">
+
+              </div>
+          </div>
+
+          <!-- Username -->
+          <div class="controls col-md-12" style="margin-bottom:2%;">
+              <div class="col-md-3">
+                <label class="control-label"   style="">Lastname</label>
+              </div>
+              <div class="col-md-9">
+                <input type="text" id="register_field">
+
+              </div>
+          </div>
+          <!-- Username -->
+          <div class="controls col-md-12" style="margin-bottom:2%;">
+              <div class="col-md-3">
+                <label class="control-label"   style="">Date of birth</label>
+              </div>
+              <div class="col-md-9">
+                {% include "includes/dateofbirth.html" %}
+              </div>
+          </div>
+          <!-- Username -->
+          <div class="controls col-md-12" style="margin-bottom:2%;">
+              <div class="col-md-3">
+                <label class="control-label"   style="">Gender</label>
+              </div>
+              <div class="col-md-9">
+                <input type="radio" name="gender" /> : Male
+                <input type="radio" name="gender" /> : Female
+              </div>
+          </div>
+          <!-- Username -->
+          <div class="controls col-md-12" style="margin-bottom:2%;">
+              <div class="col-md-3">
+                <label class="control-label"   style="">Address</label>
+              </div>
+              <div class="col-md-9">
+                <textarea  rows="6" style="width:40%;"></textarea>
+
+              </div>
+          </div>
+          <div class="controls col-md-12" style="margin-bottom:2%;">
+              <div class="col-md-3">
+                <label class="control-label"   style="">Biology</label>
+              </div>
+              <div class="col-md-9">
+                <textarea rows="6" style="width:40%;"></textarea>
+              </div>
+          </div>
+        </div>
       </div>
       <div id="teaching" class="tab-pane fade">
         <h3 style="text-align:center">Your Teaching Courses</h3>
-        <p>Some content in menu 1.</p>
-      </div>
+        <div class="well col-lg-10" style="margin-left:8%;margin-right:8%;margin-bottom:3%;">
+          <div class="col-lg-4">
+            <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:200px; height:200px;"> </a>
+          </div>
+          <div class="col-lg-8 controls">
+            <div class="controls" style="margin-bottom:1%;font-size:200%;margin-bottom:1%">
+              -INSERT_COURSE_NAME-
+            </div>
+            <div class="controls" style="margin-bottom:1%;font-size:120%;">
+              By -INSERT_INSTRUCTOR_NAME-
+            </div>
+            <div class="controls" style="margin-bottom:1%;font-size:120%;">
+              Price -INSERT_COURSES_PRICE-
+            </div>
+            <div class="controls" style="margin-bottom:1%;font-size:120%;">
+              -INSERT_COURSES_DESC
+            </div>
+            <div class="controls" style="margin-bottom:1%;font-size:120%;">
+              -INSERT STAR-
+            </div>
+          </div>
+        </div>
+
+        <div class="well col-lg-10" style="margin-left:8%;margin-right:8%;margin-bottom:3%;">
+          <div class="col-lg-4">
+            <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:200px; height:200px;"> </a>
+          </div>
+          <div class="col-lg-8 controls">
+            <div class="controls" style="margin-bottom:1%;font-size:200%;margin-bottom:1%">
+              -INSERT_COURSE_NAME-
+            </div>
+            <div class="controls" style="margin-bottom:1%;font-size:120%;">
+              By -INSERT_INSTRUCTOR_NAME-
+            </div>
+            <div class="controls" style="margin-bottom:1%;font-size:120%;">
+              Price -INSERT_COURSES_PRICE-
+            </div>
+            <div class="controls" style="margin-bottom:1%;font-size:120%;">
+              -INSERT_COURSES_DESC
+            </div>
+            <div class="controls" style="margin-bottom:1%;font-size:120%;">
+              -INSERT STAR-
+            </div>
+          </div>
+        </div>
+
+        </div>
       <div id="taking" class="tab-pane fade">
-        <h3 style="text-align:center">Your Taking Courses</h3>
+        <h3 style="text-align:center">Your Teaching Courses</h3>
+        <div class="well col-lg-10" style="margin-left:8%;margin-right:8%;margin-bottom:3%;">
+          <div class="col-lg-4">
+            <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:200px; height:200px;"> </a>
+          </div>
+          <div class="col-lg-8 controls">
+            <div class="controls" style="margin-bottom:1%;font-size:200%;margin-bottom:1%">
+              -INSERT_COURSE_NAME-
+            </div>
+            <div class="controls" style="margin-bottom:1%;font-size:120%;">
+              By -INSERT_INSTRUCTOR_NAME-
+            </div>
+            <div class="controls" style="margin-bottom:1%;font-size:120%;">
+              Price -INSERT_COURSES_PRICE-
+            </div>
+            <div class="controls" style="margin-bottom:1%;font-size:120%;">
+              -INSERT_COURSES_DESC
+            </div>
+            <div class="controls" style="margin-bottom:1%;font-size:120%;">
+              -INSERT STAR-
+            </div>
+          </div>
+        </div>
+
+        <div class="well col-lg-10" style="margin-left:8%;margin-right:8%;margin-bottom:3%;">
+          <div class="col-lg-4">
+            <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:200px; height:200px;"> </a>
+          </div>
+          <div class="col-lg-8 controls">
+            <div class="controls" style="margin-bottom:1%;font-size:200%;margin-bottom:1%">
+              -INSERT_COURSE_NAME-
+            </div>
+            <div class="controls" style="margin-bottom:1%;font-size:120%;">
+              By -INSERT_INSTRUCTOR_NAME-
+            </div>
+            <div class="controls" style="margin-bottom:1%;font-size:120%;">
+              Price -INSERT_COURSES_PRICE-
+            </div>
+            <div class="controls" style="margin-bottom:1%;font-size:120%;">
+              -INSERT_COURSES_DESC
+            </div>
+            <div class="controls" style="margin-bottom:1%;font-size:120%;">
+              -INSERT STAR-
+            </div>
+          </div>
+        </div>
+
+        <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+      </div>
+      <div id="transaction" class="tab-pane fade">
+        <h3 style="text-align:center">Your Transaction Log</h3>
+        <h1 style="text-align:center">CYCLE 2 WORK !</h3>
         <p>Some content in menu 2.</p>
+        <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
       </div>
     </div>
 
