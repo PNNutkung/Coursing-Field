@@ -1,10 +1,99 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-  </head>
-  <body>
-    <h1>This is register!</h1>
-  </body>
-</html>
+{% extends 'ui/navbar.html' %}
+{% load staticfiles %}
+{% block body %}
+<div class="container" id="login-container">
+  <div class="panel panel-success">
+    <div class="panel-heading">Register</div>
+    <div class="panel-body">
+      <form action="{% url 'account:register' %}" onsubmit="return validatePassword(this)" role="form" method="POST">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="username">Username:</label>
+            <input id="username" class="form-control" type="text" name="username" placeholder="Enter a username." required/>
+          </div>
+          <div class="form-group">
+            <label for="password">Password:</label>
+            <input id="password" class="form-control" type="password" name="password" placeholder="Enter a password." required/>
+          </div>
+          <div class="form-group">
+            <label for="confirm_password">Confirm Password:</label>
+            <input id="confirm_password" class="form-control" type="password" name="confirm_password" placeholder="Enter a confirm password." required/>
+          </div>
+          <div class="form-group">
+            <label for="firstname">Firstname:</label>
+            <input id="firstname" class="form-control" type="text" name="firstname" placeholder="Enter your firstname." required/>
+          </div>
+          <div class="form-group">
+            <label for="lastname">Lastname:</label>
+            <input id="lastname" class="form-control" type="text" name="lastname" placeholder="Enter your lastname." required/>
+          </div>
+          <div class="form-group">
+            <label for="bday">Birth Date:</label>
+            <input class="form-control" id="bday" type='date' name='birthday' required/>
+          </div>
+          <div class="form-group">
+            <label for="gender">Gender:</label>
+            <select id="gender" class="form-control" name='gender' required>
+              <option value="">Select Gender</option>
+              <option value="M">Male</option>
+              <option value="F">Female</option>
+              <option value="O">Other</option>
+            </select>
+          </div>
+          <input class="btn btn-block btn-success" type="submit" value="Register"/>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+function validatePassword(form){
+    re = /^\w+$/;
+    if(!re.test(form.username.value)) {
+      alert("Error: Username must contain only letters, numbers and underscores!");
+      form.username.focus();
+      return false;
+    }
+
+    if(form.pwd1.value != "" && form.pwd1.value == form.pwd2.value) {
+      if(form.pwd1.value.length < 6) {
+        alert("Error: Password must contain at least six characters!");
+        form.pwd1.focus();
+        return false;
+      }
+      if(form.pwd1.value == form.username.value) {
+        alert("Error: Password must be different from Username!");
+        form.pwd1.focus();
+        return false;
+      }
+      re = /[0-9]/;
+      if(!re.test(form.pwd1.value)) {
+        alert("Error: password must contain at least one number (0-9)!");
+        form.pwd1.focus();
+        return false;
+      }
+      re = /[a-z]/;
+      if(!re.test(form.pwd1.value)) {
+        alert("Error: password must contain at least one lowercase letter (a-z)!");
+        form.pwd1.focus();
+        return false;
+      }
+      re = /[A-Z]/;
+      if(!re.test(form.pwd1.value)) {
+        alert("Error: password must contain at least one uppercase letter (A-Z)!");
+        form.pwd1.focus();
+        return false;
+      }
+    } else {
+      alert("Error: Please check that you've entered and confirmed your password!");
+      form.pwd1.focus();
+      return false;
+    }
+
+    alert("You entered a valid password: " + form.pwd1.value);
+    return true;
+  }
+</script>
+{% endblock %}
