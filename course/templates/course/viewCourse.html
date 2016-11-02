@@ -75,7 +75,12 @@
                                                 <td class="list-right">฿ {{leftBalance}}</td>
                                             </tr>
                                         </table>
-                                        <input type="submit" class="btn btn-block btn-primary" value="Confirm">
+                                        <br>
+                                        {% if canTakeCourse %}
+                                            <input type="submit" class="btn btn-block btn-primary" value="Confirm">
+                                        {% else %}
+                                            <input type="submit" class="btn btn-block btn-danger" value="Not enough balance" disabled>
+                                        {% endif %}
                                     </form>
                                 </div>
                             </div>
