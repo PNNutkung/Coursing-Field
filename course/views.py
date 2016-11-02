@@ -100,20 +100,23 @@ def manage_course(req, courseID):
             isOwner = True
         else:
             return redirect(reverse('course:view_course'))
-        videos = Video.objects.filter(course=course, isDelete=False)
+        # videos = Video.objects.filter(course=course, isDelete=False)
+        orderVideosInCourse = OrderVideoInCourse.objects.filter(course=course).order_by('orderNo')
+            # videos = orderVideoInCourse.video
         commentsList = []
         inCategory = course.category.categoryName
         categories = Category.objects.all()
-        for video in videos:
-            commentsOfVideo = Comment.objects.filter(video=video, isDelete=False)
-            commentsList.append(commentsOfVideo)
-        lecturesList = [{'video' : t[0], 'comments' : t[1]} for t in zip (videos,commentsList)]
         orderNoList = []
         orderNo = 1
-        for video in videos:
+        # for video in videos:
+        for orderVideoInCourse in orderVideosInCourse:
+            commentsOfVideo = Comment.objects.filter(video=orderVideoInCourse.video, isDelete=False)
+            commentsList.append(commentsOfVideo)
             orderNoList.append(orderNo)
             orderNo += 1
-        return render(req, 'watchvideo/show_content_in_tabs.html',{ 'course' : course, 'lecturesList' : lecturesList, 'isOwner' : isOwner, 'inCategory' : inCategory, 'categories' : categories, 'orderNoList' : orderNoList })
+        # lecturesList = [{'video' : t[0], 'comments' : t[1]} for t in zip (videos,commentsList)]
+        lecturesList = [{'orderVideoInCourse' : t[0], 'comments' : t[1]} for t in zip (orderVideosInCourse,commentsList)]
+        return render(req, 'watchvideo/show_content_in_tabs.html',{ 'course' : course, 'lecturesList' : lecturesList, 'isOwner' : isOwner, 'inCategory' : inCategory, 'categories' : categories, 'orderNoList' : orderNoList, 'orderVideosInCourse' : orderVideosInCourse })
     else:
         return redirect(reverse('mockaccount:index'))
 
@@ -169,11 +172,16 @@ def edited_course(req, courseID):
 
 def upload_video(req, courseID):
     if req.method == 'POST':
-        videoName = req.POST['videoName']
+        videoName = req.POST.get('videoName')
         videoFile = req.FILES['videoToUpload']
+        videoDesc = req.POST.get('videoDesc')
         course = Course.objects.get(courseID=courseID)
-        new_video = Video(videoName=videoName,videoFile=videoFile,course=course,isDelete=False)
+        new_video = Video(videoName=videoName,videoFile=videoFile,course=course,videoDesc=videoDesc,isDelete=False)
         new_video.save()
+        course = Course.objects.get(courseID=courseID)
+        newOrderNo = OrderVideoInCourse.objects.filter(course=course).count() + 1
+        newOrderVideoInCourse = OrderVideoInCourse(course=course, video=new_video, orderNo=newOrderNo)
+        newOrderVideoInCourse.save()
         return redirect(reverse('course:manage_course', kwargs={'courseID' : courseID }))
     else:
         return HttpResponse('Failed to post.')
