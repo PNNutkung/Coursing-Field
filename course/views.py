@@ -51,6 +51,9 @@ def view_course(req, courseID):
             leftBalance = int(userWithProfile.profile.balance - course.coursePrice)
         else:
             leftBalance = int(userWithProfile.profile.balance - course.discountPrice)
+        canTakeCourse = False 
+        if leftBalance >= 0:
+            canTakeCourse = True
         numberOfLectures = Video.objects.filter(course=course).count()
         reviewList = Review.objects.filter(course=course).order_by('-reviewedDate')
         reviewPaginator = Paginator(reviewList, 5)
@@ -84,7 +87,7 @@ def view_course(req, courseID):
         except:
             reviewRateLevel = []
 
-        return render(req, 'course/viewCourse.html', {'course' : course, 'hasTakenCourse' : hasTakencourse, 'inCategory' : inCategory, 'userWithProfile' : userWithProfile, 'leftBalance': leftBalance,'numberOfLectures':numberOfLectures, 'reviews':reviews, 'averageRating': averageRating,'reviewRateLevel':reviewRateLevel, 'isOwner' : isOwner, })
+        return render(req, 'course/viewCourse.html', {'course' : course, 'hasTakenCourse' : hasTakencourse, 'inCategory' : inCategory, 'userWithProfile' : userWithProfile, 'leftBalance': leftBalance,'numberOfLectures':numberOfLectures, 'reviews':reviews, 'averageRating': averageRating,'reviewRateLevel':reviewRateLevel, 'isOwner' : isOwner, 'canTakeCourse': canTakeCourse, })
     else:
         return redirect(reverse('mockaccount:index'))
 
