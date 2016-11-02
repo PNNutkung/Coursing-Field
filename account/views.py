@@ -10,4 +10,5 @@ def register(req):
     return render(req, 'account/register.html')
 
 def profile(req):
+    teachingCourse = Course.objects.filter(owner=req.user)
     return render(req, 'account/profile.html')

@@ -1,23 +1,26 @@
-#greeting_text{
+#greeting_text {
   font-size: 220%;
+}
 
+.active a {
+  color: white !important;
+  background-color: black !important;
 }
-.active a{
-    color: white !important;
-    background-color: black !important;
-}
-#register_content{
+
+#register_content {
   margin-left: 34.5%;
-  margin-bottom:2%;
+  margin-bottom: 2%;
 }
-#register_field{
-  width:40%;
-  text-align:left;
+
+#register_field {
+  width: 40%;
+  text-align: left;
 }
+
 .tooltip-inner {
-    text-align: center;
+  text-align: center;
 }
-#register_legend{
-  text-align:center;
-  margin-left:-50%;
+
+#profile-container {
+  margin-top: 80px;
 }
