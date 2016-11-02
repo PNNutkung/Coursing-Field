@@ -216,13 +216,19 @@ def reordered_video(req, courseID):
     if req.method == 'POST':
         course = Course.objects.get(courseID=courseID)
         videos = Video.objects.filter(course=course, isDelete=False)
+        lastVideoOrderNo = OrderVideoInCourse.objects.filter(course=course).count()
         for video in videos:
-            orderNo = int(req.POST.get(video.videoID,'0'))
-            try:
-                orderOfVideo = OrderVideoInCourse.objects.get(video=video)
-                orderOfVideo.orderNo = orderNo
-            except ObjectDoesNotExist:
-                orderOfVideo = OrderVideoInCourse(course=course, video=video, orderNo=orderNo)
-            finally:
-                orderOfVideo.save()
+            newOrderNo = int(req.POST.get(str(video.videoID),lastVideoOrderNo + 1))
+            reorderedVideo = OrderVideoInCourse.objects.get(course=course,video=video)
+            print('Old order#',reorderedVideo.orderNo, 'of', reorderedVideo.video.videoName)
+            reorderedVideo.orderNo = newOrderNo
+            print('New order#', reorderedVideo.orderNo, 'of', reorderedVideo.video.videoName)
+            reorderedVideo.save()
+            # try:
+            #     orderOfVideo = OrderVideoInCourse.objects.get(video=video)
+            #     orderOfVideo.orderNo = orderNo
+            # except ObjectDoesNotExist:
+            #     orderOfVideo = OrderVideoInCourse(course=course, video=video, orderNo=orderNo)
+            # finally:
+            #     orderOfVideo.save()
     return redirect(reverse('course:manage_course', kwargs={'courseID' : courseID } ))

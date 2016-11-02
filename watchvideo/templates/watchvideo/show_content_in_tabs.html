@@ -54,12 +54,12 @@
                     <br>
                     <br>
                     <br>
-                    <form action={% url 'course:reordered_video' course.courseID %} method="POST" enctype="multipart/form-data">
+                    <form action={% url 'course:reordered_video' course.courseID %} method="POST">
                         {% csrf_token %}
                         <h3>Reorder course's videos</h3>
                         {% for lecture in lecturesList %}
                             {{lecture.orderVideoInCourse.video.videoName}} Current Order No. [{{lecture.orderVideoInCourse.orderNo}}]
-                            <select class='dropdown orderVideo' name='{{lecture.orderVideoInCourse.video.videoID}}'>
+                            <select class='dropdown orderVideo' name='{{lecture.orderVideoInCourse.video.videoID}}' required>
                                 <option value="">Select Order No.</option>
                                 {% for orderNo in orderNoList %}
                                     <option value="{{orderNo}}">{{orderNo}}</option>
@@ -68,6 +68,7 @@
                         {% endfor %}
                         <input type="submit" value="Reorder">
                     </form>
+                    <button onclick="resertOrderNo()">Reset order</button>
                 {% else %}
                     <p>{{course.courseName}}<br>
                     <p>{{courseInCategory.category.categoryName}}</p><br>
@@ -89,7 +90,6 @@
                             Change video's description:<input type="text" name="videoDesc" placeholder="{{lecture.orderVideoInCourse.video.videoDesc}}"><br>
                             <input type="submit" value="Edit">
                         </form>
-                        <button onclick="resertOrderNo()">Reset order</button>
                     {% else %}
                         <h3>{{lecture.orderVideoInCourse.video.videoName}}</h3>
                         <p>This is the video description</p>
@@ -153,8 +153,8 @@
         <script type="text/javascript">
             $(function() {
                 console.log( "ready!" );
-                var originalOrderNoOptions = $('.orderVideo option');
-                console.log(originalOrderNoOptions);
+                //var originalOrderNoOptions = $('.orderVideo option');
+                //console.log(originalOrderNoOptions);
                 $('.orderVideo').change(function() {
                     valueToRemove = $(this).val();
                     console.log("Value to be removed: "+valueToRemove);
