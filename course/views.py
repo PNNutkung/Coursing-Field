@@ -96,7 +96,7 @@ def manage_course(req, courseID):
         course = Course.objects.get(courseID=courseID)
         isOwner = False
         if req.user.id == course.owner.id:
-            print("You are the owner of this course")
+            # print("You are the owner of this course")
             isOwner = True
         else:
             return redirect(reverse('course:view_course'))
@@ -210,6 +210,39 @@ def comment_on_video(req, courseID, videoID):
         return HttpResponse('Failed to post.')
 
 def edited_video(req, courseID, videoID):
+    if req.method == 'POST':
+        course = Course.objects.get(courseID=courseID)
+        video = Video.objects.get(videoID=videoID)
+        editedOrderVideoInCourse = OrderVideoInCourse.objects.get(course=course, video=video)
+        newVideoName = req.POST.get('videoName')
+        newVideoFile = req.POST.get('videoFile')
+        newVideoDesc = req.POST.get('videoDesc')
+        if newVideoFile is not None:
+            newVideo = Video(course=course,videoFile=newVideoFile)
+            if len(newVideoName) > 0:
+                newVideo.videoName = newVideoName
+            else:
+                newVideo.videoName = video.videoName
+            if len(newVideoDesc) > 0:
+                newVideo.videoDesc = newVideoDesc
+            else:
+                newVideo.videoDesc = video.videoDesc
+            newVideo.save()
+            video.isDelete = True
+            video.save()
+            editedOrderVideoInCourse.video = newVideo
+            editedOrderVideoInCourse.save()
+        else:
+            if len(newVideoName) > 0:
+                video.videoName = newVideoName
+            else:
+                video.videoName = video.videoName
+            if len(newVideoDesc) > 0:
+                video.videoDesc = newVideoDesc
+            else:
+                video.videoDesc = video.videoDesc
+            video.save()
+
     return redirect(reverse('course:manage_course', kwargs={'courseID' : courseID } ))
 
 def reordered_video(req, courseID):
@@ -224,11 +257,4 @@ def reordered_video(req, courseID):
             reorderedVideo.orderNo = newOrderNo
             print('New order#', reorderedVideo.orderNo, 'of', reorderedVideo.video.videoName)
             reorderedVideo.save()
-            # try:
-            #     orderOfVideo = OrderVideoInCourse.objects.get(video=video)
-            #     orderOfVideo.orderNo = orderNo
-            # except ObjectDoesNotExist:
-            #     orderOfVideo = OrderVideoInCourse(course=course, video=video, orderNo=orderNo)
-            # finally:
-            #     orderOfVideo.save()
     return redirect(reverse('course:manage_course', kwargs={'courseID' : courseID } ))

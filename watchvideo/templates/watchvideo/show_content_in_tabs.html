@@ -29,13 +29,20 @@
 
         <div class="tab-content">
             <div id="overviewTab" class="tab-pane fade in active">
-                <h3>Edit course information</h3>
+                
+                <h3><span class="glyphicon glyphicon-edit"></span> Course Information</h3>
                 {% if isOwner %}
+                    <br>
                     <form action={% url 'course:edited_course' course.courseID %} method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
-                        Change course's name:<input type="text" name="courseName" placeholder="{{course.courseName}}"><br>
-                        <div class="form-group">
-                            <label for="courseCategory" class="control-label">Change Category: Current [{{inCategory}}]</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">Name</span>
+                            <input class="form-control" type="text" name="courseName" placeholder="{{course.courseName}}" maxlength="50"><br>
+                        </div>
+                        <br>
+                        <div class="input-group">
+                            <span class="input-group-addon">Category</span>
+                            {% comment %}<label for="courseCategory" class="control-label">Change Category: Current [{{inCategory}}]</label>{% endcomment %}
                             <select id="courseCategory" class="dropdown form-control" name="courseCategory">
                                 <option value="">Choose Category</option>
                                 {% for category in categories %}
@@ -43,12 +50,64 @@
                                 {% endfor %}
                             </select>
                         </div>
-                        Change preview video: <input type="file" name="previewVideo"><br>
-                        Change course's thumbnail: <input type="file" name="courseThumbnail"><br>
-                        Change course's short description:<input type="text" name="courseShortDesc" placeholder="{{course.courseShortDesc}}"><br>
-                        Change course's full description:<input type="text" name="courseFullDesc" placeholder="{{course.courseFullDesc}}"><br>
-                        Check to publish course:<input type="checkbox" name="isPublish"><br>
-                        Change Course discount (%):<input type="number" name="discountPercentage" min="0" max="100"> <br>
+                        <br>
+                        <div class="input-group">
+                            <span class="input-group-addon">Preview Video</span>
+                            <span class="input-group-addon">Current</span>
+                            <span class="input-group-addon">{{course.previewVideoFile.name}}</span>
+                            <span class="input-group-addon">Upload</span>
+                            <input class="form-control" type="file" name="previewVideo"><br>
+                        </div>
+                        <br>
+                        <div class="input-group">
+                            <span class="input-group-addon">Thumbnail</span>
+                            <span class="input-group-addon">Current</span>
+                            <span class="input-group-addon">{{course.courseThumbnail.name}}</span>
+                            <span class="input-group-addon">Upload</span>
+                            <input class="form-control" type="file" name="courseThumbnail"><br>
+                        </div>
+                        {% comment %}Change course's thumbnail: <input type="file" name="courseThumbnail"><br>{% endcomment %}
+                        <br>
+                        <div class="input-group">
+                            <span class="input-group-addon">Short Description</span>
+                            <input class="form-control" type="text" name="courseShortDesc" placeholder="{{course.courseShortDesc}}" maxlength="50"><br>
+                        </div>
+                        {% comment %}Change course's short description:<input type="text" name="courseShortDesc" placeholder="{{course.courseShortDesc}}"><br>{% endcomment %}
+                        <br>
+                        <div class="input-group">
+                            <span class="input-group-addon">Full Description</span>
+                            <input class="form-control" type="text" name="courseFullDesc" placeholder="{{course.courseFullDesc}}"><br>
+                        </div>
+                        {% comment %}Change course's full description:<input type="text" name="courseFullDesc" placeholder="{{course.courseFullDesc}}"><br>{% endcomment %}
+                        <br>
+                        <div class="row">
+                            <div class="col-md-1">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <input type="checkbox" name="isPublish">
+                                    </span>
+                                    <span class="input-group-addon">Publish Status</span>
+                                </div>  
+                            </div>
+                        </div>
+                        
+                        {% comment %}Check to publish course:<input type="checkbox" name="isPublish"><br>{% endcomment %}
+                        <br>
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Discount</span>
+                                    <span class="input-group-addon">Current</span>
+                                    <span class="input-group-addon">{{course.discountPercentage}}</span>
+                                    <span class="input-group-addon">%</span>
+                                    <span class="input-group-addon">Change</span>
+                                    <input class="form-control" type="number" name="discountPercentage" min="0" max="100">
+                                    <span class="input-group-addon">%</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% comment %}Change Course discount (%):<input type="number" name="discountPercentage" min="0" max="100"> <br>{% endcomment %}
+                        <br>
                         <input type="submit" value="Confirm">
                     </form>
                     <br>
@@ -82,7 +141,7 @@
             {% for lecture in lecturesList %}
                 <div id="{{lecture.orderVideoInCourse.video.videoID}}Tab" class="tab-pane fade">
                     {% if isOwner %}
-                        Edit Video [{{lecture.orderVideoInCourse.video.videoName}}]
+                        <h3>Edit Video [{{lecture.orderVideoInCourse.video.videoName}}]</h3>
                         <form action={% url 'course:edited_course' course.courseID %} method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
                             Change video's name:<input type="text" name="videoName" placeholder="{{lecture.orderVideoInCourse.video.videoName}}"><br>
@@ -135,6 +194,9 @@
                         Video name: <input type="text" name="videoName" placeholder="Video Name" required><br>
                         Video description: <input type="text" name="videoDesc" placeholder="Video Description" required><br>   
                         <input type="file" name="videoToUpload" required>
+                        {% with lastLecture=lecturesList|last %}
+                            <div class="alert alert-info" role="alert">Uploaded video will be added to orderNo: [{{lastLecture.orderVideoInCourse.orderNo|add:'1'}}]</div>
+                        {% endwith %}
                         <input type="submit" value="Upload">
                     </form>
                 </div>
@@ -163,33 +225,6 @@
                     $(this).find('option[value='+valueToRemove+']').prop('selected', true);
                 })
             });
-            /*var orderVideoElements = document.querySelectorAll('orderVideo')
-            //var orderVideoElements = document.getElementsByClassName('orderVideo');
-            
-            var originalOrderNoList = orderVideoElements.item(0).getElementsByTagName('option');
-            function removeOrderNo() {
-                if (originalOrderNoList) {
-                    for(i = 0; i < orderVideoElements.elements.length; i++) {
-                        currentElement = orderVideoElements.elements[i]
-                        currentElement.remove(currentElement.selectedIndex)
-                    }
-                }
-            }
-            function resertOrderNo() {
-                if (originalOrderNoList) {
-                    for(i = 0; i < orderVideoElements.elements.length; i++) {
-                        orderVideoElement = orderVideoElements.elements[i];
-                        for(j = 0; j < orderVideoElement.options.length; j++) {
-                            orderVideoElement.remove(i);
-                        }
-                        for(k = 0; k < originalOrderNoList.length; k++) {
-                            orderVideoElement.append(originalOrderNoList[k]);
-                        }
-                    }
-                }
-            }*/
         </script>
     {% endif %}
 {% endblock %}
-    <!--</body>
-</html>-->
