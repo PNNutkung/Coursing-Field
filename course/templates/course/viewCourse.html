@@ -1,36 +1,38 @@
-<!DOCTYPE>
-<html>
-    <header>
-        <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
-        <title>{{course.courseName}}</title>
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-        <style media="screen">
-            .center-cropped {
-                height: 350px;
-                width: auto;
-                background-position: center center;
-                background-size: cover;
-            }
-            .list-right {
+{% extends 'ui/navbar.html' %}
+{% load staticfiles %}
+
+{% block style %}
+<style media="screen">
+    .center-cropped {
+        height: 150px;
+        width: auto;
+        background-position: center center;
+        background-size: cover;
+    }
+    .list-right {
                 padding-left: 6px;
                 padding-top: 6px;
                 padding-bottom: 6px;
-            }
-            ul {
-                list-style-type: none;
-                padding-left: 0px;
-            }
-        </style>
-    </header>
-    <body>
-        <div class="container">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <h1>{{course.courseName}}</h1>
-                <p>Instructed by {{course.owner}}</p>
-                <p><b>Category:</b> {{inCategory}}</p>
-            </div>
+    }
+    ul {
+        list-style-type: none;
+        padding-left: 0px;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+    <!--<body>-->
+    <div class="container">
+        <br>
+        <br>
+        <br>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <h1>{{course.courseName}}</h1>
+            <p>{{course.courseShortDesc}}</p>
+            <p>Instructed by {{course.owner.first_name}} {{course.owner.last_name}}</p>
+            <p><b>Category:</b> {{inCategory}}</p>
+        </div>
         <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
             <div class="center-cropped" style="background-image: url({{course.courseThumbnail.url}});"></div>
         </div>
@@ -82,7 +84,12 @@
                                                 <td class="list-right">฿ {{leftBalance}}</td>
                                             </tr>
                                         </table>
-                                        <input type="submit" class="btn btn-block btn-primary" value="Confirm">
+                                        <br>
+                                        {% if canTakeCourse %}
+                                            <input type="submit" class="btn btn-block btn-primary" value="Confirm">
+                                        {% else %}
+                                            <input type="submit" class="btn btn-block btn-danger" value="Not enough balance" disabled>
+                                        {% endif %}
                                     </form>
                                 </div>
                             </div>
@@ -102,9 +109,9 @@
             </table>
         </div>
         <div class="col-sm-12 col-sm-12 col-md-12 col-lg-12">
-            <h2><b>Course description</b></h2>
+            <h2><b>Course full description</b></h2>
             <p>
-                {{course.courseDesc}}
+                {{course.courseFullDesc}}
             </p>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -143,7 +150,7 @@
                     <li class="review">
                         <div class="info-container">
                             <div class="avatar">
-                                <img src="{{review.owner.profilePicture.url}}" alt="{{review.owner}}'s avatar" />
+                                <img src="{{review.owner.profile.profilePicture.url}}" alt="{{review.owner}}'s avatar" />
                             </div>
                         </div>
                         <div class="user-details">
@@ -199,5 +206,6 @@
             {% endif %}
         </div>
     </div>
-    </body>
-</html>
+{% endblock %}
+    <!--</body>
+</html>-->
