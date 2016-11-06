@@ -1,18 +1,22 @@
-<!DOCTYPE>
-<html>
-    <header>
-        <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
-        <title>{{course.courseName}}</title>
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-        <script type="text/javascript">
-            
-            var orderVideoSelect = document.getElementByClassName('orderVideo');
+{% extends 'ui/navbar.html' %}
+{% load staticfiles %}
 
-        </script>
-    </header>
-    <body>
+{% block style %}
+<style media="screen">
+    .center-cropped {
+        height: 150px;
+        width: auto;
+        background-position: center center;
+        background-size: cover;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+    <br>
+    <br>
+    <br>
+    <div class="container">
         <ul class='nav nav-tabs'>
             <li class="active"><a data-toggle="tab" href="#overviewTab">Overview</a></li>
             {% for lecture in lecturesList %}
@@ -25,7 +29,7 @@
 
         <div class="tab-content">
             <div id="overviewTab" class="tab-pane fade in active">
-                <h3>Overview</h3>
+                <h3>Edit course information</h3>
                 {% if isOwner %}
                     <form action={% url 'course:edited_course' course.courseID %} method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
@@ -41,12 +45,18 @@
                         </div>
                         Change preview video: <input type="file" name="previewVideo"><br>
                         Change course's thumbnail: <input type="file" name="courseThumbnail"><br>
-                        Change course's description:<input type="text" name="courseDesc" placeholder="{{course.courseDesc}}"><br>
+                        Change course's short description:<input type="text" name="courseShortDesc" placeholder="{{course.courseShortDesc}}"><br>
+                        Change course's full description:<input type="text" name="courseFullDesc" placeholder="{{course.courseFullDesc}}"><br>
+                        Check to publish course:<input type="checkbox" name="isPublish"><br>
+                        Change Course discount (%):<input type="number" name="discountPercentage" min="0" max="100"> <br>
                         <input type="submit" value="Confirm">
                     </form>
+                    <br>
+                    <br>
+                    <br>
                     <form action={% url 'course:reordered_video' course.courseID %} method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <p>Reorder course's videos</p>
+                        <h3>Reorder course's videos</h3>
                         {% for lecture in lecturesList %}
                             {{lecture.video.videoName}}
                             <select class='dropdown orderVideo' name='{{lecture.video.videoID}}'>
@@ -119,12 +129,16 @@
                     <h3>Upload New Video</h3>
                     <form action={% url 'course:upload_video' courseID=course.courseID %} method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
-                        Video name: <input type="text" name="videoName" placeholder="Video Name" required><br>   
+                        Video name: <input type="text" name="videoName" placeholder="Video Name" required><br>
+                        Video description: <input type="text" name="videoDesc" placeholder="Video Description" required><br>   
                         <input type="file" name="videoToUpload" required>
                         <input type="submit" value="Upload">
                     </form>
                 </div>
             {% endif %}
         </div>
-    </body>
-</html>
+    </div>
+        
+{% endblock %}
+    <!--</body>
+</html>-->

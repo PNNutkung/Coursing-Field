@@ -123,31 +123,42 @@ def edited_course(req, courseID):
         newCategoryID = req.POST.get('courseCategory')
         if len(newCategoryID) > 0:
             try:
-                courseInCategory = CourseInCategory.objects.get(course=course)
                 category = Category.objects.get(categoryID=newCategoryID)
-                courseInCategory.category = category
-                courseInCategory.save()
+                course.category = category
             except ObjectDoesNotExist:
                 print("Object does not exist")
         newPreviewVideo = req.FILES.get('previewVideo',None)
         if newPreviewVideo is not None:
-            try:
-                #Assume there is only one preview video. Any old ones should be labeled isDelete=True
-                coursePreview = CoursePreview.objects.get(course=course,isDelete=False)
-                #Add for loop to set old preview videos as isDelete=True
-                coursePreview.isDelete = True
-                coursePreview.save()
-            except ObjectDoesNotExist:
-                print("Object does not exist creating new one")
-            finally:
-                newCoursePreview = CoursePreview(course=course,previewVideo=newPreviewVideo,isDelete=False)
-                newCoursePreview.save()
+            course.previewVideoFile = newPreviewVideo
         newCourseThumbnail = req.FILES.get('courseThumbnail')
         if newCourseThumbnail is not None:
             course.courseThumbnail = newCourseThumbnail
-        newCourseDesc = req.POST.get('courseDesc')
-        if len(newCourseDesc) > 0:
-            course.courseDesc = newCourseDesc
+        newCourseFullDesc = req.POST.get('courseFullDesc')
+        if len(newCourseFullDesc) > 0:
+            course.courseFullDesc = newCourseFullDesc
+        newCourseShortDesc = req.POST.get('courseShortDesc')
+        if len(newCourseShortDesc) > 0:
+            course.courseShortDesc = newCourseShortDesc
+        isPublish = req.POST.get('isPublish')
+        if isPublish is not None:
+            course.isPublish = True
+            # print('New value of isPublish', 'True')
+        else:
+            course.isPublish = False
+            print('New value of isPublish', 'False')
+        newDiscountPercentage_str = req.POST.get('discountPercentage')
+        if len(newDiscountPercentage_str) > 0:
+            newDiscountPercentage = int(newDiscountPercentage_str)
+            course.discountPercentage = newDiscountPercentage
+            if newDiscountPercentage > 0:
+                print('New value of discountPercentage', newDiscountPercentage)
+                newDiscountPrice = course.coursePrice * ( 100 - newDiscountPercentage ) / 100
+                print('new value of discountPrice', newDiscountPrice)
+                course.discountPrice = newDiscountPrice
+            else:
+                print('New value of discountPercentage', newDiscountPercentage)
+                newDiscountPrice = course.coursePrice
+                print('new value of discountPrice', newDiscountPrice)
         course.save()
         return redirect(reverse('course:manage_course', kwargs={'courseID' : courseID }))
     else:
