@@ -17,6 +17,8 @@ def login(req):
         if user is not None:
             auth.login(req, user)
             return redirect(reverse('browse:browseIndex'))
+        else:
+            return render(req, 'account/login.html', {'pageTitle': 'Login', 'message': 'Wrong Username or Password.'})
     else:
         return render(req, 'account/login.html', {'pageTitle': 'Login'})
 
