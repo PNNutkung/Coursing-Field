@@ -52,6 +52,9 @@ def profile(req):
     #teachingCourse = Course.objects.filter(owner=req.user)
     return render(req, 'account/profile.html')
 
+def profileUpdate(req):
+    return redirect(reverse('account:profile'))
+
 def logout(req):
     auth.logout(req)
     return redirect(reverse('index:index'))
