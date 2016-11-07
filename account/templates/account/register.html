@@ -2,51 +2,23 @@
 {% load staticfiles %}
 
 {% block script %}
+
 <script type="text/javascript">
-
-function checkPassword(str)
-{
-  var re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,}$/;
-  return re.test(str);
+window.onload = function() {
+  document.getElementById('password').onchange = validatePassword;
+  document.getElementById('confirm_password').onchange = validatePassword;
 }
-
-function checkForm(form)
-{
-  re = /^\w+$/;
-  if(!re.test(form.username.value)) {
-    form.username.setCustomValidity("Username must contain only letters, numbers and underscores!");
-    return false;
-  }
-
-  reemail = /^[^@]+@[^@]+\.[^@]+$/;
-  if(!reemail.test(form.email.value)) {
-    form.email.setCustomValidity('Your entered email has wrong format.')
-    return false;
-  }
-
-  if(form.password.value == form.confirm_password.value) {
-    if(!checkPassword(form.password.value)) {
-      form.password.setCustomValidity("The password you have entered is not valid!");
-      return false;
-    }
+function validatePassword() {
+  var confirm_password = document.getElementById('confirm_password').value;
+  var password = document.getElementById('password').value;
+  if (password != confirm_password) {
+    document.getElementById('confirm_password').setCustomValidity('Please check that you\'ve entered and confirmed your password!');
   } else {
-    form.password.setCustomValidity("Error: Please check that you've entered and confirmed your password!");
-    return false;
+    document.getElementById('confirm_password').setCustomValidity('');
   }
-
-  rename = /^[A-Za-z]+$/;
-  if(!rename.test(form.lastname.value)) {
-    form.firstname.setCustomValidity('Your entered firstname has wrong format.');
-    return false;
-  }
-  if(!rename.test(form.firstname.value)) {
-    form.lastname.setCustomValidity('Your entered lastname has wrong format.');
-    return false;
-  }
-  return true;
 }
-
 </script>
+
 {% endblock %}
 
 {% block body %}
@@ -57,19 +29,38 @@ function checkForm(form)
   <div class="panel panel-success">
     <div class="panel-heading">Register</div>
     <div class="panel-body">
-      <form action="{% url 'account:register' %}" onsubmit="return checkForm(this);" role="form" method="POST">
+      <form name="regis" action="{% url 'account:register' %}" onsubmit="return checkForm();" role="form" method="POST">
           {% csrf_token %}
           <div class="form-group">
             <label for="username">Username:</label>
-            <input id="username" class="form-control" type="text" name="username" placeholder="Enter a username." required oninput="setCustomValidity('')"/>
+            <input
+              id="username"
+              class="form-control"
+              type="text" name="username"
+              placeholder="Enter a username."
+              pattern="[A-Za-z0-9]{4,}"
+              required />
           </div>
           <div class="form-group">
             <label for="email">Email:</label>
-            <input id="email" class="form-control" type="text" name="email" placeholder="Enter an email." required oninput="setCustomValidity('')"/>
+            <input
+            id="email"
+            class="form-control"
+            type="email"
+            name="email"
+            placeholder="Enter an email."
+            required />
           </div>
           <div class="form-group">
-            <label for="password">Password:</label>
-            <input id="password" class="form-control" type="password" name="password" placeholder="Enter a password." required oninput="setCustomValidity('')"/>
+            <label for="password">Password: (Require atleast 1 Uppercase, 1 Lowercase, 1 Number, and greater than or equals 6 characters)</label>
+            <input
+            id="password"
+            class="form-control"
+            type="password"
+            name="password"
+            placeholder="Enter a password."
+            pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,}$"
+            required />
           </div>
           <div class="form-group">
             <label for="confirm_password">Confirm Password:</label>
@@ -77,15 +68,16 @@ function checkForm(form)
           </div>
           <div class="form-group">
             <label for="firstname">Firstname:</label>
-            <input id="firstname" class="form-control" type="text" name="firstname" placeholder="Enter your firstname." required oninput="setCustomValidity('')"/>
+            <input id="firstname" class="form-control" type="text" name="firstname" placeholder="Enter your firstname." required pattern="[A-Za-z]+"/>
           </div>
           <div class="form-group">
             <label for="lastname">Lastname:</label>
-            <input id="lastname" class="form-control" type="text" name="lastname" placeholder="Enter your lastname." required oninput="setCustomValidity('')"/>
+            <input id="lastname" class="form-control" type="text" name="lastname" placeholder="Enter your lastname." required pattern="[A-Za-z]+"/>
           </div>
           <div class="form-group">
             <label for="bday">Birth Date:</label>
-            <input class="form-control" id="bday" type='date' name='birthday' required/>
+            <input class="form-control" id="bday" type='date' name='birthday' required
+            max="{% now 'Y-m-d' %}"/>
           </div>
           <div class="form-group">
             <label for="gender">Gender:</label>
