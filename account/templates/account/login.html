@@ -3,6 +3,9 @@
 
 {% block body %}
 <div class="container" id="login-container">
+  {% if message %}
+  <div class="alert alert-danger" role="alert">{{ message }}</div>
+  {% endif %}
   <div class="panel panel-success">
     <div class="panel-heading">Login</div>
     <div class="panel-body">
