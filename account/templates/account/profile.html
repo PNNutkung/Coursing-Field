@@ -115,7 +115,7 @@ function validatePassword() {
                 </div>
               </div>
 
-              <form action="index.html" method="post">
+              <form name="personalUpdate" action="{% url 'account:personalUpdate' %}" role="form" method="post">
                 {% csrf_token %}
                 <div class="controls col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-bottom:2%;">
                   <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
@@ -163,7 +163,7 @@ function validatePassword() {
                     <label class="control-label">Address</label>
                   </div>
                   <div class="col-md-9">
-                    <textarea name="address" rows="6" cols="40" spellcheck required></textarea>
+                    <textarea name="address" rows="6" cols="40" spellcheck required>{{user.profile.address}}</textarea>
                   </div>
                 </div>
 
@@ -172,7 +172,7 @@ function validatePassword() {
                     <label class="control-label">Biography</label>
                   </div>
                   <div class="col-md-9">
-                    <textarea name="biography" rows="6" cols="40" spellcheck required></textarea>
+                    <textarea name="biography" rows="6" cols="40" spellcheck maxlength="255" required>{{user.profile.bio}}</textarea>
                   </div>
                 </div>
               </div>

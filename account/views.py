@@ -4,7 +4,7 @@ import django.contrib.auth as auth
 from mainmodels.models import Profile, Course, Category
 from django.urls import reverse
 from datetime import datetime
-import re
+import json
 
 # Create your views here.
 def login(req):
@@ -49,12 +49,33 @@ def register(req):
         return render(req, 'account/register.html')
 
 def profile(req):
+    if not req.user.is_authenticated:
+        return redirect(reverse('account:login'))
     #teachingCourse = Course.objects.filter(owner=req.user)
     return render(req, 'account/profile.html')
 
-def profileUpdate(req):
-    return redirect(reverse('account:profile'))
+def personalUpdate(req):
+    user = User.objects.filter(username=req.user, email=req.user.email)
+    profile = Profile.objects.filter(user=req.user)
+    if user is not None and profile is not None:
+        birthDate_str = req.POST.get('bday')
+        birthDate = datetime.strptime(birthDate_str, '%Y-%m-%d').date()
+        gender = req.POST.get('gender', 'M')
+        user.update(first_name=req.POST.get('firstname', ''), last_name=req.POST.get('lastname', ''))
+        profile.update(birthDate=birthDate, gender=gender[0], address=req.POST.get('address', ''), bio=req.POST.get('biography', ''))
+        return redirect(reverse('account:profile'))
+    else:
+        return json.dumps({'message': '403 Forbidden'})
 
+def profileUpdate(req):
+    user = User.objects.get(username=req.user)
+    if user is not None:
+        user.email = req.POST.get('email', '')
+        user.set_password(req.POST.get('password',''))
+        user.save()
+        return redirect(reverse('account:login'))
+    else:
+        return json.dumps({'message': '403 Forbidden'})
 def logout(req):
     auth.logout(req)
     return redirect(reverse('index:index'))
