@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 import django.contrib.auth as auth
-from mainmodels.models import Profile, Course, Category
+from mainmodels.models import Profile, Course, Category, Transaction
 from django.urls import reverse
 from datetime import datetime
 import json
@@ -51,8 +51,13 @@ def register(req):
 def profile(req):
     if not req.user.is_authenticated:
         return redirect(reverse('account:login'))
-    #teachingCourse = Course.objects.filter(owner=req.user)
-    return render(req, 'account/profile.html')
+    teachingCourses = Course.objects.filter(owner=req.user)
+    findTakingCourses = Transaction.objects.filter(takerID=req.user.id)
+    takingCourses = []
+    for course in findTakingCourses:
+        joinCourse = Course.objects.filter(courseID=course.courseID)
+        takingCourses.append(joinCourse)
+    return render(req, 'account/profile.html', {'teachingCourses': teachingCourses, 'takingCourses': takingCourses})
 
 def personalUpdate(req):
     user = User.objects.filter(username=req.user, email=req.user.email)

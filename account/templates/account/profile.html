@@ -185,101 +185,67 @@ function validatePassword() {
           </div>
 
             <div id="teaching" class="tab-pane fade">
-                <h3 style="text-align:center">Your Teaching Courses</h3>
-                <div class="well col-lg-10" style="margin-left:8%;margin-right:8%;margin-bottom:3%;">
+              {% if teachingCourses %}
+              <h3 style="text-align:center">Your Teaching Courses</h3>
+                {% for teachingCourse in teachingCourses %}
+                <a href="{% url 'course:view_course' courseID=teachingCourse.courseID %}">
+                  <div class="well col-lg-10" style="margin-left:8%;margin-right:8%;margin-bottom:3%;">
                     <div class="col-lg-4">
-                        <a href="#"><img src="{% static " ui/img/item.jpg " %}" alt="" style="width:200px; height:200px;"> </a>
+                      <a href={% url 'course:view_course' courseID=teachingCourse.courseID %} class="thumbnail"><img src={{teachingCourse.courseThumbnail.url}} alt={{teachingCourse.courseName}} style="width:200px; height:200px;"> </a>
                     </div>
                     <div class="col-lg-8 controls">
-                        <div class="controls" style="margin-bottom:1%;font-size:200%;margin-bottom:1%">
-                            -INSERT_COURSE_NAME-
-                        </div>
-                        <div class="controls" style="margin-bottom:1%;font-size:120%;">
-                            By -INSERT_INSTRUCTOR_NAME-
-                        </div>
-                        <div class="controls" style="margin-bottom:1%;font-size:120%;">
-                            Price -INSERT_COURSES_PRICE-
-                        </div>
-                        <div class="controls" style="margin-bottom:1%;font-size:120%;">
-                            -INSERT_COURSES_DESC
-                        </div>
-                        <div class="controls" style="margin-bottom:1%;font-size:120%;">
-                            -INSERT STAR-
-                        </div>
+                      <div
+                      class="controls"
+                      style="margin-bottom:1%;font-size:200%;margin-bottom:1%">
+                        {{teachingCourse.courseName}}
+                      </div>
+                      <div class="controls" style="margin-bottom:1%;font-size:120%;">
+                        Price: ฿{{teachingCourse.coursePrice}}
+                      </div>
+                      <div class="controls" style="margin-bottom:1%;font-size:120%;">
+                        {{teachingCourse.courseShortDesc}}
+                      </div>
+                      <div class="controls" style="margin-bottom:1%;font-size:120%;">
+                      </div>
                     </div>
-                </div>
-
-                <div class="well col-lg-10" style="margin-left:8%;margin-right:8%;margin-bottom:3%;">
-                    <div class="col-lg-4">
-                        <a href="#"><img src="{% static " ui/img/item.jpg " %}" alt="" style="width:200px; height:200px;"> </a>
-                    </div>
-                    <div class="col-lg-8 controls">
-                        <div class="controls" style="margin-bottom:1%;font-size:200%;margin-bottom:1%">
-                            -INSERT_COURSE_NAME-
-                        </div>
-                        <div class="controls" style="margin-bottom:1%;font-size:120%;">
-                            By -INSERT_INSTRUCTOR_NAME-
-                        </div>
-                        <div class="controls" style="margin-bottom:1%;font-size:120%;">
-                            Price -INSERT_COURSES_PRICE-
-                        </div>
-                        <div class="controls" style="margin-bottom:1%;font-size:120%;">
-                            -INSERT_COURSES_DESC
-                        </div>
-                        <div class="controls" style="margin-bottom:1%;font-size:120%;">
-                            -INSERT STAR-
-                        </div>
-                    </div>
-                </div>
-
+                  </div>
+              </a>
+              {% endfor %}
+            {% else %}
+              <h3 style="text-align:center">You are not teaching any course.</h3>
+            {% endif %}
             </div>
-            <div id="taking" class="tab-pane fade">
-                <h3 style="text-align:center">Your Teaching Courses</h3>
-                <div class="well col-lg-10" style="margin-left:8%;margin-right:8%;margin-bottom:3%;">
-                    <div class="col-lg-4">
-                        <a href="#"><img src="{% static " ui/img/item.jpg " %}" alt="" style="width:200px; height:200px;"> </a>
-                    </div>
-                    <div class="col-lg-8 controls">
-                        <div class="controls" style="margin-bottom:1%;font-size:200%;margin-bottom:1%">
-                            -INSERT_COURSE_NAME-
-                        </div>
-                        <div class="controls" style="margin-bottom:1%;font-size:120%;">
-                            By -INSERT_INSTRUCTOR_NAME-
-                        </div>
-                        <div class="controls" style="margin-bottom:1%;font-size:120%;">
-                            Price -INSERT_COURSES_PRICE-
-                        </div>
-                        <div class="controls" style="margin-bottom:1%;font-size:120%;">
-                            -INSERT_COURSES_DESC
-                        </div>
-                        <div class="controls" style="margin-bottom:1%;font-size:120%;">
-                            -INSERT STAR-
-                        </div>
-                    </div>
-                </div>
 
-                <div class="well col-lg-10" style="margin-left:8%;margin-right:8%;margin-bottom:3%;">
+            <div id="taking" class="tab-pane fade">
+                {% if takingCourses|length > 0 %}
+                <h3 style="text-align:center">Your Taking Courses</h3>
+                  {% for takingCourse in takingCourses.0 %}
+                  <a href="{% url 'course:view_course' courseID=takingCourse.courseID %}">
+                  <div class="well col-lg-10" style="margin-left:8%;margin-right:8%;margin-bottom:3%;">
                     <div class="col-lg-4">
-                        <a href="#"><img src="{% static " ui/img/item.jpg " %}" alt="" style="width:200px; height:200px;"> </a>
+                      <a href="{% url 'course:view_course' courseID=takingCourse.courseID %}" class="thumbnail"><img src={{takingCourse.courseThumbnail.url}} alt={{takingCourse.courseName}} style="width:200px; height:200px;"></a>
                     </div>
                     <div class="col-lg-8 controls">
-                        <div class="controls" style="margin-bottom:1%;font-size:200%;margin-bottom:1%">
-                            -INSERT_COURSE_NAME-
-                        </div>
-                        <div class="controls" style="margin-bottom:1%;font-size:120%;">
-                            By -INSERT_INSTRUCTOR_NAME-
-                        </div>
-                        <div class="controls" style="margin-bottom:1%;font-size:120%;">
-                            Price -INSERT_COURSES_PRICE-
-                        </div>
-                        <div class="controls" style="margin-bottom:1%;font-size:120%;">
-                            -INSERT_COURSES_DESC
-                        </div>
-                        <div class="controls">
-                          -INSERT STAR-
-                        </div>
+                      <div
+                      class="controls"
+                      style="margin-bottom:1%;font-size:200%;margin-bottom:1%">
+                      {{takingCourse.courseName}}
                     </div>
+                    <div class="controls" style="margin-bottom:1%;font-size:120%;">
+                      Price: ฿{{takingCourse.coursePrice}}
+                    </div>
+                    <div class="controls" style="margin-bottom:1%;font-size:120%;">
+                      {{takingCourse.courseShortDesc}}
+                    </div>
+                    <div class="controls" style="margin-bottom:1%;font-size:120%;">
+                    </div>
+                  </div>
                 </div>
+              </a>
+                {% endfor %}
+              {% else %}
+                <h3 style="text-align:center">You are not taking any course.</h3>
+              {% endif %}
             </div>
         <div id="transaction" class="tab-pane fade">
           <h3 style="text-align:center">Your Transaction Log</h3>
