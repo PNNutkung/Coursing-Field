@@ -19,3 +19,6 @@ def create(request):
 
 def profile(request):
     return render(request , 'ui/profile.html')
+
+def tester(request):
+    return render(request , 'ui/tester.html')

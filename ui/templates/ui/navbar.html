@@ -39,6 +39,8 @@
 </head>
 
 <body>
+
+
     <div id="navbar">
       <nav id="navbar" class="navbar navbar-default navbar-default navbar-fixed-top">
           <!-- Handle Toggle -->
@@ -48,15 +50,14 @@
           <!-- End Handle Toggle -->
           <div class="container-fluid">
               <div class="col-md-2">
-                  <div class="navbar-header">
+                  <div class="navbar-header borderXwidth">
                       <a class="navbar-brand" href="{% url 'index:index' %}">
                           <div id="head">Coursing Field</div>
                       </a>
                   </div>
               </div>
-
               <!-- Collect the nav links, forms, and other content for toggling -->
-              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <div class="collapse navbar-collapse pullRight" id="bs-example-navbar-collapse-1">
                   <div class="col-md-1">
                       <ul class="nav navbar-nav">
                           <li><a href="{% url 'browse:browseIndex' %}">Browse</a></li>

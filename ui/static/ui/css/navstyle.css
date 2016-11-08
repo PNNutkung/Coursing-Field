@@ -216,3 +216,22 @@ body.modal-open {
 .payments {
 	font-size: 1.5em;
 }
+
+/* Pull right  */
+div.pullRight a:before
+{
+    position: absolute;
+    width: 2px;
+    height: 100%;
+    left: 0px;
+    top: 0px;
+    content: '';
+    background: #FFF;
+    opacity: 0.3;
+    transition: all 0.3s;
+}
+
+div.pullRight a:hover:before
+{
+    width: 100%;
+}

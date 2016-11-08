@@ -19,6 +19,7 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^', include('index.urls')),
     url(r'^', include('account.urls')),
+    url(r'^ui/', include('ui.urls')),
     url(r'^browse/', include('browse.urls')),
     url(r'^course/', include('course.urls')),
     url(r'^watchvideo/',include('watchvideo.urls')),
