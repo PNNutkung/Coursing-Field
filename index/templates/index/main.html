@@ -27,64 +27,14 @@
 <div class="container" id="best_course" style="text-align:center;">
   <div class="" style="margin-bottom:2em;"><h1>Most Popular Course</h1></div>
   <div id="owl-no1" class="owl-carousel col-md-12">
-    <div class="well well-sm">
-  <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:150px; height:150px; margin-left:5%;"> </a>
-  <div><h4>Course Name No.1</div>
-  <div>Course Name No.1</div>
-  <div>Course Name No.1</div>
-  <div>Price : 500 Baht</div>
-</div>
-    <div class="well well-sm">
-  <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:150px; height:150px; margin-left:5%;"> </a>
-  <div><h4>Course Name No.1</div>
-  <div>Course Name No.1</div>
-  <div>Course Name No.1</div>
-  <div>Price : 500 Baht</div>
-</div>
-    <div class="well well-sm">
-  <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:150px; height:150px; margin-left:5%;"> </a>
-  <div><h4>Course Name No.1</div>
-  <div>Course Name No.1</div>
-  <div>Course Name No.1</div>
-  <div>Price : 500 Baht</div>
-</div>
-    <div class="well well-sm">
-  <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:150px; height:150px; margin-left:5%;"> </a>
-  <div><h4>Course Name No.1</div>
-  <div>Course Name No.1</div>
-  <div>Course Name No.1</div>
-  <div>Price : 500 Baht</div>
-</div>
-    <div class="well well-sm">
-  <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:150px; height:150px; margin-left:5%;"> </a>
-  <div><h4>Course Name No.1</div>
-  <div>Course Name No.1</div>
-  <div>Course Name No.1</div>
-  <div>Price : 500 Baht</div>
-</div>
-    <div class="well well-sm">
-  <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:150px; height:150px; margin-left:5%;"> </a>
-  <div><h4>Course Name No.1</div>
-  <div>Course Name No.1</div>
-  <div>Course Name No.1</div>
-  <div>Price : 500 Baht</div>
-</div>
-    <div class="well well-sm">
-  <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:150px; height:150px; margin-left:5%;"> </a>
-  <div><h4>Course Name No.1</div>
-  <div>Course Name No.1</div>
-  <div>Course Name No.1</div>
-  <div>Price : 500 Baht</div>
-</div>
-    <div class="well well-sm">
-  <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:150px; height:150px; margin-left:5%;"> </a>
-  <div><h4>Course Name No.1</div>
-  <div>Course Name No.1</div>
-  <div>Course Name No.1</div>
-  <div>Price : 500 Baht</div>
-</div>
-
-    ...
+    {% for mostPopularCourse in mostPopularCourses %}
+      <div class="well well-sm">
+        <a href="{% url 'course:view_course' courseID=mostPopularCourse.courseID %}"><img src={{mostPopularCourse.courseThumbnail.url}} alt="" style="width:150px; height:150px; margin-left:5%;"> </a>
+        <div><a href="{% url 'course:view_course' courseID=mostPopularCourse.courseID %}"><h4>{{mostPopularCourse.courseName}}</h4></a></div>
+        <div>{{mostPopularCourse.courseShortDesc}}</div>
+        <div>Price: ฿{{mostPopularCourse.coursePrice}}</div>
+      </div>
+    {% endfor %}
   </div>
 </div>
 
