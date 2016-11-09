@@ -25,23 +25,39 @@
           <form class="form-horizontal">
             <div class="form-group">
               <ul class='nav nav-pills'>
-                  {% if isOverview %}
-                    <li class="active form-control"><a data-toggle="pill" href="#overviewTab">Overview</a></li>
-                    {% for orderVideo in orderVideos %}
-                    <li class="form-control"><a style="margin-top:-2%" href="{% url 'course:manage_course_by_video_id' courseID=course.courseID videoID=orderVideo.video_id %}">{{orderVideo.video.videoName}}</a></li>
-                    {% endfor %}
-                  {% else %}
-                    <li class="form-control"><a href="{% url 'course:manage_course_overview' courseID=course.courseID %}">Overview</a></li>
-                    {% for orderVideo in orderVideos %}
-                        {% if orderVideo.video_id == video.videoID %}
-                            <li class="active form-control"><a data-toggle="pill" href="#{{video.videoID}}Tab">{{video.videoName}}</a></li>
-                        {% else %}
-                            <li class="form-control"><a style="margin-top:-2%" href="{% url 'course:manage_course_by_video_id' courseID=course.courseID videoID=orderVideo.video_id %}">{{orderVideo.video.videoName}}</a></li>
-                        {% endif %}
-                    {% endfor %}
-                  {% endif %} 
                   {% if isOwner %}
+                    {% if isOverview %}
+                        <li class="active form-control"><a data-toggle="pill" href="#overviewTab">Overview</a></li>
+                        {% for orderVideo in orderVideos %}
+                        <li class="form-control"><a style="margin-top:-2%" href="{% url 'course:manage_course_by_video_id' courseID=course.courseID videoID=orderVideo.video_id %}">{{orderVideo.video.videoName}}</a></li>
+                        {% endfor %}
+                    {% else %}
+                        <li class="form-control"><a href="{% url 'course:manage_course_overview' courseID=course.courseID %}">Overview</a></li>
+                        {% for orderVideo in orderVideos %}
+                            {% if orderVideo.video_id == video.videoID %}
+                                <li class="active form-control"><a data-toggle="pill" href="#{{video.videoID}}Tab">{{video.videoName}}</a></li>
+                            {% else %}
+                                <li class="form-control"><a style="margin-top:-2%" href="{% url 'course:manage_course_by_video_id' courseID=course.courseID videoID=orderVideo.video_id %}">{{orderVideo.video.videoName}}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %} 
                       <li class="form-control"><a data-toggle="pill" href="#uploadTab">Upload</a></li>
+                  {% else %}
+                    {% if isOverview %}
+                        <li class="active form-control"><a data-toggle="pill" href="#overviewTab">Overview</a></li>
+                        {% for orderVideo in orderVideos %}
+                        <li class="form-control"><a style="margin-top:-2%" href="{% url 'watchvideo:video_tab' courseID=course.courseID videoID=orderVideo.video_id %}">{{orderVideo.video.videoName}}</a></li>
+                        {% endfor %}
+                    {% else %}
+                        <li class="form-control"><a href="{% url 'watchvideo:overview' courseID=course.courseID %}">Overview</a></li>
+                        {% for orderVideo in orderVideos %}
+                            {% if orderVideo.video_id == video.videoID %}
+                                <li class="active form-control"><a data-toggle="pill" href="#{{video.videoID}}Tab">{{video.videoName}}</a></li>
+                            {% else %}
+                                <li class="form-control"><a style="margin-top:-2%" href="{% url 'watchvideo:video_tab' courseID=course.courseID videoID=orderVideo.video_id %}">{{orderVideo.video.videoName}}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %} 
                   {% endif %}
               </ul>
               </div>

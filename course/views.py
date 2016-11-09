@@ -122,7 +122,7 @@ def manage_course(req, courseID):
 
 def manage_course_overview(req, courseID):
     if req.user.is_authenticated:
-        course = Course.objects.get(courseID=courseID)
+        course = Course.objects.select_related('owner').get(courseID=courseID)
         if req.user.id == course.owner_id:
             # isOwner = True
             # isOverview = True
@@ -134,8 +134,8 @@ def manage_course_overview(req, courseID):
                 orderNoList.append(orderVideo.orderNo)
             # tabsList = orderVideos.values('video')
             return render(req, 'watchvideo/tabs_with_content.html', { 'isOverview' : True, 'isOwner' : True, 'categories' : categories, 'orderNoList' : orderNoList, 'orderVideos' : orderVideos, 'course' : course })
-        else:
-            return redirect(reverse('course:view_course'))
+    else:
+        return redirect(reverse('course:view_course'))
 
 def manage_course_by_video_id(req, courseID, videoID):
     if req.user.is_authenticated:
@@ -146,12 +146,6 @@ def manage_course_by_video_id(req, courseID, videoID):
         lastVideoOrder = orderVideos.reverse()[0].orderNo
         if req.user.id == video.course.owner_id:
             return render(req, 'watchvideo/tabs_with_content.html', { 'isVideoTab' : True, 'isOwner' : True, 'video' : video, 'orderVideos' : orderVideos, 'course' : video.course, 'comments' : comments, 'lastVideoOrder' : lastVideoOrder})
-    else:
-        return redirect(reverse('course:view_course'))
-
-def manage_course_upload(req, courseID):
-    if req.user.is_authenticated:
-        return render(req, 'watchvideo/tabs_with_content.html', {'isOwner' : True})
     else:
         return redirect(reverse('course:view_course'))
 
