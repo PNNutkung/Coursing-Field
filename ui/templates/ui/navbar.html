@@ -40,59 +40,95 @@
 </head>
 
 <body>
-
-
-    <div id="navbar">
-      <nav id="navbar" class="navbar navbar-default navbar-default navbar-fixed-top">
-          <!-- Handle Toggle -->
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1">
-      <!-- Do the toggle -->
+  <div id="navbar">
+    <nav id="navbar" class="navbar navbar-default navbar-default navbar-fixed-top">
+        <!-- Handle Toggle -->
+    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1">
+    <!-- Do the toggle -->
     </button>
-          <!-- End Handle Toggle -->
-          <div class="container-fluid">
-              <div class="col-md-2">
-                  <div class="navbar-header borderXwidth">
-                      <a class="navbar-brand" href="{% url 'index:index' %}">
-                          <div id="head">Coursing Field</div>
-                      </a>
-                  </div>
-              </div>
-              <!-- Collect the nav links, forms, and other content for toggling -->
-              <div class="collapse navbar-collapse pullRight" id="bs-example-navbar-collapse-1">
-                  <div class="col-md-1">
-                      <ul class="nav navbar-nav">
-                          <li><a href="{% url 'browse:browseIndex' %}">Browse</a></li>
-                      </ul>
-                  </div>
-                  <div class="col-md-5">
-                      <form class="navbar-form navbar-left">
-                          <div class="form-group">
-                              <input type="text" class="form-control" id="searchfield" placeholder="Search"><button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
-                          </div>
-                      </form>
-                  </div>
-                  <ul class="nav navbar-nav navbar-right">
-                      <li><a href="#">My Course</a></li>
-                      <li><a href="{% url 'course:createCourse' %}" style="background-color: limegreen; color: white;">Create Course</a></li>
-                      {% if user.is_authenticated %}
-                        <li><a href="{% url 'account:profile' %}">{{user}}</a></li>
-                        <li><a href="{% url 'account:logout' %}" id="logout-btn">Logout</a></li>
-                      {% else %}
-                        <li><a href="{% url 'account:register' %}">Register</a></li>
-                        <li><a href="{% url 'account:login' %}">Login</a></li>
-                      {% endif %}
-                  </ul>
+        <!-- End Handle Toggle -->
+      <div class="container-fluid">
+          <div class="col-md-2">
+              <div class="navbar-header borderXwidth">
+                  <a class="navbar-brand" href="{% url 'index:index' %}">
+                      <div id="head">Coursing Field</div>
+                  </a>
               </div>
           </div>
-      </nav>
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse pullRight" id="bs-example-navbar-collapse-1">
+              <div class="col-md-1">
+                <ul class="nav navbar-nav">
+                  <li><a href="{% url 'browse:browseIndex' %}">Browse</a></li>
+                </ul>
+              </div>
+              <div class="col-md-5">
+                  <form class="navbar-form navbar-left">
+                      <div class="form-group">
+                          <input type="text" class="form-control" id="searchfield" placeholder="Search"><button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                      </div>
+                  </form>
+              </div>
+              <ul class="nav navbar-nav navbar-right">
+                  <li><a href="{% url 'course:createCourse' %}" style="background-color: limegreen; color: white;">Create Course</a></li>
+                  {% if user.is_authenticated %}
+                    <li><a href="{% url 'account:profile' %}">{{user}}</a></li>
+                    <li><a href="{% url 'account:logout' %}" id="logout-btn">Logout</a></li>
+                  {% else %}
+                    <li><a href="{% url 'account:register' %}">Register</a></li>
+                    <li><a href="{% url 'account:login' %}">Login</a></li>
+                  {% endif %}
+              </ul>
+          </div>
+      </div>
+    </nav>
+  </div>
+
+  {% block body %}
+  {% endblock %}
+
+  <footer>
+    <div class="footer" id="footer">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-4  col-md-4 col-sm-4 col-xs-6">
+              <a href="{% url 'index:index' %}">
+                <h3 style="text-align: center;">Coursing Field</h3>
+              </a>
+              <div style="text-align: center;">
+                Cousing Field is the platform that allow any user to take any interested course they want and teaching any other individuals at the same time
+              </div>
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">
+              <h3>Course</h3>
+              <ul>
+                <li><a href="{% url 'browse:browseIndex' %}">Browse Course</a></li>
+                <li><a href="{% url 'browse:all' %}">All Course</a></li>
+                <li><a href="{% url 'course:createCourse' %}">Create Course</a></li>
+              </ul>
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">
+              <h3>Profile</h3>
+              <ul>
+                <li><a href="{% url 'account:profile' %}">My Profile</a></li>
+              </ul>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+              <h3>Contact Us</h3>
+              <ul class="social">
+                <li><a href="#"><i class=" fa fa-facebook"></i></a></li>
+                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
+                <li><a href="#"><i class="fa fa-youtube"></i></a></li>
+              </ul>
+            </div>
+        </div>
+      </div>
     </div>
-
-    {% block body %}
-    {% endblock %}
-
-    {% block carousel %}
-    {% endblock %}
-
+  </footer>
+  {% block carousel %}
+  {% endblock %}
 </body>
 
 </html>
