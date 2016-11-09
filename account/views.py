@@ -81,6 +81,18 @@ def profileUpdate(req):
         return redirect(reverse('account:login'))
     else:
         return json.dumps({'message': '403 Forbidden'})
+
+def updateProfilePicture(req):
+    user = User.objects.get(username=req.user)
+    if user is not None:
+        profilePic = req.FILES.get('profilePicture','')
+        if profilePic:
+            user.profile.profilePicture = profilePic
+            user.save()
+        return redirect(reverse('account:profile'))
+    else:
+        return json.dumps({'message': '403 Forbidden'})
+
 def logout(req):
     auth.logout(req)
     return redirect(reverse('index:index'))
