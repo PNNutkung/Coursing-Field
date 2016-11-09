@@ -83,13 +83,20 @@ def profileUpdate(req):
         return json.dumps({'message': '403 Forbidden'})
 
 def updateProfilePicture(req):
-    user = User.objects.get(username=req.user)
-    if user is not None:
-        profilePic = req.FILES.get('profilePicture','')
-        if profilePic:
-            user.profile.profilePicture = profilePic
-            user.save()
-        return redirect(reverse('account:profile'))
+    if req.method == 'POST':
+        user = User.objects.get(username=req.user)
+        if user is not None:
+            profilePic = req.FILES['newProfilePicture']
+            if profilePic is not None:
+                print('New profile picture is ',profilePic.name)
+                user.profile.profilePicture = profilePic
+                user.save()
+            else:
+                print('No new profile picture.')
+            # if profilePic:
+            #     user.profile.profilePicture = profilePic
+            #     user.save()
+            return redirect(reverse('account:profile'))
     else:
         return json.dumps({'message': '403 Forbidden'})
 
