@@ -3,7 +3,7 @@
 {% block style %}
 <link rel="stylesheet" href="{% static "ui/css/profile.css" %}"? "{% now 'U' %}">
 {% endblock %}
-{% block script %}
+{% block prescript %}
 <script type="text/javascript">
 window.onload = function() {
   document.getElementById('password').onchange = validatePassword;
@@ -46,10 +46,24 @@ function validatePassword() {
         </div>
         <div class="tab-content">
           <div id="profile" class="tab-pane fade in active">
+            <h3><b>Profile</b></h3>
+            <div class="controls col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-bottom:2%;">
+            <form name="profile-picture" action="{% url 'account:updateProfilePicture'%}">
+              {% csrf_token %}
+                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                  <label for="profilePicture" class="control-label">Profile picture</label>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                  <input type="file" name="profilePicture" />
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                  <input class="btn btn-success" type="submit" name="profilePicture" value="Update"/>
+                </div>
+            </form>
+          </div>
             <form name="profile-update" action="{% url 'account:profileUpdate' %}" onsubmit="return checkForm();" role="form" method="post">
               {% csrf_token %}
               <div class="form-group">
-                <h3><b>Profile</b></h3>
                 <div class="control-group">
                   <div class="controls col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <legend><h4><b>Account Information</b></h4></legend>

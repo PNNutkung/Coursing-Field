@@ -9,4 +9,5 @@ urlpatterns = [
     url(r'^profile/$', views.profile, name='profile'),
     url(r'^profileUpdate/', views.profileUpdate, name='profileUpdate'),
     url(r'^personalUpdate/', views.personalUpdate, name='personalUpdate'),
+    url(r'^updateProfilePicture/', views.updateProfilePicture, name='updateProfilePicture'),
 ]
