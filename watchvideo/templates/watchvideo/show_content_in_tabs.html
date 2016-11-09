@@ -264,20 +264,11 @@
                 $('#resetBtn').click(function() {
                     console.log("resetting order...");
                     $('.orderVideo').empty();
-                    // originalOrderNoOptions.forEach(function (orderNoOption){
                     for(i=0; i<originalOrderNoOptions.length; i++) {
                         $('.orderVideo').append(originalOrderNoOptions[i]);
                     }
                     $('.orderVideo').first().prop('selected', true);
-                    // }); 
                 });
-                // function resetOrderNo() {
-                //     console.log("resetting order...")
-                    // $('.orderVideo').empty();
-                    // originalOrderNoOptions.forEach(function (orderNoOption){
-                    //     $('.orderVideo').append(orderNoOption);
-                    // }); 
-                // }
             });
         </script>
     {% endif %}
