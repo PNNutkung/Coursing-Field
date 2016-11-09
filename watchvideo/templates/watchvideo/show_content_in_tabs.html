@@ -26,12 +26,12 @@
           <form class="form-horizontal">
             <div class="form-group">
               <ul class='nav nav-pills'>
-                  <li class="active"><a data-toggle="pill" href="#overviewTab">Overview</a></li>
+                  <li class="active form-control"><a data-toggle="pill" href="#overviewTab">Overview</a></li>
                   {% for lecture in lecturesList %}
-                  <li><a style="margin-top:-2%" data-toggle="pill" href="#{{lecture.orderVideoInCourse.video.videoID}}Tab">{{lecture.orderVideoInCourse.video.videoName}}</a></li>
+                  <li class="form-control"><a style="margin-top:-2%" data-toggle="pill" href="#{{lecture.orderVideoInCourse.video.videoID}}Tab">{{lecture.orderVideoInCourse.video.videoName}}</a></li>
                   {% endfor %}
                   {% if isOwner %}
-                      <li><a data-toggle="pill" href="#uploadTab">Upload</a></li>
+                      <li class="form-control"><a data-toggle="pill" href="#uploadTab">Upload</a></li>
                   {% endif %}
               </ul>
               </div>
@@ -241,7 +241,10 @@
               <div id="{{lecture.orderVideoInCourse.video.videoID}}Tab" class="tab-pane fade">
                   {% if isOwner %}
                       <h3>Edit Video [{{lecture.orderVideoInCourse.video.videoName}}]</h3>
-                      <form action={% url 'course:edited_course' course.courseID %} method="POST" enctype="multipart/form-data">
+                      <video width="400" height="300" controls>
+                          <source src="{{lecture.orderVideoInCourse.video.videoFile.url}}" type="video/mp4">
+                      </video>
+                      <form action={% url 'course:edited_video' courseID=course.courseID videoID=lecture.orderVideoInCourse.video.videoID %} method="POST" enctype="multipart/form-data">
                           {% csrf_token %}
                           Change video's name:<input type="text" name="videoName" placeholder="{{lecture.orderVideoInCourse.video.videoName}}"><br>
                           Change video: <input type="file" name="videoFile"><br>
@@ -334,7 +337,6 @@
                         <br>
                         <div class="input-group">
                             <span class="input-group-addon">Category</span>
-                            {% comment %}<label for="courseCategory" class="control-label">Change Category: Current [{{inCategory}}]</label>{% endcomment %}
                             <select id="courseCategory" class="dropdown form-control" name="courseCategory">
                                 <option value="">Choose Category</option>
                                 {% for category in categories %}
@@ -358,19 +360,16 @@
                             <span class="input-group-addon">Change</span>
                             <input class="form-control" type="file" name="courseThumbnail"><br>
                         </div>
-                        {% comment %}Change course's thumbnail: <input type="file" name="courseThumbnail"><br>{% endcomment %}
                         <br>
                         <div class="input-group">
                             <span class="input-group-addon">Short Description</span>
                             <input class="form-control" type="text" name="courseShortDesc" placeholder="{{course.courseShortDesc}}" maxlength="50"><br>
                         </div>
-                        {% comment %}Change course's short description:<input type="text" name="courseShortDesc" placeholder="{{course.courseShortDesc}}"><br>{% endcomment %}
                         <br>
                         <div class="input-group">
                             <span class="input-group-addon">Full Description</span>
                             <input class="form-control" type="text" name="courseFullDesc" placeholder="{{course.courseFullDesc}}"><br>
                         </div>
-                        {% comment %}Change course's full description:<input type="text" name="courseFullDesc" placeholder="{{course.courseFullDesc}}"><br>{% endcomment %}
                         <br>
                         <div class="row">
                             <div class="col-md-1">
@@ -383,7 +382,6 @@
                             </div>
                         </div>
                         
-                        {% comment %}Check to publish course:<input type="checkbox" name="isPublish"><br>{% endcomment %}
                         <br>
                         <div class="row">
                             <div class="col-md-5">
@@ -398,7 +396,6 @@
                                 </div>
                             </div>
                         </div>
-                        {% comment %}Change Course discount (%):<input type="number" name="discountPercentage" min="0" max="100"> <br>{% endcomment %}
                         <br>
                         <input class="btn btn-primary form-control" type="submit" value="Confirm">
                     </form>
@@ -440,16 +437,7 @@
                                 <button id="resetBtn" type="button" class="btn btn-danger">Reset</button>
                             </div>
                         </div>
-                        {% comment %}<div class="input-group">
-                            <div class="input-group-btn btn-group btn-group-justified" role="group">
-                                <div class="btn-group" role="group">
-                                    <input class="btn btn-primary" type="submit" value="Reorder">
-                                </div>
-                                <div class="btn-group" role="group">
-                                    <button class="btn btn-info"  onclick="resertOrderNo()">Reset order</button>
-                                </div>
-                            </div>
-                        </div>{% endcomment %}
+                        
                     </form>
                 {% else %}
                     <p>{{course.courseName}}<br>
@@ -480,9 +468,6 @@
                         <h3>{{lecture.orderVideoInCourse.video.videoName}}</h3>
                         <p>This is the video description</p>
                         <video width="400" height="300" controls>
-                            {% comment %}
-                                <source src="{{lecture.orderVideoInCourse.video.videoFile.url}}.mp4" type="video/mp4">
-                            {% endcomment %}
                             <source src="https://s3-ap-southeast-1.amazonaws.com/coursingfield/media/videos/1/Java_Programming_1.mp4" type="video/mp4">
                         </video>
                     {% endif %}
