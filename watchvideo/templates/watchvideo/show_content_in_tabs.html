@@ -176,7 +176,11 @@
                 <div id="{{lecture.orderVideoInCourse.video.videoID}}Tab" class="tab-pane fade">
                     {% if isOwner %}
                         <h3>Edit Video [{{lecture.orderVideoInCourse.video.videoName}}]</h3>
-                        <form action={% url 'course:edited_course' course.courseID %} method="POST" enctype="multipart/form-data">
+                        <video width="400" height="300" controls>
+                            <!--<source src="{{lecture.orderVideoInCourse.video.videoFile.url}}.mp4">-->
+                            <source src="https://s3-ap-southeast-1.amazonaws.com/coursingfield/media/videos/1/Java_Programming_1.mp4" type="video/mp4">
+                        </video>
+                        <form action={% url 'course:edited_video' course.courseID %} method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
                             Change video's name:<input type="text" name="videoName" placeholder="{{lecture.orderVideoInCourse.video.videoName}}"><br>
                             Change video: <input type="file" name="videoFile"><br>
@@ -187,7 +191,10 @@
                         <h3>{{lecture.orderVideoInCourse.video.videoName}}</h3>
                         <p>This is the video description</p>
                         <video width="400" height="300" controls>
-                            <source src="{{lecture.orderVideoInCourse.video.videoFile.url}}" type="video/mp4">
+                            {% comment %}
+                                <source src="{{lecture.orderVideoInCourse.video.videoFile.url}}.mp4" type="video/mp4">
+                            {% endcomment %}
+                            <source src="https://s3-ap-southeast-1.amazonaws.com/coursingfield/media/videos/1/Java_Programming_1.mp4" type="video/mp4">
                         </video>
                     {% endif %}
                     <h3>Comment Section</h3>
