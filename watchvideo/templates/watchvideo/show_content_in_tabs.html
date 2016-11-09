@@ -165,20 +165,8 @@
                               <button id="resetBtn" type="button" class="btn btn-danger">Reset</button>
                           </div>
                       </div>
-                      {% comment %}<div class="input-group">
-                          <div class="input-group-btn btn-group btn-group-justified" role="group">
-                              <div class="btn-group" role="group">
-                                  <input class="btn btn-primary" type="submit" value="Reorder">
-                              </div>
-                              <div class="btn-group" role="group">
-                                  <button class="btn btn-info"  onclick="resertOrderNo()">Reset order</button>
-                              </div>
-                          </div>
-                      </div>{% endcomment %}
                   </form>
               {% else %}
-
-
                   <p>{{course.courseName}}<br>
                   <p>{{courseInCategory.category.categoryName}}</p><br>
                   <video width="400" height="300" controls>
@@ -231,8 +219,6 @@
                       {{course.owner.profile.bio}}
                     </div>
                   </div>
-
-
               {% endif %}
           </div>
           {% for lecture in lecturesList %}
@@ -305,8 +291,8 @@
           {% endif %}
       </div>
     </div>
-      </div>
     </div>
+</div>
 
 
 
