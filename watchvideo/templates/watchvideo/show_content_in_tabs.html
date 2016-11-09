@@ -187,21 +187,20 @@
                   <p>{{course.courseDesc}}</p>
                   <p>Owned by {{course.owner.first_name}} {{course.owner.last_name}}</p>
                   <div class="col-sm-9 col-lg-10" style="text-align:center;margin-left:10%">
-                    <h1>Course Name HERE</h1><hr />
+                    <h1>{{course.courseName}}</h1><hr />
                   </div>
                     <div class="col-sm-9 col-lg-10" style="margin-bottom:3%">
-                      <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:700px; height:400px; margin-left:20%;"> </a>
+                      <a href="#"><img src="{{course.courseThumbnail.url}}" alt="" style="width:700px; height:400px; margin-left:20%;"> </a>
                     </div>
                     <!-- Course Desciption -->
                     <div class="col-sm-9 col-lg-10 well" style="text-align:left; margin-left:10%; margin-bottom:3%">
                       <div class="col-lg-4">
                         <div style="font-size:150%">
-                          Course Desciption
+                          {{course.courseShortDesc}}
                         </div>
                       </div>
                       <div class="col-lg-8">
-
-                        PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE !
+                            {{course.courseFullDesc}}
                       </div>
                     </div>
                     <br /><br /><br />
@@ -211,14 +210,13 @@
                     <div class="col-lg-4">
                       <div style="font-size:150%">
                         About Course Instuctor
-                        <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:120px; height:150px; margin-left:20%;"> </a>
-
+                        <a href="#"><img src="{{request.user.profile.profilePicture.url}}" alt="" style="width:120px; height:150px; margin-left:20%;"> </a>
                       </div>
                     </div>
                     <br />
                     <div class="col-lg-8" style="">
-                      <h4>Instuctor Name Here</h4>
-                      PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE !
+                      <h4>{{course.owner.first_name}} {{course.owner.last_name}}</h4>
+                      {{course.owner.profile.bio}}
                     </div>
                   </div>
 
@@ -229,8 +227,8 @@
                       </div>
                     </div>
                     <div class="col-lg-8" style="">
-                      <h4>Instuctor Name Here</h4>
-                      PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE !
+                      <h4>{{course.owner.first_name}} {{course.owner.last_name}}</h4>
+                      {{course.owner.profile.bio}}
                     </div>
                   </div>
 
@@ -344,6 +342,6 @@
                     $('.orderVideo').first().prop('selected', true);
                 });
             });
-        </script>
+        </script>       
     {% endif %}
 {% endblock %}
