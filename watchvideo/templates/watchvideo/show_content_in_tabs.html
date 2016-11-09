@@ -44,11 +44,11 @@
       <div class="tab-content">
           <div id="overviewTab" class="tab-pane fade in active">
 
+              {% if isOwner %}
               <h3>
                   <span class="glyphicon glyphicon-edit"></span>
                   Course Information
               </h3>
-              {% if isOwner %}
                   <br>
                   <form action={% url 'course:edited_course' course.courseID %} method="POST" enctype="multipart/form-data">
                       {% csrf_token %}
@@ -167,6 +167,9 @@
                       </div>
                   </form>
               {% else %}
+                <h3>
+                    Course Information
+                </h3>
                   <p>{{course.courseName}}<br>
                   <p>{{courseInCategory.category.categoryName}}</p><br>
                   <video width="400" height="300" controls>
