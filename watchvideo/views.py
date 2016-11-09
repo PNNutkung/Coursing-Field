@@ -13,13 +13,21 @@ def show_content_in_tabs(request, courseID):
             videos = Video.objects.filter(course=course,isDelete=False)
             # preview = CoursePreview.objects.get(course=course,isDelete=False)
             courseInCategory = course.category.categoryName
+            orderVideosInCourse = OrderVideoInCourse.objects.filter(course=course).order_by('orderNo')
             # courseInCategory = courseInCategory.objects.get(course=course)
             commentsList = []
-            for video in videos:
-                commentsOfVideo = Comment.objects.filter(video=video, isDelete=False)
+            orderNoList = []
+            orderNo = 1
+            # for video in videos:
+            #     commentsOfVideo = Comment.objects.filter(video=video, isDelete=False)
+            #     commentsList.append(commentsOfVideo)
+            for orderVideoInCourse in orderVideosInCourse:
+                commentsOfVideo = Comment.objects.filter(video=orderVideoInCourse.video, isDelete=False)
                 commentsList.append(commentsOfVideo)
-            print("Comments #",len(commentsList))
-            lecturesList = [{'video' : t[0], 'comments' : t[1]} for t in zip (videos,commentsList)]
+                orderNoList.append(orderNo)
+            # print("Comments #",len(commentsList))
+            # lecturesList = [{'video' : t[0], 'comments' : t[1]} for t in zip (videos,commentsList)]
+            lecturesList = [{'orderVideoInCourse' : t[0], 'comments' : t[1]} for t in zip (orderVideosInCourse,commentsList)]
             return render(request, 
                 'watchvideo/show_content_in_tabs.html', 
                 {'course' : course, 'videos' : videos, 'courseInCategory' : courseInCategory, 'lecturesList' : lecturesList}
