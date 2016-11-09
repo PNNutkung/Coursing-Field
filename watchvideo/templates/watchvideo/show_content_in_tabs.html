@@ -313,7 +313,228 @@
     <br>
     <div class="container">
 
+{% comment %}<<<<<<< HEAD
         <
+=======
+        <div class="tab-content">
+            <div id="overviewTab" class="tab-pane fade in active">
+                
+                <h3>
+                    <span class="glyphicon glyphicon-edit"></span> 
+                    Course Information
+                </h3>
+                {% if isOwner %}
+                    <br>
+                    <form action={% url 'course:edited_course' course.courseID %} method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <span class="input-group-addon">Name</span>
+                            <input class="form-control" type="text" name="courseName" placeholder="{{course.courseName}}" maxlength="50"><br>
+                        </div>
+                        <br>
+                        <div class="input-group">
+                            <span class="input-group-addon">Category</span>
+                            {% comment %}<label for="courseCategory" class="control-label">Change Category: Current [{{inCategory}}]</label>{% endcomment %}
+                            <select id="courseCategory" class="dropdown form-control" name="courseCategory">
+                                <option value="">Choose Category</option>
+                                {% for category in categories %}
+                                    <option value="{{category.categoryID}}">{{category.categoryName}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <br>
+                        <div class="input-group">
+                            <span class="input-group-addon">Preview Video</span>
+                            <span class="input-group-addon">Current</span>
+                            <span class="input-group-addon">{{course.previewVideoFile.name}}</span>
+                            <span class="input-group-addon">Change</span>
+                            <input class="form-control" type="file" name="previewVideo"><br>
+                        </div>
+                        <br>
+                        <div class="input-group">
+                            <span class="input-group-addon">Thumbnail</span>
+                            <span class="input-group-addon">Current</span>
+                            <span class="input-group-addon">{{course.courseThumbnail.name}}</span>
+                            <span class="input-group-addon">Change</span>
+                            <input class="form-control" type="file" name="courseThumbnail"><br>
+                        </div>
+                        {% comment %}Change course's thumbnail: <input type="file" name="courseThumbnail"><br>{% endcomment %}
+                        <br>
+                        <div class="input-group">
+                            <span class="input-group-addon">Short Description</span>
+                            <input class="form-control" type="text" name="courseShortDesc" placeholder="{{course.courseShortDesc}}" maxlength="50"><br>
+                        </div>
+                        {% comment %}Change course's short description:<input type="text" name="courseShortDesc" placeholder="{{course.courseShortDesc}}"><br>{% endcomment %}
+                        <br>
+                        <div class="input-group">
+                            <span class="input-group-addon">Full Description</span>
+                            <input class="form-control" type="text" name="courseFullDesc" placeholder="{{course.courseFullDesc}}"><br>
+                        </div>
+                        {% comment %}Change course's full description:<input type="text" name="courseFullDesc" placeholder="{{course.courseFullDesc}}"><br>{% endcomment %}
+                        <br>
+                        <div class="row">
+                            <div class="col-md-1">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <input type="checkbox" name="isPublish">
+                                    </span>
+                                    <span class="input-group-addon">Publish Status</span>
+                                </div>  
+                            </div>
+                        </div>
+                        
+                        {% comment %}Check to publish course:<input type="checkbox" name="isPublish"><br>{% endcomment %}
+                        <br>
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Discount</span>
+                                    <span class="input-group-addon">Current</span>
+                                    <span class="input-group-addon">{{course.discountPercentage}}</span>
+                                    <span class="input-group-addon">%</span>
+                                    <span class="input-group-addon">Change</span>
+                                    <input class="form-control" type="number" name="discountPercentage" min="0" max="100">
+                                    <span class="input-group-addon">%</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% comment %}Change Course discount (%):<input type="number" name="discountPercentage" min="0" max="100"> <br>{% endcomment %}
+                        <br>
+                        <input class="btn btn-primary form-control" type="submit" value="Confirm">
+                    </form>
+                    <br>
+                    <br>
+                    <br>
+                    <form action={% url 'course:reordered_video' course.courseID %} method="POST">
+                        {% csrf_token %}
+                        <h3>
+                            <span class="glyphicon glyphicon-sort-by-attributes"></span>
+                            <span class="glyphicon glyphicon-film"></span>
+                            Reorder Videos
+                        </h3>
+                        <br>
+                        {% for lecture in lecturesList %}
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">{{lecture.orderVideoInCourse.video.videoName}}</span>
+                                        <span class="input-group-addon">Current Order</span>
+                                        <span class="input-group-addon">{{lecture.orderVideoInCourse.orderNo}}</span>
+                                        <span class="input-group-addon">Change</span>
+                                        <select class='dropdown orderVideo form-control' name='{{lecture.orderVideoInCourse.video.videoID}}' required>
+                                        <option value="">Select Order No</option>
+                                        {% for orderNo in orderNoList %}
+                                            <option value="{{orderNo}}">{{orderNo}}</option>
+                                        {% endfor %}
+                                        </select><br>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <br>
+                        <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                            <div class="btn-group" role="group">
+                                <button type="submt" class="btn btn-primary">Confirm</button>
+                            </div>
+                            <div class="btn-group" role="group">
+                                <button id="resetBtn" type="button" class="btn btn-danger">Reset</button>
+                            </div>
+                        </div>
+                        {% comment %}<div class="input-group">
+                            <div class="input-group-btn btn-group btn-group-justified" role="group">
+                                <div class="btn-group" role="group">
+                                    <input class="btn btn-primary" type="submit" value="Reorder">
+                                </div>
+                                <div class="btn-group" role="group">
+                                    <button class="btn btn-info"  onclick="resertOrderNo()">Reset order</button>
+                                </div>
+                            </div>
+                        </div>{% endcomment %}
+                    </form>
+                {% else %}
+                    <p>{{course.courseName}}<br>
+                    <p>{{courseInCategory.category.categoryName}}</p><br>
+                    <video width="400" height="300" controls>
+                        <source src="{{course.previewVideoFile.url}}" type="video/mp4">
+                    </video>
+                    <p>{{course.courseDesc}}</p>
+                    <p>Owned by {{course.owner.first_name}} {{course.owner.last_name}}</p>
+                {% endif %}
+            </div>
+            {% for lecture in lecturesList %}
+                <div id="{{lecture.orderVideoInCourse.video.videoID}}Tab" class="tab-pane fade">
+                    {% if isOwner %}
+                        <h3>Edit Video [{{lecture.orderVideoInCourse.video.videoName}}]</h3>
+                        <video width="400" height="300" controls>
+                            <!--<source src="{{lecture.orderVideoInCourse.video.videoFile.url}}.mp4">-->
+                            <source src="https://s3-ap-southeast-1.amazonaws.com/coursingfield/media/videos/1/Java_Programming_1.mp4" type="video/mp4">
+                        </video>
+                        <form action={% url 'course:edited_video' course.courseID %} method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            Change video's name:<input type="text" name="videoName" placeholder="{{lecture.orderVideoInCourse.video.videoName}}"><br>
+                            Change video: <input type="file" name="videoFile"><br>
+                            Change video's description:<input type="text" name="videoDesc" placeholder="{{lecture.orderVideoInCourse.video.videoDesc}}"><br>
+                            <input type="submit" value="Edit">
+                        </form>
+                    {% else %}
+                        <h3>{{lecture.orderVideoInCourse.video.videoName}}</h3>
+                        <p>This is the video description</p>
+                        <video width="400" height="300" controls>
+                            {% comment %}
+                                <source src="{{lecture.orderVideoInCourse.video.videoFile.url}}.mp4" type="video/mp4">
+                            {% endcomment %}
+                            <source src="https://s3-ap-southeast-1.amazonaws.com/coursingfield/media/videos/1/Java_Programming_1.mp4" type="video/mp4">
+                        </video>
+                    {% endif %}
+                    <h3>Comment Section</h3>
+                    {% for comment in lecture.comments %}
+                        <li>
+                            <div class="info-container">
+                                <div class="avatar">
+                                    <img src="{{comment.owner.profilePicture.url}}" alt="{{comment.owner}}'s avatar" />
+                                </div>
+                            </div>
+                            <div class="user-details">
+                                <ul>
+                                    <li class="username ellipsis">{{comment.owner.first_name}} {{comment.owner.last_name}}</li>
+                                    <li class="comment-create">{{comment.commentDate}}</li>
+                                </ul>
+                            </div>
+                            <div class="comment-container">
+                                <p>
+                                    {{comment.commentDesc}}
+                                </p>
+                            </div>
+                        </li>
+                    {% endfor %}
+                    {% if lecture.orderVideoInCourse.video  %}
+                        <form action={% url 'course:comment_on_video' courseID=course.courseID videoID=lecture.orderVideoInCourse.video.videoID %} method="POST" >
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <textarea id="commentDesc" name="commentDesc" rows="10" class="form-control" placeholder="Give your opinion about this video..." required></textarea>
+                            </div>
+                            <input type="submit" class="btn btn-block btn-primary" name="submitComment" value="Comment"/>
+                        </form>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            {% if isOwner %}
+                <div id="uploadTab" class="tab-pane fade">
+                    <h3>Upload New Video</h3>
+                    <form action={% url 'course:upload_video' courseID=course.courseID %} method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        Video name: <input type="text" name="videoName" placeholder="Video Name" required><br>
+                        Video description: <input type="text" name="videoDesc" placeholder="Video Description" required><br>   
+                        <input type="file" name="videoToUpload" required>
+                        {% with lastLecture=lecturesList|last %}
+                            <div class="alert alert-info" role="alert">Uploaded video will be added to orderNo: [{{lastLecture.orderVideoInCourse.orderNo|add:'1'}}]</div>
+                        {% endwith %}
+                        <input type="submit" value="Upload">
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+>>>>>>> fixing video with only audio{% endcomment %}
     </div>
 
 {% endblock %}
