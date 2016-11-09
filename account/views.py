@@ -31,13 +31,16 @@ def register(req):
             lastname = req.POST.get('lastname')
             email = req.POST.get('email')
             gender = req.POST.get('gender', 'M')
-            profilePicture = req.FILES.get('profilepicture')
-            birthDate_str = req.POST.get('birthday')
-            birthDate = datetime.strptime(birthDate_str, '%Y-%m-%d').date()
             user = User.objects.create_user(username=username,password=password,email=email,first_name=firstname,last_name=lastname)
-            user.profile.gender = gender[0]
-            user.profile.profilePicture = profilePicture
-            user.profile.birthDate = birthDate
+            profilePicture = req.FILES.get('profilepicture')
+            if profilePicture is not None:
+                user.profile.profilePicture = profilePicture
+            birthDate_str = req.POST.get('birthday')
+            if len(birthDate_str) > 0:
+                birthDate = datetime.strptime(birthDate_str, '%Y-%m-%d').date()
+                user.profile.birthDate = birthDate
+            if len(gender) > 0:
+                user.profile.gender = gender[0]
             user.save()
             user = auth.authenticate(username=username, password=password)
             if user is not None:
