@@ -28,7 +28,7 @@ function validatePassword() {
             <div class="row">
               <div class="col-md-3">
                   <a href="#" class="thumbnail">
-                    <img src="{{user.profile.profilePicture.url}}" alt="Profile picture">
+                      <img src="{{user.profile.profilePicture.url}}" alt="Profile picture">
                   </a>
               </div>
               <div class="col-md-9">
@@ -48,16 +48,16 @@ function validatePassword() {
           <div id="profile" class="tab-pane fade in active">
             <h3><b>Profile</b></h3>
             <div class="controls col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-bottom:2%;">
-            <form name="profile-picture" action="{% url 'account:updateProfilePicture'%}">
+            <form action="{% url 'account:updateProfilePicture'%}" method="POST" enctype="multipart/form-data">
               {% csrf_token %}
                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                  <label for="profilePicture" class="control-label">Profile picture</label>
+                  <label for="newProfilePicture" class="control-label">Profile picture</label>
                 </div>
                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                  <input type="file" name="profilePicture" />
+                  <input type="file" name="newProfilePicture"/>
                 </div>
                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                  <input class="btn btn-success" type="submit" name="profilePicture" value="Update"/>
+                  <input class="btn btn-success" type="submit" value="Update"/>
                 </div>
             </form>
           </div>
