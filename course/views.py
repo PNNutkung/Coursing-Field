@@ -120,6 +120,35 @@ def manage_course(req, courseID):
     else:
         return redirect(reverse('mockaccount:index'))
 
+def manage_course_overview(req, courseID):
+    if req.user.is_authenticated:
+        course = Course.objects.select_related('owner').get(courseID=courseID)
+        if req.user.id == course.owner_id:
+            # isOwner = True
+            # isOverview = True
+            orderVideos = OrderVideoInCourse.objects.select_related('video').filter(course=course).order_by('orderNo')
+            categories = Category.objects.all()
+            orderNoList = []
+            # orderNo = 0
+            for orderVideo in orderVideos:
+                orderNoList.append(orderVideo.orderNo)
+            # tabsList = orderVideos.values('video')
+            return render(req, 'watchvideo/tabs_with_content.html', { 'isOverview' : True, 'isOwner' : True, 'categories' : categories, 'orderNoList' : orderNoList, 'orderVideos' : orderVideos, 'course' : course })
+    else:
+        return redirect(reverse('course:view_course'))
+
+def manage_course_by_video_id(req, courseID, videoID):
+    if req.user.is_authenticated:
+        # course = Course.objects.get(courseID=courseID)
+        video = Video.objects.select_related('course').get(videoID=videoID)
+        orderVideos = OrderVideoInCourse.objects.select_related('video').filter(course=video.course).order_by('orderNo')
+        comments = Comment.objects.select_related('owner').filter(video=video)
+        lastVideoOrder = orderVideos.reverse()[0].orderNo
+        if req.user.id == video.course.owner_id:
+            return render(req, 'watchvideo/tabs_with_content.html', { 'isVideoTab' : True, 'isOwner' : True, 'video' : video, 'orderVideos' : orderVideos, 'course' : video.course, 'comments' : comments, 'lastVideoOrder' : lastVideoOrder})
+    else:
+        return redirect(reverse('course:view_course'))
+
 def edited_course(req, courseID):
     if req.method == 'POST':
         course = Course.objects.get(courseID=courseID)

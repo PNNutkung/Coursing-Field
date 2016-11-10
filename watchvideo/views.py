@@ -37,6 +37,32 @@ def show_content_in_tabs(request, courseID):
     else:
         return redirect(reverse('mockaccount:index'))
 
+def overview(request, courseID):
+    if request.user.is_authenticated:
+        course = Course.objects.select_related('owner').get(courseID=courseID)
+        orderVideos = OrderVideoInCourse.objects.select_related('video').filter(course=course).order_by('orderNo')
+        if request.user.id == course.owner_id:
+            return redirect(reverse('course:manage_course_overview', kwargs={ 'courseID' : courseID}))
+        elif hasTakenCourse(request.user.id, courseID):
+            return render(request, 'watchvideo/tabs_with_content.html', { 'isOwner' : False, 'isOverview' : True, 'course' : course, 'orderVideos' : orderVideos })
+        else:
+            return redirect(reverse('course:view_course', kwargs={ 'courseID' : courseID}))
+    return redirect(reverse('account:login'))
+
+def video_tab(request, courseID, videoID):
+    if request.user.is_authenticated:
+        course = Course.objects.select_related('owner').get(courseID=courseID)
+        if request.user.id == course.owner_id:
+            return redirect(reverse('course:manage_course_overview', kwargs={ 'courseID' : courseID}))
+        elif hasTakenCourse(request.user.id, courseID):
+            video = Video.objects.select_related('course').get(videoID=videoID)
+            comments = Comment.objects.select_related('owner').filter(video=video)
+            orderVideos = OrderVideoInCourse.objects.select_related('video').filter(course=video.course).order_by('orderNo')
+            return render(request, 'watchvideo/tabs_with_content.html', { 'isOwner' : False, 'isVideoTab' : True, 'course' : course, 'video' : video, 'comments' : comments, 'orderVideos' : orderVideos })
+        else:
+            return redirect(reverse('course:view_course', kwargs={ 'courseID' : courseID}))
+    return redirect(reverse('account:login'))
+    
 def hasTakenCourse(userID,courseID):
     try:
         transaction = Transaction.objects.get(courseID=courseID, takerID=userID)
