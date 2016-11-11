@@ -19,19 +19,19 @@
 <div class="container-fluid">
   <div class="row" >
     <div class="col-sm-3 col-lg-2">
-      <nav class="navbar navbar-default navbar-fixed-side" style="text-align:center;margin-top:-2%">
+      <nav class="navbar navbar-default navbar-fixed-side" style="text-align:center;margin-top:1%">
         <!-- normal collapsible navbar markup -->
 
         <div class="container">
           <form class="form-horizontal">
             <div class="form-group">
               <ul class='nav nav-pills'>
-                  <li class="active form-control"><a data-toggle="pill" href="#overviewTab">Overview</a></li>
+                  <li class="active form-control"><a data-toggle="pill" style="margin-top:-2%"  href="#overviewTab">Overview</a></li>
                   {% for lecture in lecturesList %}
                   <li class="form-control"><a style="margin-top:-2%" data-toggle="pill" href="#{{lecture.orderVideoInCourse.video.videoID}}Tab">{{lecture.orderVideoInCourse.video.videoName}}</a></li>
                   {% endfor %}
                   {% if isOwner %}
-                      <li class="form-control"><a data-toggle="pill" href="#uploadTab">Upload</a></li>
+                      <li class="form-control"><a style="margin-top:-2%"  data-toggle="pill" href="#uploadTab">Upload</a></li>
                   {% endif %}
               </ul>
               </div>
@@ -40,7 +40,7 @@
 
       </nav>
     </div>
-    <div class="col-sm-9 col-lg-10" style="margin-top:-2%"><br>
+    <div class="col-sm-9 col-lg-10" style=""><br>
       <div class="tab-content">
           <div id="overviewTab" class="tab-pane fade in active">
 
@@ -282,9 +282,16 @@
                   <h3>Upload New Video</h3>
                   <form action={% url 'course:upload_video' courseID=course.courseID %} method="POST" enctype="multipart/form-data">
                       {% csrf_token %}
-                      Video name: <input type="text" name="videoName" placeholder="Video Name" required><br>
-                      Video description: <input type="text" name="videoDesc" placeholder="Video Description" required><br>
-                      <input type="file" name="videoToUpload" required>
+                      <div class="input-group  style="margin-top:1%"">
+                          <span class="input-group-addon">Video name: </span>
+                          <input class="form-control" type="text" name="videoName" placeholder="Video Name" required><br>
+                      </div>
+                      <div class="input-group" style="margin-top:1%">
+                          <span class="input-group-addon">Video description: </span>
+                          <input type="text" class="form-control" name="videoDesc" placeholder="Video Description" required><br>
+                      </div>
+
+                      <input  style="margin-top:1%;margin-bottom:1%" type="file" name="videoToUpload" required>
                       {% with lastLecture=lecturesList|last %}
                           <div class="alert alert-info" role="alert">Uploaded video will be added to orderNo: [{{lastLecture.orderVideoInCourse.orderNo|add:'1'}}]</div>
                       {% endwith %}
@@ -331,6 +338,6 @@
                     $('.orderVideo').first().prop('selected', true);
                 });
             });
-        </script>       
+        </script>
     {% endif %}
 {% endblock %}

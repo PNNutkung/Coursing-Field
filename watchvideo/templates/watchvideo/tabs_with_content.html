@@ -40,7 +40,7 @@
                                 <li class="form-control"><a style="margin-top:-2%" href="{% url 'course:manage_course_by_video_id' courseID=course.courseID videoID=orderVideo.video_id %}">{{orderVideo.video.videoName}}</a></li>
                             {% endif %}
                         {% endfor %}
-                    {% endif %} 
+                    {% endif %}
                       <li class="form-control"><a data-toggle="pill" href="#uploadTab">Upload</a></li>
                   {% else %}
                     {% if isOverview %}
@@ -57,7 +57,7 @@
                                 <li class="form-control"><a style="margin-top:-2%" href="{% url 'watchvideo:video_tab' courseID=course.courseID videoID=orderVideo.video_id %}">{{orderVideo.video.videoName}}</a></li>
                             {% endif %}
                         {% endfor %}
-                    {% endif %} 
+                    {% endif %}
                   {% endif %}
               </ul>
               </div>
@@ -354,6 +354,6 @@
                     $('.orderVideo').first().prop('selected', true);
                 });
             });
-        </script>       
+        </script>
     {% endif %}
 {% endblock %}
