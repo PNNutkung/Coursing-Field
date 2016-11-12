@@ -212,27 +212,31 @@
                 </ul>
             </div>
             {% if reviews %}
+            <h2><b>Review History</b></h2>
             <ul class="reviews-list">
                 {% for review in reviews %}
-                    <li class="review">
-                        <div class="info-container">
+                    <li class="review col-md-12 col-lg-12" style="margin-bottom:1.5%">
+                        <div class="col-md-2 col-lg-2">
                             <div class="avatar">
                                 <img src="{{review.owner.profile.profilePicture.url}}" alt="{{review.owner}}'s avatar" />
                             </div>
                         </div>
-                        <div class="user-details">
-                            <ul>
-                                <li class="username ellipsis">{{review.owner.first_name}} {{review.owner.last_name}}</li>
-                                <li class="review-create">{{review.reviewedDate}}</li>
-                            </ul>
-                        </div>
-                        <div class="rating-container">
-                            {{review.rating}}
-                        </div>
-                        <div class="comment-container">
-                            <p>
-                                {{review.reviewDesc}}
-                            </p>
+                        <div class="col-md-10 col-lg-10">
+                          <div class="user-details">
+                              <ul>
+                                  <li class="username ellipsis"><b>Username</b> : {{review.owner.first_name}} {{review.owner.last_name}}</li>
+                                  <li class="review-create"><b>Date</b> : {{review.reviewedDate}}</li>
+                              </ul>
+                          </div>
+                          <div class="rating-container" style="font-size:50%">
+                            <input id="fixrating" value="{{review.rating}}" data-readonly="true" class="rating">
+                          </div>
+                          <div class="comment-container">
+                            <b>User Review : </b>
+                              <p>
+                                  {{review.reviewDesc}}
+                              </p>
+                          </div>
                         </div>
                     </li>
                 {% endfor %}
@@ -287,6 +291,14 @@
 <script>
 $(document).on('ready', function(){
     $('#rating').rating({displayOnly: true, step: 0.5});
+});
+$(document).on('ready', function(){
+    $('#fixrating').rating({displayOnly: true,
+      step: 1,
+      starCaptions: {1: 'Very Poor', 2: 'Poor', 3: 'Ok', 4: 'Good', 5: 'Very Good'},
+      starCaptionClasses: {1: 'text-danger', 2: 'text-warning', 3: 'text-info', 4: 'text-primary', 5: 'text-success'}
+
+    });
 });
 $(document).on('ready', function(){
     $('#reviewRating').rating({
