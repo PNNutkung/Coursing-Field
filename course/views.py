@@ -95,14 +95,13 @@ def manage_course(req, courseID):
     if req.user.is_authenticated:
         course = Course.objects.get(courseID=courseID)
         isOwner = False
-        if req.user.id == course.owner.id:
+        if req.user.id == course.owner_id:
             # print("You are the owner of this course")
             isOwner = True
         else:
             return redirect(reverse('course:view_course'))
         # videos = Video.objects.filter(course=course, isDelete=False)
-        orderVideosInCourse = OrderVideoInCourse.objects.filter(course=course).order_by('orderNo')
-            # videos = orderVideoInCourse.video
+        orderVideosInCourse = OrderVideoInCourse.objects.filter(course=course,orderNo__gte=1).order_by('orderNo')
         commentsList = []
         inCategory = course.category.categoryName
         categories = Category.objects.all()

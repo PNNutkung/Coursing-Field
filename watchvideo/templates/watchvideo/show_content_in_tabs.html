@@ -228,9 +228,16 @@
               <div id="{{lecture.orderVideoInCourse.video.videoID}}Tab" class="tab-pane fade">
                   {% if isOwner %}
                       <h3>Edit Video [{{lecture.orderVideoInCourse.video.videoName}}]</h3>
-                      <video width="400" height="300" controls>
+                      <div id="{{lecture.orderVideoInCourse.video_id}}"></div>
+                      <script type="text/javascript">
+                          var playerInstance = jwplayer("{{lecture.orderVideoInCourse.video_id}}");
+                          playerInstance.setup({
+                              file: "{{lecture.orderVideoInCourse.video.videoFile.url}}",
+                          });
+                      </script>
+                      {% comment %}<video width="400" height="300" controls>
                           <source src="{{lecture.orderVideoInCourse.video.videoFile.url}}" type="video/mp4">
-                      </video>
+                      </video>{% endcomment %}
                       <form action={% url 'course:edited_video' courseID=course.courseID videoID=lecture.orderVideoInCourse.video.videoID %} method="POST" enctype="multipart/form-data">
                           {% csrf_token %}
                           Change video's name:<input type="text" name="videoName" placeholder="{{lecture.orderVideoInCourse.video.videoName}}"><br>
@@ -241,9 +248,16 @@
                   {% else %}
                       <h3>{{lecture.orderVideoInCourse.video.videoName}}</h3>
                       <p>This is the video description</p>
-                      <video width="400" height="300" controls>
+                      <div id="{{lecture.orderVideoInCourse.video_id}}"></div>
+                      <script type="text/javascript">
+                          var playerInstance = jwplayer("{{lecture.orderVideoInCourse.video_id}}");
+                          playerInstance.setup({
+                              file: "//example.com/uploads/myVideo.mp4",
+                          });
+                      </script>
+                      {% comment %}<video width="400" height="300" controls>
                           <source src="{{lecture.orderVideoInCourse.video.videoFile.url}}" type="video/mp4">
-                      </video>
+                      </video>{% endcomment %}
                   {% endif %}
                   <h3>Comment Section</h3>
                   {% for comment in lecture.comments %}
@@ -309,6 +323,7 @@
 {% endblock %}
 {% block script %}
     {{block.super}}
+    <script src="https://content.jwplatform.com/libraries/7QfOxDsK.js"> </script>
     {% if isOwner %}
         <script
             src="https://code.jquery.com/jquery-3.1.1.min.js"
