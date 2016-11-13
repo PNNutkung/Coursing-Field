@@ -4,7 +4,7 @@ from mainmodels.models import *
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.db.models import Avg
+from django.db.models import Avg, F
 # Create your views here.
 def createCourse(req):
     if not req.user.is_authenticated:
@@ -126,7 +126,7 @@ def manage_course_overview(req, courseID):
         if req.user.id == course.owner_id:
             # isOwner = True
             # isOverview = True
-            orderVideos = OrderVideoInCourse.objects.select_related('video').filter(course=course).order_by('orderNo')
+            orderVideos = OrderVideoInCourse.objects.select_related('video').filter(course=course, orderNo__gte=1).order_by('orderNo')
             categories = Category.objects.all()
             orderNoList = []
             # orderNo = 0
@@ -141,7 +141,7 @@ def manage_course_by_video_id(req, courseID, videoID):
     if req.user.is_authenticated:
         # course = Course.objects.get(courseID=courseID)
         video = Video.objects.select_related('course').get(videoID=videoID)
-        orderVideos = OrderVideoInCourse.objects.select_related('video').filter(course=video.course).order_by('orderNo')
+        orderVideos = OrderVideoInCourse.objects.select_related('video').filter(course=video.course, orderNo__gte=1).order_by('orderNo')
         comments = Comment.objects.select_related('owner').filter(video=video)
         lastVideoOrder = orderVideos.reverse()[0].orderNo
         if req.user.id == video.course.owner_id:
@@ -208,7 +208,7 @@ def upload_video(req, courseID):
         new_video = Video(videoName=videoName,videoFile=videoFile,course=course,videoDesc=videoDesc,isDelete=False)
         new_video.save()
         course = Course.objects.get(courseID=courseID)
-        newOrderNo = OrderVideoInCourse.objects.filter(course=course).count() + 1
+        newOrderNo = OrderVideoInCourse.objects.filter(course=course,orderNo__gte=1).count() + 1
         newOrderVideoInCourse = OrderVideoInCourse(course=course, video=new_video, orderNo=newOrderNo)
         newOrderVideoInCourse.save()
         return redirect(reverse('course:manage_course', kwargs={'courseID' : courseID }))
@@ -287,3 +287,14 @@ def reordered_video(req, courseID):
             print('New order#', reorderedVideo.orderNo, 'of', reorderedVideo.video.videoName)
             reorderedVideo.save()
     return redirect(reverse('course:manage_course', kwargs={'courseID' : courseID } ))
+
+def remove_video(req, courseID, videoID):
+    if req.method == 'POST':
+        course = Course.objects.get(courseID=courseID)
+        video = Video.objects.get(videoID=videoID)
+        video.isDelete = True
+        orderVideo = OrderVideoInCourse.objects.get(course=course, video=video)
+        greaterOrderNoVideos = OrderVideoInCourse.objects.filter(course=course, orderNo__gt=orderVideo.orderNo)
+        greaterOrderNoVideos.update(orderNo=F('orderNo') - 1)
+        orderVideo.update(orderNo=-1)
+    return redirect(reverse('course:manage_course', kwargs={'courseID' : courseID}))
