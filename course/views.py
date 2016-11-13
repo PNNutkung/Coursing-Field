@@ -291,9 +291,14 @@ def remove_video(req, courseID, videoID):
     if req.method == 'POST':
         course = Course.objects.get(courseID=courseID)
         video = Video.objects.get(videoID=videoID)
-        video.isDelete = True
-        orderVideo = OrderVideoInCourse.objects.get(course=course, video=video)
-        greaterOrderNoVideos = OrderVideoInCourse.objects.filter(course=course, orderNo__gt=orderVideo.orderNo)
-        greaterOrderNoVideos.update(orderNo=F('orderNo') - 1)
-        orderVideo.update(orderNo=-1)
+        videoNameToDelete = req.POST.get('confirmToDelete','')
+        if videoNameToDelete == video.videoName:
+            video.isDelete = True
+            orderVideo = OrderVideoInCourse.objects.get(course=course, video=video)
+            greaterOrderNoVideos = OrderVideoInCourse.objects.filter(course=course, orderNo__gt=orderVideo.orderNo)
+            greaterOrderNoVideos.update(orderNo=F('orderNo') - 1)
+            # orderVideo.update(orderNo=-1)
+            orderVideo.orderNo = -1
+            ordervideo.save()
+            
     return redirect(reverse('course:manage_course', kwargs={'courseID' : courseID}))
