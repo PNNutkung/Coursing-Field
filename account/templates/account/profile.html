@@ -172,7 +172,7 @@
               </div>
               <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
                 <select id="gender" class="form-control" name='gender' required>
-                  <option value="">Select Gender</option>
+                  <option value="" selected="selected">Select Gender</option>
                   <option value="M">Male</option>
                   <option value="F">Female</option>
                   <option value="O">Other</option>
@@ -276,4 +276,33 @@
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block script %}
+
+  <script>
+    window.onload = function() {
+
+       var genderField = "{{user.profile.gender}}";
+       var values;
+       var item = document.getElementById("gender");
+       console.log(item);
+       console.log(item.value);
+       if(genderField == "M")
+       {
+         values = "M";
+         item.value = values;
+       }
+       else if(genderField == "F") {
+         values = "F";
+         item.value = values;
+       }
+       else if(genderField == "O")
+       {
+         values = "O";
+         item.value = values;
+       }
+
+   }
+  </script>
 {% endblock %}
