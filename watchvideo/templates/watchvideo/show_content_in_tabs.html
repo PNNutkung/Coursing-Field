@@ -159,7 +159,7 @@
                       <br>
                       <div class="btn-group btn-group-justified" role="group" aria-label="...">
                           <div class="btn-group" role="group">
-                              <button type="submt" class="btn btn-primary">Confirm</button>
+                              <button type="submit" class="btn btn-primary">Confirm</button>
                           </div>
                           <div class="btn-group" role="group">
                               <button id="resetBtn" type="button" class="btn btn-danger">Reset</button>
@@ -228,24 +228,66 @@
               <div id="{{lecture.orderVideoInCourse.video.videoID}}Tab" class="tab-pane fade">
                   {% if isOwner %}
                       <h3>Edit Video [{{lecture.orderVideoInCourse.video.videoName}}]</h3>
-                      <video width="400" height="300" controls>
+                      <br>
+                      <div id="{{lecture.orderVideoInCourse.video_id}}"></div>
+                      <script type="text/javascript">
+                          var playerInstance = jwplayer("{{lecture.orderVideoInCourse.video_id}}");
+                          playerInstance.setup({
+                              file: "{{lecture.orderVideoInCourse.video.videoFile.url}}",
+                          });
+                      </script>
+                      <br>
+                      {% comment %}<video width="400" height="300" controls>
                           <source src="{{lecture.orderVideoInCourse.video.videoFile.url}}" type="video/mp4">
-                      </video>
+                      </video>{% endcomment %}
                       <form action={% url 'course:edited_video' courseID=course.courseID videoID=lecture.orderVideoInCourse.video.videoID %} method="POST" enctype="multipart/form-data">
                           {% csrf_token %}
-                          Change video's name:<input type="text" name="videoName" placeholder="{{lecture.orderVideoInCourse.video.videoName}}"><br>
-                          Change video: <input type="file" name="videoFile"><br>
-                          Change video's description:<input type="text" name="videoDesc" placeholder="{{lecture.orderVideoInCourse.video.videoDesc}}"><br>
-                          <input type="submit" value="Edit">
+                          <div class="input-group">
+                            <span class="input-group-addon">Video Name</span>
+                            <input class="form-control" type="text" name="videoName" placeholder="{{lecture.orderVideoInCourse.video.videoName}}"><br>
+                          </div>
+                          <br>
+                          <div class="input-group">
+                            <span class="input-group-addon">Video File</span>
+                            <span class="input-group-addon">Current</span>
+                            <span class="input-group-addon">{{lecture.orderVideoInCourse.video.videoFile.name}}</span>
+                            <span class="input-group-addon">Change</span>
+                            <input class="form-control" type="file" name="videoFile"><br>
+                          </div>
+                          <br>
+                          <div class="input-group">
+                            <span class="input-group-addon">Video Description</span>
+                            <input class="form-control" type="text" name="videoDesc" placeholder="{{lecture.orderVideoInCourse.video.videoDesc}}"><br>
+                          </div>
+                          <br>
+                          <input class="btn btn-primary form-control" type="submit" value="Confirm">
+                      </form>
+                      <br>
+
+                      <form action={% url 'course:remove_video' courseID=course.courseID videoID=lecture.orderVideoInCourse.video.videoID %} method="POST">
+                          {% csrf_token %}
+                          <div class="input-group">
+                            <input class="form-control" type="text" name="confirmToDelete" placeholder="Type this video name and confirm to delete" required><br>
+                            <span class="input-group-btn">
+                                <input class="btn btn-danger form-control" type="submit" value="Delete video">
+                            </span>
+                          </div>
                       </form>
                   {% else %}
                       <h3>{{lecture.orderVideoInCourse.video.videoName}}</h3>
                       <p>This is the video description</p>
-                      <video width="400" height="300" controls>
+                      <div id="{{lecture.orderVideoInCourse.video_id}}"></div>
+                      <script type="text/javascript">
+                          var playerInstance = jwplayer("{{lecture.orderVideoInCourse.video_id}}");
+                          playerInstance.setup({
+                              file: "//example.com/uploads/myVideo.mp4",
+                          });
+                      </script>
+                      {% comment %}<video width="400" height="300" controls>
                           <source src="{{lecture.orderVideoInCourse.video.videoFile.url}}" type="video/mp4">
-                      </video>
+                      </video>{% endcomment %}
                   {% endif %}
-                  <h3>Comment Section</h3>
+                  <h4>Comment Section</h4>
                   {% for comment in lecture.comments %}
                       <li>
                           <div class="info-container">
@@ -309,6 +351,7 @@
 {% endblock %}
 {% block script %}
     {{block.super}}
+    <script src="https://content.jwplatform.com/libraries/7QfOxDsK.js"> </script>
     {% if isOwner %}
         <script
             src="https://code.jquery.com/jquery-3.1.1.min.js"

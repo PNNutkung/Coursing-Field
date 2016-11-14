@@ -56,7 +56,12 @@
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
-            <div class="center-cropped" style="background-image: url({{course.courseThumbnail.url}});"></div>
+            {% comment %}<div class="center-cropped" style="background-image: url({{course.courseThumbnail.url}});">
+                <img src="{{course.courseThumbnail.url}}" alt="Course Thumbmail">
+            </div>{% endcomment %}
+            <div>
+                <img class="center-cropped" src="{{course.courseThumbnail.url}}" alt="Course Thumbmail" height="400" width="300">
+            </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
             <span><h3><b>฿ {{course.coursePrice}}</b></h3></span>
@@ -147,7 +152,14 @@
                   <font style="font-weight:bold;">Number Of Lecture Videos : </font>{{numberOfLectures}}
               </div>
               <div style="font-size:160%; margin-bottom:1%">
-                  <font style="font-weight:bold;">Current Rating : </font>{{averageRating.rating__avg|floatformat:2}} Star
+                  <font style="font-weight:bold;">Current Rating : </font>
+                  {% with avgRate=averageRating.rating__avg|floatformat:2|default_if_none:-1 %}
+                    {% if avgRate >= 0 %}
+                        {{avgRate}} star
+                    {% else %}
+                        No Reviews yet.
+                    {% endif %}
+                  {% endwith %}
               </div>
               <div style="font-size:160%; margin-bottom:1%">
                   <font style="font-weight:bold;">Courses Price : </font>{{course.coursePrice}} Baht
@@ -162,7 +174,7 @@
               <b>Meet The Instructor</b>
             </div>
             <div class="col-sm-2 col-sm-2 col-md-2 col-lg-2" style="text-align:center">
-              <img src="{{course.owner.profilePicture.url}}" alt="Profile picture" height="180" width="171" />
+                <img src="{{course.owner.profile.profilePicture.url}}" alt="Profile picture" height="180" width="171" />
             </div>
             <div class="col-sm-10 col-sm-10 col-md-10 col-lg-10">
               <div style="font-size:160%; margin-bottom:1%">
@@ -172,10 +184,10 @@
                 <b>Instructor Biology</b>
               </div>
               <div style="font-size:120%; margin-bottom:1%">
-                  {{course.courseFullDesc}}
+                  {{course.owner.profile.bio}}
               </div>
               <div style="font-size:160%; margin-bottom:1%">
-                  <font style="font-weight:bold;">Instructor Contract Email : </font>{{numberOfLectures}}
+                  <font style="font-weight:bold;">Instructor Contract Email : </font>{{course.owner.email}}
               </div>
             </div>
           </div>
