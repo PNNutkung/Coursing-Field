@@ -152,7 +152,14 @@
                   <font style="font-weight:bold;">Number Of Lecture Videos : </font>{{numberOfLectures}}
               </div>
               <div style="font-size:160%; margin-bottom:1%">
-                  <font style="font-weight:bold;">Current Rating : </font>{{averageRating.rating__avg|floatformat:2}} Star
+                  <font style="font-weight:bold;">Current Rating : </font>
+                  {% with avgRate=averageRating.rating__avg|floatformat:2|default_if_none:-1 %}
+                    {% if avgRate >= 0 %}
+                        {{avgRate}} star
+                    {% else %}
+                        No Reviews yet.
+                    {% endif %}
+                  {% endwith %}
               </div>
               <div style="font-size:160%; margin-bottom:1%">
                   <font style="font-weight:bold;">Courses Price : </font>{{course.coursePrice}} Baht
@@ -177,10 +184,10 @@
                 <b>Instructor Biology</b>
               </div>
               <div style="font-size:120%; margin-bottom:1%">
-                  {{course.courseFullDesc}}
+                  {{course.owner.profile.bio}}
               </div>
               <div style="font-size:160%; margin-bottom:1%">
-                  <font style="font-weight:bold;">Instructor Contract Email : </font>{{numberOfLectures}}
+                  <font style="font-weight:bold;">Instructor Contract Email : </font>{{course.owner.email}}
               </div>
             </div>
           </div>
