@@ -11,6 +11,8 @@
     }
 </style>
 <link rel="stylesheet" href="{% static "ui/css/navbar-fixed-side.css" %}"?"{% now "U" %}">
+<link href="{% static "ui/switch/bootstrap-switch.css" %}" rel="stylesheet">
+<script src="{% static "ui/switch/bootstrap-switch.js" %}"></script>
 
 {% endblock %}
 
@@ -101,7 +103,7 @@
                           <div class="col-md-1">
                               <div class="input-group">
                                   <span class="input-group-addon">
-                                      <input type="checkbox" name="isPublish">
+                                      <input type="checkbox"  name="isPublish">
                                   </span>
                                   <span class="input-group-addon">Publish Status</span>
                               </div>
@@ -347,6 +349,11 @@
 </div>
 
 
+<script type="text/javascript">
+  $("[name='isPublish']").bootstrapSwitch({
+    // state: a,
+  });
+</script>
 
 {% endblock %}
 {% block script %}
@@ -372,7 +379,7 @@
                     $(this).append( $('<option>', {value:valueToRemove, text:valueToRemove}) );
                     $(this).find('option[value='+valueToRemove+']').prop('selected', true);
                 });
-                $('#resetBtn').click(function() {
+                // $('#resetBtn').click(function() {
                     console.log("resetting order...");
                     $('.orderVideo').empty();
                     for(i=0; i<originalOrderNoOptions.length; i++) {
@@ -382,5 +389,6 @@
                 });
             });
         </script>
+
     {% endif %}
 {% endblock %}
