@@ -4,31 +4,29 @@ from mainmodels.models import *
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.db.models import Avg
+from django.db.models import Avg, F
 # Create your views here.
 def createCourse(req):
     if not req.user.is_authenticated:
         return redirect(reverse('mockaccount:index'))
     else:
         if req.method == 'POST':
-            try:
-                courseName = req.POST['courseName']
-                courseCategory = req.POST['courseCategory']
-                courseDesc = req.POST['courseDesc']
-                courseThumbnail = req.FILES['courseThumbnail']
-                coursePrice = req.POST['coursePrice']
-                owner = req.user
+            # try:
+            courseName = req.POST['courseName']
+            courseCategory = req.POST['courseCategory']
+            courseShortDesc = req.POST['courseDesc']
+            # if courseThumbnail is None:
+            #     dummyCourse = Course.objects.get(courseID="11")
+            #     courseThumbnail = dummyCourse.courseThumbnail
+            coursePrice = req.POST['coursePrice']
+            owner = req.user
+            category = Category.objects.get(categoryID=courseCategory)
+            newCourse = Course(courseName=courseName, courseShortDesc=courseShortDesc, owner=owner, coursePrice=coursePrice, isDelete=False, isPublish=False, category=category, discountPercentage=0, discountPrice=coursePrice)
+            newCourse.save()
 
-                newCourse = Course(courseName=courseName, courseDesc=courseDesc,courseThumbnail=courseThumbnail, owner=owner, coursePrice=coursePrice, isDelete=False)
-                newCourse.save()
-
-                category = Category.objects.get(categoryID=courseCategory)
-                newCourseCategory = CourseInCategory(category=category, course=newCourse)
-                newCourseCategory.save()
-
-                return render(req, 'course/createCourse.html', {'courseCategory':courseCategory, 'success': True, 'message': 'Create course successfully.'})
-            except:
-                return render(req, 'course/createCourse.html', {'courseCategory':courseCategory, 'success': False, 'message': 'Create course failed.'})
+            return render(req, 'course/createCourse.html', {'courseCategory':courseCategory, 'success': True, 'message': 'Create course successfully.'})
+            # except:
+            #     return render(req, 'course/createCourse.html', {'courseCategory':courseCategory, 'success': False, 'message': 'Create course failed.'})
         else:
             courseCategory = Category.objects.all()
             return render(req, 'course/createCourse.html', {'courseCategory':courseCategory})
@@ -38,22 +36,26 @@ def view_course(req, courseID):
         course = Course.objects.get(courseID=courseID)
         isOwner = False
         if req.user.id == course.owner.id:
-            print("You are owner of this course")
             isOwner = True
         hasTakencourse = False
         try:
-            takenCourse = TakenCourse.objects.get(course=course,taker=req.user)
-            if takenCourse is not None:
+            transaction = Transaction.objects.get(courseID=courseID, takerID=req.user.id)
+            # takenCourse = TakenCourse.objects.get(course=course,taker=req.user)
+            if transaction is not None:
                 hasTakencourse = True
         except ObjectDoesNotExist:
             hasTakencourse = False
         userWithProfile = User.objects.get(id=req.user.id)
-        inCategory = CourseInCategory.objects.get(course=course).category.categoryName
-        leftBalance = int(userWithProfile.profile.balance - course.coursePrice)
-
+        inCategory = course.category.categoryName
+        if course.discountPercentage > 0:
+            leftBalance = int(userWithProfile.profile.balance - course.coursePrice)
+        else:
+            leftBalance = int(userWithProfile.profile.balance - course.discountPrice)
+        canTakeCourse = False 
+        if leftBalance >= 0:
+            canTakeCourse = True
         numberOfLectures = Video.objects.filter(course=course).count()
-
-        reviewList = Review.objects.filter(course=course).order_by('-reviewDate')
+        reviewList = Review.objects.filter(course=course).order_by('-reviewedDate')
         reviewPaginator = Paginator(reviewList, 5)
         page = req.GET.get('reviewPage')
         try:
@@ -85,7 +87,7 @@ def view_course(req, courseID):
         except:
             reviewRateLevel = []
 
-        return render(req, 'course/viewCourse.html', {'course' : course, 'hasTakenCourse' : hasTakencourse, 'inCategory' : inCategory, 'userWithProfile' : userWithProfile, 'leftBalance': leftBalance,'numberOfLectures':numberOfLectures, 'reviews':reviews, 'averageRating': averageRating,'reviewRateLevel':reviewRateLevel, 'isOwner' : isOwner, })
+        return render(req, 'course/viewCourse.html', {'course' : course, 'hasTakenCourse' : hasTakencourse, 'inCategory' : inCategory, 'userWithProfile' : userWithProfile, 'leftBalance': leftBalance,'numberOfLectures':numberOfLectures, 'reviews':reviews, 'averageRating': averageRating,'reviewRateLevel':reviewRateLevel, 'isOwner' : isOwner, 'canTakeCourse': canTakeCourse, })
     else:
         return redirect(reverse('mockaccount:index'))
 
@@ -93,22 +95,58 @@ def manage_course(req, courseID):
     if req.user.is_authenticated:
         course = Course.objects.get(courseID=courseID)
         isOwner = False
-        if req.user.id == course.owner.id:
-            print("You are the owner of this course")
+        if req.user.id == course.owner_id:
+            # print("You are the owner of this course")
             isOwner = True
         else:
             return redirect(reverse('course:view_course'))
-        videos = Video.objects.filter(course=course)
+        # videos = Video.objects.filter(course=course, isDelete=False)
+        orderVideosInCourse = OrderVideoInCourse.objects.filter(course=course,orderNo__gte=1).order_by('orderNo')
         commentsList = []
-        inCategory = CourseInCategory.objects.get(course=course).category.categoryName
+        inCategory = course.category.categoryName
         categories = Category.objects.all()
-        for video in videos:
-            commentsOfVideo = Comment.objects.filter(video=video, isDelete=False)
+        orderNoList = []
+        orderNo = 1
+        # for video in videos:
+        for orderVideoInCourse in orderVideosInCourse:
+            commentsOfVideo = Comment.objects.filter(video=orderVideoInCourse.video, isDelete=False)
             commentsList.append(commentsOfVideo)
-        lecturesList = [{'video' : t[0], 'comments' : t[1]} for t in zip (videos,commentsList)]
-        return render(req, 'watchvideo/show_content_in_tabs.html',{ 'course' : course, 'lecturesList' : lecturesList, 'isOwner' : isOwner, 'inCategory' : inCategory, 'categories' : categories, })
+            orderNoList.append(orderNo)
+            orderNo += 1
+        # lecturesList = [{'video' : t[0], 'comments' : t[1]} for t in zip (videos,commentsList)]
+        lecturesList = [{'orderVideoInCourse' : t[0], 'comments' : t[1]} for t in zip (orderVideosInCourse,commentsList)]
+        return render(req, 'watchvideo/show_content_in_tabs.html',{ 'course' : course, 'lecturesList' : lecturesList, 'isOwner' : isOwner, 'inCategory' : inCategory, 'categories' : categories, 'orderNoList' : orderNoList, 'orderVideosInCourse' : orderVideosInCourse })
     else:
         return redirect(reverse('mockaccount:index'))
+
+def manage_course_overview(req, courseID):
+    if req.user.is_authenticated:
+        course = Course.objects.select_related('owner').get(courseID=courseID)
+        if req.user.id == course.owner_id:
+            # isOwner = True
+            # isOverview = True
+            orderVideos = OrderVideoInCourse.objects.select_related('video').filter(course=course, orderNo__gte=1).order_by('orderNo')
+            categories = Category.objects.all()
+            orderNoList = []
+            # orderNo = 0
+            for orderVideo in orderVideos:
+                orderNoList.append(orderVideo.orderNo)
+            # tabsList = orderVideos.values('video')
+            return render(req, 'watchvideo/tabs_with_content.html', { 'isOverview' : True, 'isOwner' : True, 'categories' : categories, 'orderNoList' : orderNoList, 'orderVideos' : orderVideos, 'course' : course })
+    else:
+        return redirect(reverse('course:view_course'))
+
+def manage_course_by_video_id(req, courseID, videoID):
+    if req.user.is_authenticated:
+        # course = Course.objects.get(courseID=courseID)
+        video = Video.objects.select_related('course').get(videoID=videoID)
+        orderVideos = OrderVideoInCourse.objects.select_related('video').filter(course=video.course, orderNo__gte=1).order_by('orderNo')
+        comments = Comment.objects.select_related('owner').filter(video=video)
+        lastVideoOrder = orderVideos.reverse()[0].orderNo
+        if req.user.id == video.course.owner_id:
+            return render(req, 'watchvideo/tabs_with_content.html', { 'isVideoTab' : True, 'isOwner' : True, 'video' : video, 'orderVideos' : orderVideos, 'course' : video.course, 'comments' : comments, 'lastVideoOrder' : lastVideoOrder})
+    else:
+        return redirect(reverse('course:view_course'))
 
 def edited_course(req, courseID):
     if req.method == 'POST':
@@ -119,31 +157,42 @@ def edited_course(req, courseID):
         newCategoryID = req.POST.get('courseCategory')
         if len(newCategoryID) > 0:
             try:
-                courseInCategory = CourseInCategory.objects.get(course=course)
                 category = Category.objects.get(categoryID=newCategoryID)
-                courseInCategory.category = category
-                courseInCategory.save()
+                course.category = category
             except ObjectDoesNotExist:
                 print("Object does not exist")
         newPreviewVideo = req.FILES.get('previewVideo',None)
         if newPreviewVideo is not None:
-            try:
-                #Assume there is only one preview video. Any old ones should be labeled isDelete=True
-                coursePreview = CoursePreview.objects.get(course=course,isDelete=False)
-                #Add for loop to set old preview videos as isDelete=True
-                coursePreview.isDelete = True
-                coursePreview.save()
-            except ObjectDoesNotExist:
-                print("Object does not exist creating new one")
-            finally:
-                newCoursePreview = CoursePreview(course=course,previewVideo=newPreviewVideo,isDelete=False)
-                newCoursePreview.save()
+            course.previewVideoFile = newPreviewVideo
         newCourseThumbnail = req.FILES.get('courseThumbnail')
         if newCourseThumbnail is not None:
             course.courseThumbnail = newCourseThumbnail
-        newCourseDesc = req.POST.get('courseDesc')
-        if len(newCourseDesc) > 0:
-            course.courseDesc = newCourseDesc
+        newCourseFullDesc = req.POST.get('courseFullDesc')
+        if len(newCourseFullDesc) > 0:
+            course.courseFullDesc = newCourseFullDesc
+        newCourseShortDesc = req.POST.get('courseShortDesc')
+        if len(newCourseShortDesc) > 0:
+            course.courseShortDesc = newCourseShortDesc
+        isPublish = req.POST.get('isPublish')
+        if isPublish is not None:
+            course.isPublish = True
+            # print('New value of isPublish', 'True')
+        else:
+            course.isPublish = False
+            print('New value of isPublish', 'False')
+        newDiscountPercentage_str = req.POST.get('discountPercentage')
+        if len(newDiscountPercentage_str) > 0:
+            newDiscountPercentage = int(newDiscountPercentage_str)
+            course.discountPercentage = newDiscountPercentage
+            if newDiscountPercentage > 0:
+                print('New value of discountPercentage', newDiscountPercentage)
+                newDiscountPrice = course.coursePrice * ( 100 - newDiscountPercentage ) / 100
+                print('new value of discountPrice', newDiscountPrice)
+                course.discountPrice = newDiscountPrice
+            else:
+                print('New value of discountPercentage', newDiscountPercentage)
+                newDiscountPrice = course.coursePrice
+                print('new value of discountPrice', newDiscountPrice)
         course.save()
         return redirect(reverse('course:manage_course', kwargs={'courseID' : courseID }))
     else:
@@ -151,11 +200,16 @@ def edited_course(req, courseID):
 
 def upload_video(req, courseID):
     if req.method == 'POST':
-        videoName = req.POST['videoName']
+        videoName = req.POST.get('videoName')
         videoFile = req.FILES['videoToUpload']
+        videoDesc = req.POST.get('videoDesc')
         course = Course.objects.get(courseID=courseID)
-        new_video = Video(videoName=videoName,videoFile=videoFile,course=course,isDelete=False)
+        new_video = Video(videoName=videoName,videoFile=videoFile,course=course,videoDesc=videoDesc,isDelete=False)
         new_video.save()
+        course = Course.objects.get(courseID=courseID)
+        newOrderNo = OrderVideoInCourse.objects.filter(course=course,orderNo__gte=1).count() + 1
+        newOrderVideoInCourse = OrderVideoInCourse(course=course, video=new_video, orderNo=newOrderNo)
+        newOrderVideoInCourse.save()
         return redirect(reverse('course:manage_course', kwargs={'courseID' : courseID }))
     else:
         return HttpResponse('Failed to post.')
@@ -184,4 +238,67 @@ def comment_on_video(req, courseID, videoID):
         return HttpResponse('Failed to post.')
 
 def edited_video(req, courseID, videoID):
+    if req.method == 'POST':
+        course = Course.objects.get(courseID=courseID)
+        video = Video.objects.get(videoID=videoID)
+        editedOrderVideoInCourse = OrderVideoInCourse.objects.get(course=course, video=video)
+        newVideoName = req.POST.get('videoName')
+        newVideoFile = req.POST.get('videoFile')
+        newVideoDesc = req.POST.get('videoDesc')
+        if newVideoFile is not None:
+            newVideo = Video(course=course,videoFile=newVideoFile)
+            if len(newVideoName) > 0:
+                newVideo.videoName = newVideoName
+            else:
+                newVideo.videoName = video.videoName
+            if len(newVideoDesc) > 0:
+                newVideo.videoDesc = newVideoDesc
+            else:
+                newVideo.videoDesc = video.videoDesc
+            newVideo.save()
+            video.isDelete = True
+            video.save()
+            editedOrderVideoInCourse.video = newVideo
+            editedOrderVideoInCourse.save()
+        else:
+            if len(newVideoName) > 0:
+                video.videoName = newVideoName
+            else:
+                video.videoName = video.videoName
+            if len(newVideoDesc) > 0:
+                video.videoDesc = newVideoDesc
+            else:
+                video.videoDesc = video.videoDesc
+            video.save()
+
     return redirect(reverse('course:manage_course', kwargs={'courseID' : courseID } ))
+
+def reordered_video(req, courseID):
+    if req.method == 'POST':
+        course = Course.objects.get(courseID=courseID)
+        videos = Video.objects.filter(course=course, isDelete=False)
+        lastVideoOrderNo = OrderVideoInCourse.objects.filter(course=course).count()
+        for video in videos:
+            newOrderNo = int(req.POST.get(str(video.videoID),lastVideoOrderNo + 1))
+            reorderedVideo = OrderVideoInCourse.objects.get(course=course,video=video)
+            print('Old order#',reorderedVideo.orderNo, 'of', reorderedVideo.video.videoName)
+            reorderedVideo.orderNo = newOrderNo
+            print('New order#', reorderedVideo.orderNo, 'of', reorderedVideo.video.videoName)
+            reorderedVideo.save()
+    return redirect(reverse('course:manage_course', kwargs={'courseID' : courseID } ))
+
+def remove_video(req, courseID, videoID):
+    if req.method == 'POST':
+        course = Course.objects.get(courseID=courseID)
+        video = Video.objects.get(videoID=videoID)
+        videoNameToDelete = req.POST.get('confirmToDelete','')
+        if videoNameToDelete == video.videoName:
+            video.isDelete = True
+            orderVideo = OrderVideoInCourse.objects.get(course=course, video=video)
+            greaterOrderNoVideos = OrderVideoInCourse.objects.filter(course=course, orderNo__gt=orderVideo.orderNo)
+            greaterOrderNoVideos.update(orderNo=F('orderNo') - 1)
+            # orderVideo.update(orderNo=-1)
+            orderVideo.orderNo = -1
+            ordervideo.save()
+            
+    return redirect(reverse('course:manage_course', kwargs={'courseID' : courseID}))

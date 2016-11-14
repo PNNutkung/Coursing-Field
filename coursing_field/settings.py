@@ -31,8 +31,10 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'account.apps.AccountConfig',
+    'index.apps.IndexConfig',
+    'ui.apps.UiConfig',
     'mainmodels.apps.MainmodelsConfig',
-    'mockaccount.apps.MockaccountConfig',
     'takecourse.apps.TakecourseConfig',
     'watchvideo.apps.WatchvideoConfig',
     'browse.apps.BrowseConfig',
@@ -61,7 +63,7 @@ ROOT_URLCONF = 'coursing_field.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

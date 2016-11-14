@@ -1,0 +1,27 @@
+{% extends 'ui/navbar.html' %}
+{% load staticfiles %}
+
+{% block body %}
+<div class="container" style="margin-top:5%">
+  {% if message %}
+  <div class="alert alert-danger" role="alert">{{ message }}</div>
+  {% endif %}
+  <div class="panel panel-success">
+    <div class="panel-heading">Login</div>
+    <div class="panel-body">
+      <form action="{% url 'account:login' %}" role="form" method="POST">
+          {% csrf_token %}
+          <div class="input-group form-group">
+            <span class="input-group-addon" id="username-addon">Username</span>
+            <input type="text" class="form-control" name="_username" placeholder="Enter a Username." aria-describedby="username-addon"/>
+          </div>
+          <div class="input-group form-group">
+            <span class="input-group-addon" id="password-addon">Password</span>
+            <input type="password" class="form-control" name="_password" placeholder="Enter a Password." aria-describedby="password-addon"/>
+          </div>
+          <input class="btn btn-block btn-success" type="submit" value="Login"/>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

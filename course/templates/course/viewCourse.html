@@ -1,38 +1,67 @@
-<!DOCTYPE>
-<html>
-    <header>
-        <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
-        <title>{{course.courseName}}</title>
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-        <style media="screen">
-            .center-cropped {
-                height: 350px;
-                width: auto;
-                background-position: center center;
-                background-size: cover;
-            }
-            .list-right {
+{% extends 'ui/navbar.html' %}
+{% load staticfiles %}
+
+{% block style %}
+
+<link rel="stylesheet" href="{% static "ui/css/index.css" %}"?"{% now "U" %}">
+<link href="{% static "ui/kartik/css/star-rating.css" %}" media="all" rel="stylesheet" type="text/css" />
+
+<!-- optionally if you need to use a theme, then include the theme file as mentioned below -->
+<link href="{% static "ui/kartik/themes/krajee-svg/theme.css" %}" media="all" rel="stylesheet" type="text/css" />
+
+<script src="{% static "ui/kartik/js/star-rating.js" %}" type="text/javascript"></script>
+
+<!-- optionally if you need to use a theme, then include the theme file as mentioned below -->
+<script src="{% static "ui/kartik/themes/krajee-svg/theme.js" %}"></script>
+
+
+
+<style media="screen">
+    .center-cropped {
+        height: 150px;
+        width: auto;
+        background-position: center center;
+        background-size: cover;
+    }
+    .list-right {
                 padding-left: 6px;
                 padding-top: 6px;
                 padding-bottom: 6px;
-            }
-            ul {
-                list-style-type: none;
-                padding-left: 0px;
-            }
-        </style>
-    </header>
-    <body>
-        <div class="container">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <h1>{{course.courseName}}</h1>
-                <p>Instructed by {{course.owner}}</p>
-                <p><b>Category:</b> {{inCategory}}</p>
+    }
+    ul {
+        list-style-type: none;
+        padding-left: 0px;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+    <!--<body>-->
+    <div class="container">
+        <br>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-bottom:2%">
+            <h1>{{course.courseName}}</h1>
+            <hr />
+
+            <div style="font-size:150%">
+              <div >
+                  <font style="font-weight:bold">Course Overview : </font>{{course.courseShortDesc}}
+              </div>
+              <div >
+                  <font style="font-weight:bold">Instructed by : </font><a href="">{{course.owner.first_name}} {{course.owner.last_name}}</a>
+              </div>
+              <div >
+                  <font style="font-weight:bold">Category : </font>{{inCategory}}
+              </div>
             </div>
+        </div>
         <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
-            <div class="center-cropped" style="background-image: url({{course.courseThumbnail.url}});"></div>
+            {% comment %}<div class="center-cropped" style="background-image: url({{course.courseThumbnail.url}});">
+                <img src="{{course.courseThumbnail.url}}" alt="Course Thumbmail">
+            </div>{% endcomment %}
+            <div>
+                <img class="center-cropped" src="{{course.courseThumbnail.url}}" alt="Course Thumbmail" height="400" width="300">
+            </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
             <span><h3><b>฿ {{course.coursePrice}}</b></h3></span>
@@ -82,7 +111,12 @@
                                                 <td class="list-right">฿ {{leftBalance}}</td>
                                             </tr>
                                         </table>
-                                        <input type="submit" class="btn btn-block btn-primary" value="Confirm">
+                                        <br>
+                                        {% if canTakeCourse %}
+                                            <input type="submit" class="btn btn-block btn-primary" value="Confirm">
+                                        {% else %}
+                                            <input type="submit" class="btn btn-block btn-danger" value="Not enough balance" disabled>
+                                        {% endif %}
                                     </form>
                                 </div>
                             </div>
@@ -90,30 +124,82 @@
                     </div>
                 {% endif %}
             {% endif %}
-            <table>
-                <tr>
-                    <td>
-                        <span>Lectures</span>
-                    </td>
-                    <td>
-                        <span><b>{{numberOfLectures}}</b></span>
-                    </td>
-                </tr>
-            </table>
+
         </div>
-        <div class="col-sm-12 col-sm-12 col-md-12 col-lg-12">
-            <h2><b>Course description</b></h2>
-            <p>
-                {{course.courseDesc}}
-            </p>
+        <div class="col-sm-12 col-sm-12 col-md-12 col-lg-12" ></div>
+
+        <div class="col-sm-12 col-sm-12 col-md-12 col-lg-12" style="margin-bottom:2; margin-top:3%">
+          <ul class="nav nav-tabs">
+            <li role="presentation"class="active"><a href="#information" data-toggle="tab">Course Information</a></li>
+            <li role="presentation"><a href="#owner" data-toggle="tab">Course Owner Information</a></li>
+            <li role="presentation"><a href="#review" data-toggle="tab">Review</a></li>
+          </ul>
         </div>
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+        <div class="tab-content col-sm-12 col-sm-12 col-md-12 col-lg-12"  >
+          <div id="information" class="tab-pane fade in active">
+              <div style="font-size:200%; margin-bottom:2%; margin-top:1%">
+                <b>Course Information</b>
+              </div>
+              <hr />
+              <div style="font-size:160%; margin-bottom:1%">
+                <b>Course Description </b>
+              </div>
+              <div style="font-size:120%; margin-bottom:1%">
+                  {{course.courseFullDesc}}
+              </div>
+              <div style="font-size:160%; margin-bottom:1%">
+                  <font style="font-weight:bold;">Number Of Lecture Videos : </font>{{numberOfLectures}}
+              </div>
+              <div style="font-size:160%; margin-bottom:1%">
+                  <font style="font-weight:bold;">Current Rating : </font>
+                  {% with avgRate=averageRating.rating__avg|floatformat:2|default_if_none:-1 %}
+                    {% if avgRate >= 0 %}
+                        {{avgRate}} star
+                    {% else %}
+                        No Reviews yet.
+                    {% endif %}
+                  {% endwith %}
+              </div>
+              <div style="font-size:160%; margin-bottom:1%">
+                  <font style="font-weight:bold;">Courses Price : </font>{{course.coursePrice}} Baht
+              </div>
+              <div style="font-size:160%; margin-bottom:1%">
+                  <font style="font-weight:bold;">Category : </font>{{inCategory}}
+              </div>
+          </div>
+
+          <div id="owner" class="tab-pane fade">
+            <div style="font-size:200%; margin-bottom:2%; margin-top:1%">
+              <b>Meet The Instructor</b>
+            </div>
+            <div class="col-sm-2 col-sm-2 col-md-2 col-lg-2" style="text-align:center">
+                <img src="{{course.owner.profile.profilePicture.url}}" alt="Profile picture" height="180" width="171" />
+            </div>
+            <div class="col-sm-10 col-sm-10 col-md-10 col-lg-10">
+              <div style="font-size:160%; margin-bottom:1%">
+                  <font style="font-weight:bold;">Instructor Name : </font> {{course.owner.first_name}} {{course.owner.last_name}}
+              </div>
+              <div style="font-size:160%; margin-bottom:1%">
+                <b>Instructor Biology</b>
+              </div>
+              <div style="font-size:120%; margin-bottom:1%">
+                  {{course.owner.profile.bio}}
+              </div>
+              <div style="font-size:160%; margin-bottom:1%">
+                  <font style="font-weight:bold;">Instructor Contract Email : </font>{{course.owner.email}}
+              </div>
+            </div>
+          </div>
+
+
+          <div id="review" class="tab-pane fade">
             <h2><b>Reviews</b></h2>
             {% if reviews %}
             <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                 <span class="hm">Average Rating</span>
                 <div class="average-rate">
-                    <h1><b>{{averageRating.rating__avg|floatformat:2}}</b></h1>
+                    <input id="rating" name="rating" value="{{averageRating.rating__avg|floatformat:2}}" class="rating-loading">
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
@@ -138,27 +224,31 @@
                 </ul>
             </div>
             {% if reviews %}
+            <h2><b>Review History</b></h2>
             <ul class="reviews-list">
                 {% for review in reviews %}
-                    <li class="review">
-                        <div class="info-container">
+                    <li class="review col-md-12 col-lg-12" style="margin-bottom:1.5%">
+                        <div class="col-md-2 col-lg-2">
                             <div class="avatar">
-                                <img src="{{review.owner.profilePicture.url}}" alt="{{review.owner}}'s avatar" />
+                                <img src="{{review.owner.profile.profilePicture.url}}" alt="{{review.owner}}'s avatar" />
                             </div>
                         </div>
-                        <div class="user-details">
-                            <ul>
-                                <li class="username ellipsis">{{review.owner.first_name}} {{review.owner.last_name}}</li>
-                                <li class="review-create">{{review.reviewDate}}</li>
-                            </ul>
-                        </div>
-                        <div class="rating-container">
-                            {{review.rating}}
-                        </div>
-                        <div class="comment-container">
-                            <p>
-                                {{review.reviewDesc}}
-                            </p>
+                        <div class="col-md-10 col-lg-10">
+                          <div class="user-details">
+                              <ul>
+                                  <li class="username ellipsis"><b>Username</b> : {{review.owner.first_name}} {{review.owner.last_name}}</li>
+                                  <li class="review-create"><b>Date</b> : {{review.reviewedDate}}</li>
+                              </ul>
+                          </div>
+                          <div class="rating-container" style="font-size:50%">
+                            <input id="fixrating" value="{{review.rating}}" data-readonly="true" class="rating">
+                          </div>
+                          <div class="comment-container">
+                            <b>User Review : </b>
+                              <p>
+                                  {{review.reviewDesc}}
+                              </p>
+                          </div>
                         </div>
                     </li>
                 {% endfor %}
@@ -182,14 +272,16 @@
                 <h2><label for="reviewDesc" class="control-label">Review this course</label></h2>
                 <div class="form-group">
                     <label for="reviewRating" class="control-label">Give star(s) to this course</label>
-                    <select id="reviewRating" class="dropdown form-control" name="reviewRating" required>
+                    <input id="reviewRating" name="reviewRating" value="0" class="rating-loading">
+
+                    <!-- <select id="reviewRating" class="dropdown form-control" name="reviewRating" required>
                         <option value="">Rate for this course</option>
                             <option value="5">5 Stars</option>
                             <option value="4">4 Stars</option>
                             <option value="3">3 Stars</option>
                             <option value="2">2 Stars</option>
                             <option value="1">1 Star</option>
-                    </select>
+                    </select> -->
                 </div>
                 <div class="form-group">
                     <textarea id="reviewDesc" name="reviewDesc" rows="10" class="form-control" placeholder="Say something to this course..." required></textarea>
@@ -197,7 +289,38 @@
                 <input type="submit" class="btn btn-block btn-primary" name="submitReview" value="Review"/>
             </form>
             {% endif %}
+          </div>
         </div>
+
+
     </div>
-    </body>
-</html>
+
+    <br />  <br />  <br />
+{% endblock %}
+
+
+{% block script %}
+<script>
+$(document).on('ready', function(){
+    $('#rating').rating({displayOnly: true, step: 0.5});
+});
+$(document).on('ready', function(){
+    $('#fixrating').rating({displayOnly: true,
+      step: 1,
+      starCaptions: {1: 'Very Poor', 2: 'Poor', 3: 'Ok', 4: 'Good', 5: 'Very Good'},
+      starCaptionClasses: {1: 'text-danger', 2: 'text-warning', 3: 'text-info', 4: 'text-primary', 5: 'text-success'}
+
+    });
+});
+$(document).on('ready', function(){
+    $('#reviewRating').rating({
+        step: 1,
+        starCaptions: {1: 'Very Poor', 2: 'Poor', 3: 'Ok', 4: 'Good', 5: 'Very Good'},
+        starCaptionClasses: {1: 'text-danger', 2: 'text-warning', 3: 'text-info', 4: 'text-primary', 5: 'text-success'}
+    });
+});
+</script>
+
+{% endblock %}
+    <!--</body>
+</html>-->

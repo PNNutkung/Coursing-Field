@@ -1,0 +1,151 @@
+{% extends 'ui/navbar.html' %}
+{% load staticfiles %}
+
+{% block style %}
+  <link rel="stylesheet" href="{% static "ui/css/register.css" %}"?"{% now "U" %}">
+{% endblock %}
+
+{% block body %}<br /><br /><br /><br />
+
+
+<form class="form-horizontal" action='' method="POST" style="">
+  <div class="container">
+    <!-- <h3 style="text-align:center;">User Information</h3> -->
+    <div class="control-group" id="register_content">
+      <!-- Username -->
+      <div class="controls col-md-12" style="margin-bottom:2%;">
+        <div id="register_legend" >
+          <legend class="" ><h3>Account Information</h3></legend>
+        </div>
+      </div>
+      <!-- Username -->
+      <div class="controls col-md-12" style="margin-bottom:2%;">
+          <div class="col-md-3">
+            <label class="control-label"   style="">Username</label>
+          </div>
+          <div class="col-md-9">
+            <input type="text" id="register_field">
+            <a data-toggle="tooltip" title="insert text here"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></a>
+          </div>
+      </div>
+      <!-- Password -->
+      <div class="controls col-md-12" style="margin-bottom:2%;">
+          <div class="col-md-3">
+            <label class="control-label"  style="">Password</label>
+          </div>
+          <div class="col-md-9">
+            <input type="password" id="register_field">
+            <a data-toggle="tooltip" title="insert text here"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></a>
+          </div>
+      </div>
+      <!-- Username -->
+      <div class="controls col-md-12" style="margin-bottom:2%;">
+          <div class="col-md-3">
+            <label class="control-label"   style="">Comfirm Password</label>
+          </div>
+          <div class="col-md-9">
+            <input type="password" id="register_field">
+            <a data-toggle="tooltip" title="insert text here"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></a>
+          </div>
+      </div>
+      <!-- Username -->
+      <div class="controls col-md-12" style="margin-bottom:2%;">
+          <div class="col-md-3">
+            <label class="control-label"   style="">Email Address</label>
+          </div>
+          <div class="col-md-9">
+            <input type="text" id="register_field">
+            <a data-toggle="tooltip" title="insert text here"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></a>
+          </div>
+      </div>
+
+      <div class="controls col-md-12" style="margin-bottom:2%;">
+          <hr />
+      </div>
+      <div class="controls col-md-12" style="margin-bottom:2%;">
+        <div id="register_legend">
+          <legend class="" ><h3>Personal Information</h3></legend>
+        </div>
+      </div>
+
+      <!-- Username -->
+      <div class="controls col-md-12" style="margin-bottom:2%;">
+          <div class="col-md-3">
+            <label class="control-label"   style="">Firstname</label>
+          </div>
+          <div class="col-md-9">
+            <input type="text" id="register_field">
+            <a data-toggle="tooltip" title="insert text here"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></a>
+          </div>
+      </div>
+
+      <!-- Username -->
+      <div class="controls col-md-12" style="margin-bottom:2%;">
+          <div class="col-md-3">
+            <label class="control-label"   style="">Lastname</label>
+          </div>
+          <div class="col-md-9">
+            <input type="text" id="register_field">
+            <a data-toggle="tooltip" title="insert text here"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></a>
+          </div>
+      </div>
+      <!-- Username -->
+      <div class="controls col-md-12" style="margin-bottom:2%;">
+          <div class="col-md-3">
+            <label class="control-label"   style="">Date of birth</label>
+          </div>
+          <div class="col-md-9">
+            {% include "includes/dateofbirth.html" %}<a data-toggle="tooltip" title="insert text here"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></a>
+          </div>
+      </div>
+      <!-- Username -->
+      <div class="controls col-md-12" style="margin-bottom:2%;">
+          <div class="col-md-3">
+            <label class="control-label"   style="">Gender</label>
+          </div>
+          <div class="col-md-9">
+            <input type="radio" name="gender" /> : Male
+            <input type="radio" name="gender" /> : Female
+          </div>
+      </div>
+      <!-- Username -->
+      <!-- Username -->
+      <div class="controls col-md-12" style="margin-bottom:2%;">
+          <div class="col-md-3">
+            <label class="control-label"   style="">Address</label>
+          </div>
+          <div class="col-md-9">
+            <textarea  rows="6" style="width:40%;"></textarea>
+
+          </div>
+      </div>
+      <div class="controls col-md-12" style="margin-bottom:2%;">
+          <div class="col-md-3">
+            <label class="control-label"   style="">Biology</label>
+          </div>
+          <div class="col-md-9">
+            <textarea rows="6" style="width:40%;"></textarea>
+          </div>
+      </div>
+
+    <div class="control-group" style="">
+      <!-- Button -->
+      <div class="controls" style="text-align:center;">
+        <button class="btn btn-primary">Register</button>
+      </div>
+    </div>
+  </div>
+</form>
+
+<br><br><br><br><br><br><br><br>
+{% endblock %}
+
+
+{% block script %}
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+});
+</script>
+
+{% endblock %}

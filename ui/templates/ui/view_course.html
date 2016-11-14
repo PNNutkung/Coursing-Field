@@ -1,0 +1,143 @@
+{% extends 'ui/navbar.html' %}
+{% load staticfiles %}
+
+{% block style %}
+  <link rel="stylesheet" href="{% static "ui/css/navbar-fixed-side.css" %}"?"{% now "U" %}">
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-3 col-lg-2">
+      <nav class="navbar navbar-default navbar-fixed-side" style="text-align:center;">
+        <!-- normal collapsible navbar markup -->
+
+        <div class="container">
+          <form class="form-horizontal">
+            <div class="form-group">
+
+              <h3><a href="">Course Overall</a></h2><hr>
+              <h3><a href="">Lesson 1</a></h2><hr>
+              <h3><a href="">Lesson 2</a></h2><hr>
+              <h3><a href="">Lesson 3</a></h2><hr>
+              <h3><a href="">Lesson 4</a></h2><hr>
+              <h3><a href="">Lesson 5</a></h2><hr>
+              <h3><a href="">Lesson 6</a></h2><hr>
+              <h3><a href="">Lesson 7</a></h2><hr>
+              <h3><a href="#" data-toggle="modal" data-target="#myModal">Upload Video</a></h2><hr>
+            </div>
+          </form>
+        </div>
+
+      </nav>
+    </div>
+    <div class="col-sm-9 col-lg-10" style=""><br>
+      <div class="col-sm-9 col-lg-10" style="text-align:center;margin-left:10%">
+        <h1>Course Name HERE</h1><hr />
+      </div>
+        <div class="col-sm-9 col-lg-10" style="margin-bottom:3%">
+          <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:700px; height:400px; margin-left:20%;"> </a>
+        </div>
+        <!-- Course Desciption -->
+        <div class="col-sm-9 col-lg-10 well" style="text-align:left; margin-left:10%; margin-bottom:3%">
+          <div class="col-lg-4">
+            <div style="font-size:150%">
+              Course Desciption
+            </div>
+          </div>
+          <div class="col-lg-8">
+
+            PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE !
+          </div>
+        </div>
+        <br /><br /><br />
+        <hr />
+      <!-- Owner Biology  -->
+      <div class="col-sm-9 col-lg-10 well" style="text-align:left; margin-left:10%; margin-bottom:3%">
+        <div class="col-lg-4">
+          <div style="font-size:150%">
+            About Course Instuctor
+            <a href="#"><img src="{% static "ui/img/item.jpg" %}" alt="" style="width:120px; height:150px; margin-left:20%;"> </a>
+
+          </div>
+        </div>
+        <br />
+        <div class="col-lg-8" style="">
+          <h4>Instuctor Name Here</h4>
+          PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE !
+        </div>
+      </div>
+
+      <div class="col-sm-9 col-lg-10 well" style="text-align:left; margin-left:10%">
+        <div class="col-lg-4">
+          <div style="font-size:150%">
+            Update History by Instuctor (For Further Cycle?)
+          </div>
+        </div>
+        <div class="col-lg-8" style="">
+          <h4>Instuctor Name Here</h4>
+          PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE ! PUT ALL THE DETAIL HERE !
+        </div>
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="size:200px;">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" id="close_modal" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h2 class="modal-title" id="myModalLabel" style="text-align:center">Upload Your Video</h2>
+      </div>
+      <div class="modal-body"  style="text-align: center;">
+
+
+
+        <div class="input-group col-md-offset-3" id="apply_margin">
+          <span class="input-group-addon">Video Name</span>
+          <input type="text" class="form-control" placeholder="" aria-describedby="basic-addon1">
+        </div>
+        <br>
+
+        <div class="input-group col-md-offset-3" id="apply_margin">
+          <button type="button" class="btn btn-default btn-group btn-group-justified" style="background:transparent">Choose Your File !</button>
+        </div>
+        <br>
+
+        <div class="input-group col-md-offset-3" id="apply_margin" style="text-align:right">
+          Video name that uploaded
+        </div>
+        <br>
+
+            <button type="button" id="login_button" class="btn btn-primary">Upload</button>
+
+
+      </div>   <!-- End Modal Body -->
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+{% block script %}
+<script>
+</script>
+
+{% endblock %}

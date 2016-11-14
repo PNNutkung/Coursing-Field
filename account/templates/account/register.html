@@ -1,0 +1,132 @@
+{% extends 'ui/navbar.html' %}
+{% load staticfiles %}
+
+{% block prescript %}
+<script type="text/javascript">
+window.onload = function() {
+  document.getElementById('password').onchange = validatePassword;
+  document.getElementById('confirm_password').onchange = validatePassword;
+}
+function validatePassword() {
+  var confirm_password = document.getElementById('confirm_password').value;
+  var password = document.getElementById('password').value;
+  if (password != confirm_password) {
+    document.getElementById('confirm_password').setCustomValidity('Please check that you\'ve entered and confirmed your password!');
+  } else {
+    document.getElementById('confirm_password').setCustomValidity('');
+  }
+}
+
+</script>
+{% endblock %}
+
+{% block body %}
+<div class="container" id="login-container" style="margin-top:5%">
+  {% if message%}
+    <div class="alert alert-danger" role="alert">{{message}}</div>
+  {% endif %}
+  <div class="panel panel-success">
+    <div class="panel-heading">Register</div>
+    <div class="panel-body">
+      <form name="regis" action="{% url 'account:register' %}" onsubmit="return checkForm();" role="form" method="POST">
+          {% csrf_token %}
+          <!-- Header -->
+          <div class="controls col-md-12" style="">
+            <div id="" >
+              <legend class="" ><h3>Account Information</h3></legend>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="username">Username:</label>
+            <a data-toggle="tooltip"
+            title="Your username that will be use to login.Contain only letter between 1-20 alphabet">
+            <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></a>
+            <input
+              id="username"
+              class="form-control"
+              type="text" name="username"
+              placeholder="Enter a username."
+              pattern="[A-Za-z0-9]{4,}"
+              required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <a data-toggle="tooltip" title="Your email that will use to get the information from us"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></a>
+            <input
+            id="email"
+            class="form-control"
+            type="email"
+            name="email"
+            placeholder="Enter an email."
+            pattern="[^@]+@[^@]+\.[^@]+"
+            required />
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <a data-toggle="tooltip" title="Require atleast 1 Uppercase, 1 Lowercase, 1 Number, and greater than or equals 6 characters"  style="text-align:left"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></a>
+            <input
+            id="password"
+            class="form-control"
+            type="password"
+            name="password"
+            placeholder="Enter a password."
+            pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,}$"
+            required />
+          </div>
+          <div class="form-group">
+            <label for="confirm_password">Confirm Password:</label>
+            <a data-toggle="tooltip" title="Confirm your password above"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></a>
+            <input id="confirm_password" class="form-control" type="password" name="confirm_password" placeholder="Enter a confirm password." required oninput="setCustomValidity('')"/>
+          </div>
+
+          <!-- Header -->
+          <div class="controls col-md-12" style="">
+            <div id="" >
+              <legend class="" ><h3>Personal Information</h3></legend>
+            </div>
+          </div>
+
+
+
+          <div class="form-group">
+            <label for="firstname">Firstname:</label>
+            <a data-toggle="tooltip" title="Your firstname"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></a>
+            <input id="firstname" class="form-control" type="text" name="firstname" placeholder="Enter your firstname." required pattern="[A-Za-z]+"/>
+          </div>
+          <div class="form-group">
+            <label for="lastname">Lastname:</label>
+            <a data-toggle="tooltip" title="Your lastname"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></a>
+            <input id="lastname" class="form-control" type="text" name="lastname" placeholder="Enter your lastname." required pattern="[A-Za-z]+"/>
+          </div>
+          <div class="form-group">
+            <label for="bday">Birth Date:</label>
+            <a data-toggle="tooltip" title="Your birthdate in format day/month/year"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></a>
+            <input class="form-control" id="bday" type='date' name='birthday' required
+            max="{% now 'Y-m-d' %}"/>
+          </div>
+          <div class="form-group">
+            <label for="gender">Gender:</label>
+            <a data-toggle="tooltip" title="Please choose you gender below"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></a>
+            <select id="gender" class="form-control" name='gender' required>
+              <option value="">Select Gender</option>
+              <option value="M">Male</option>
+              <option value="F">Female</option>
+              <option value="O">Other</option>
+            </select>
+          </div>
+          <input class="btn btn-block btn-success" type="submit" value="Register"/>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+});
+</script>
+
+{% endblock %}
