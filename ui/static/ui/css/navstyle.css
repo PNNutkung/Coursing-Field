@@ -3,6 +3,13 @@
     font-family: SAOfont;
     src: url('../font/SAOUITT-Bold.ttf');
 }
+@font-face {
+    font-family: RubikFont;
+    src: url('../font/Rubik-Regular.ttf');
+}
+#the_body{
+  font-family: RubikFont;
+}
 #searchfield
 {
   width: auto;

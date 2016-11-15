@@ -39,7 +39,7 @@
     </style>
 </head>
 
-<body>
+<body id="the_body">
   <div id="navbar">
     <nav id="navbar" class="navbar navbar-default navbar-default navbar-fixed-top">
         <!-- Handle Toggle -->
@@ -48,21 +48,21 @@
     </button>
         <!-- End Handle Toggle -->
       <div class="container-fluid">
-          <div class="col-md-2">
-              <div class="navbar-header borderXwidth">
+          <div class="col-md-3">
+              <div class="navbar-header borderXwidth col-md-12 col-xs-12 col-lg-12">
                   <a class="navbar-brand" href="{% url 'index:index' %}">
                       <div id="head">Coursing Field</div>
                   </a>
               </div>
           </div>
           <!-- Collect the nav links, forms, and other content for toggling -->
-          <div class="collapse navbar-collapse pullRight" id="bs-example-navbar-collapse-1">
+          <div class="collapse navbar-collapse pullRight col-md-9" id="bs-example-navbar-collapse-1">
               <div class="col-md-1">
                 <ul class="nav navbar-nav">
                   <li><a href="{% url 'browse:browseIndex' %}">Browse</a></li>
                 </ul>
               </div>
-              <div class="col-md-5">
+              <div class="col-md-6 col-xs-0 col-sm-0">
                   <form class="navbar-form navbar-left">
                       <div class="form-group">
                           <input type="text" class="form-control" id="searchfield" placeholder="Search"><button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
@@ -87,22 +87,22 @@
   {% block body %}
   {% endblock %}
 
-  
+
   {% block carousel %}
   {% endblock %}
 </body>
 
 
-  <footer>
-    <div class="footer" id="footer">
+  <footer style="margin-top:2%;">
+    <div class="footer" id="footer" style="z-index:-1">
         <div class="container">
           <div class="row">
-            <div class="col-lg-4  col-md-4 col-sm-4 col-xs-6">
+            <div class="col-lg-3  col-md-4 col-sm-4 col-xs-6" style="margin-left:11%">
               <a href="{% url 'index:index' %}">
-                <h3 style="text-align: center;">Coursing Field</h3>
+                <h3 style="text-align: left;">Coursing Field</h3>
               </a>
-              <div style="text-align: center;">
-                Cousing Field is the platform that allow any user to take any interested course they want and teaching any other individuals at the same time
+              <div style="text-align: left;">
+                Cousing Field is the platform that allow any user to take any courses they want and teaching anything at the same time
               </div>
             </div>
             <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">
@@ -119,7 +119,7 @@
                 <li><a href="{% url 'account:profile' %}">My Profile</a></li>
               </ul>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
               <h3>Contact Us</h3>
               <ul class="social">
                 <li><a href="#"><i class=" fa fa-facebook"></i></a></li>
