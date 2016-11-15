@@ -154,7 +154,7 @@
               <div style="font-size:160%; margin-bottom:1%">
                   <font style="font-weight:bold;">Current Rating : </font>
                   {% with avgRate=averageRating.rating__avg|floatformat:2|default_if_none:-1 %}
-                    {% if avgRate >= 0 %}
+                    {% if avgRate %}
                         {{avgRate}} star
                     {% else %}
                         No Reviews yet.
