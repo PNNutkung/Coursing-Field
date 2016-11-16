@@ -60,7 +60,8 @@ def profile(req):
     for course in findTakingCourses:
         joinCourse = Course.objects.filter(courseID=course.courseID)
         takingCourses.append(joinCourse)
-    return render(req, 'account/profile.html', {'teachingCourses': teachingCourses, 'takingCourses': takingCourses})
+    transactions = Course.objects.raw('SELECT * FROM mainmodels_transaction as main_tran JOIN mainmodels_course as main_course ON main_course.courseID = main_tran.courseID WHERE %s = main_tran.takerID ORDER BY main_tran.transactionDate DESC',[req.user.id])
+    return render(req, 'account/profile.html', {'teachingCourses': teachingCourses, 'takingCourses': takingCourses, 'transactions': transactions})
 
 def personalUpdate(req):
     user = User.objects.filter(username=req.user, email=req.user.email)

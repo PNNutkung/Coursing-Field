@@ -270,9 +270,29 @@
         {% endif %}
       </div>
       <div id="transaction" class="tab-pane fade">
-        <h3 style="text-align:center">Your Transaction Log</h3>
-        <h1 style="text-align:center">CYCLE 2 WORK !</h3>
-        <p>Some content in menu 2.</p>
+        <h3 style="text-align:center; margin-bottom:2%;">Your Transaction Log</h3>
+        {% if transactions %}
+          <table class="table">
+            <tr>
+              <th>#</th>
+              <th>Date</th>
+              <th>Course</th>
+              <th>Balance before</th>
+              <th>Price</th>
+            </tr>
+            {% for transaction in transactions %}
+              <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ transaction.transactionDate }}</td>
+                <td>{{ transaction.courseName }}</td>
+                <td>{{ transaction.takerBalanceBeforePurchased }}</td>
+                <td>{{ transaction.coursePrice }}</td>
+              </tr>
+            {% endfor %}
+          </table>
+        {% else %}
+          <h3 style="text-align:center; margin-bottom:2%;">You have not do transactions yet.</h3>
+        {% endif %}
       </div>
     </div>
   </div>
