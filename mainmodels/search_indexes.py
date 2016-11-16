@@ -1,6 +1,6 @@
 from haystack import indexes
 from django.contrib.auth.models import User
-from mainmodels.models import Profile, Course, Category
+from mainmodels.models import Course
 
 class CourseIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
