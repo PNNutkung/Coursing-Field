@@ -22,6 +22,7 @@
 {% endblock %}
 
 {% block body %}
+
 <div class="container-fluid" style="overflow:hidden" id="profile-container">
     <div class="container" id="profile_banner">
         <div class="well">
@@ -162,7 +163,7 @@
                 <label class="control-label">Date of birth</label>
               </div>
               <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
-                <input type="date" name="bday" max="{% now 'Y-m-d' %}" required />
+                <input type="date" id="DoB" name="bday" max="{% now 'Y-m-d' %}" required />
               </div>
             </div>
 
@@ -172,7 +173,7 @@
               </div>
               <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
                 <select id="gender" class="form-control" name='gender' required>
-                  <option value="">Select Gender</option>
+                  <option value="" selected="selected">Select Gender</option>
                   <option value="M">Male</option>
                   <option value="F">Female</option>
                   <option value="O">Other</option>
@@ -276,4 +277,59 @@
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block script %}
+
+  <script>
+    window.onload = function() {
+
+       var genderField = "{{user.profile.gender}}";
+       var values;
+       var item = document.getElementById("gender");
+       if(genderField == "M")
+       {
+         values = "M";
+         item.value = values;
+       }
+       else if(genderField == "F") {
+         values = "F";
+         item.value = values;
+       }
+       else if(genderField == "O")
+       {
+         values = "O";
+         item.value = values;
+       }
+
+      var dateOfBirth = "{{user.profile.birthDate}}";
+      var dateField = document.getElementById("DoB");
+      console.log(dateOfBirth);
+      console.log(dateField);
+      var month = dateOfBirth.split(". ")[0];
+      var year = dateOfBirth.split(", ")[1];
+      var day = dateOfBirth.split(" ")[1].split(",")[0];
+      var actualMonth;
+      var monthData = [
+        ["Jan", "Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
+        [1, 2,3,4,5,6,7,8,9,10,11,12],
+      ];
+      var i;
+      var j = 0;
+      for(i=0;i<monthData[0].length;i++)
+      {
+        if(month == monthData[0][i])
+        {
+          actualMonth = monthData[1][i];
+        }
+      }
+      // console.log(actualMonth);
+
+      // YYYY-MM-DD
+      dateField.value = year+"-"+actualMonth+"-"+day;
+      // console.log(year);
+
+
+   }
+  </script>
 {% endblock %}
