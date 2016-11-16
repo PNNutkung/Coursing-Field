@@ -24,5 +24,6 @@ urlpatterns = [
     url(r'^course/', include('course.urls')),
     url(r'^watchvideo/',include('watchvideo.urls')),
     url(r'^takecourse/', include('takecourse.urls')),
+    url(r'^search/', include('haystack.urls')),
     url(r'^admin/', admin.site.urls),
 ]
