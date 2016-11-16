@@ -70,7 +70,14 @@
                   </form>
               </div>
               <ul class="nav navbar-nav navbar-right">
-                  <li><a href="{% url 'course:createCourse' %}" style="background-color: limegreen; color: white;">Create Course</a></li>
+                  <li>
+                    {% comment %}<span href="{% url 'account:addBalanceView' %}">
+                      <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                      Balance
+                    </span>{% endcomment %}
+                    <a href="{% url 'account:addBalanceView' %}" style="background-color: green; color: white; opacity: 0.75;"><i class="glyphicon glyphicon-plus-sign"></i> Balance</a>
+                  </li>
+                  <li><a href="{% url 'course:createCourse' %}" style="background-color: limegreen; color: white;"><i class="glyphicon glyphicon-plus-sign"></i> Course</a></li>
                   {% if user.is_authenticated %}
                     <li><a href="{% url 'account:profile' %}">{{user}}</a></li>
                     <li><a href="{% url 'account:logout' %}" id="logout-btn">Logout</a></li>

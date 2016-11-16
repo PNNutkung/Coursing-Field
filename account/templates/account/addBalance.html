@@ -1,0 +1,46 @@
+{% extends 'ui/navbar.html' %}
+{% load staticfiles %}
+
+{% block body %}
+<div class="container" style="margin-top:5%">
+  {% if status %}
+  <div class="alert alert-info" role="alert">{{ status }}</div>
+  {% endif %}
+  <div class="panel panel-success">
+    <div class="panel-heading">Add Balance</div>
+    <div class="panel-body">
+      <form action="{% url 'account:updateBalance' %}" role="form" method="POST">
+          {% csrf_token %}
+          <div class="input-group">
+            <!--<select class="form-control" name="balanceAmount" required>
+              <option value=""></option>
+              <option value="1250">1250 Balance</option>
+              <option value="2500">2500 Balance</option>
+              <option value="4000">4000 Balance</option>
+              <option value="6000">6000 Balance</option>
+              <option value="8500">8500 Balance</option>
+              <option value="11500">11500 Balance</option>
+              <option value="15000">15000 Balance</option>
+              <option value="19000">19000 Balance</option>
+              <option value="23500">23500 Balance</option>
+              <option value="28500">28500 Balance</option>
+              <option value="34000">34000 Balance</option>
+            </select>-->
+            <input class="form-control" type="number" name="balanceAmount" min="1" max="100000" placeholder="Add Amount" required>
+            <span class="input-group-addon"><i class="glyphicon glyphicon-bitcoin"></i></span>
+          </div>
+          <br>
+          {% comment %}<div class="input-group form-group">
+            <span class="input-group-addon" id="username-addon">Username</span>
+            <input type="text" class="form-control" name="_username" placeholder="Enter a Username." aria-describedby="username-addon"/>
+          </div>
+          <div class="input-group form-group">
+            <span class="input-group-addon" id="password-addon">Password</span>
+            <input type="password" class="form-control" name="_password" placeholder="Enter a Password." aria-describedby="password-addon"/>
+          </div>{% endcomment %}
+          <input class="btn btn-block btn-success" type="submit" value="Login"/>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
