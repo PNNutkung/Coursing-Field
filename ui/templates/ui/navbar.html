@@ -102,8 +102,9 @@
   <footer style="margin-top:2%;">
     <div class="footer" id="footer" style="z-index:-1">
         <div class="container">
-          <div class="row">
-            <div class="col-lg-3  col-md-4 col-sm-4 col-xs-6" style="margin-left:11%">
+          <div class="row" style="">
+            <div class="col-md-2 col-xs-2" style=""></div>
+            <div class="col-md-3 col-xs-2" style="">
               <a href="{% url 'index:index' %}">
                 <h3 style="text-align: left;">Coursing Field</h3>
               </a>
@@ -111,7 +112,8 @@
                 Cousing Field is the platform that allow any user to take any courses they want and teaching anything at the same time
               </div>
             </div>
-            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">
+            <div class="col-md-2 col-xs-2" style=""></div>
+            <div class="col-md-2 col-xs-2">
               <h3>Course</h3>
               <ul>
                 <li><a href="{% url 'browse:browseIndex' %}">Browse Course</a></li>
@@ -119,20 +121,11 @@
                 <li><a href="{% url 'course:createCourse' %}">Create Course</a></li>
               </ul>
             </div>
-            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">
+            <div class="col-md-1 col-xs-2" style=""></div>
+            <div class="col-md-2 col-xs-2">
               <h3>Profile</h3>
               <ul>
                 <li><a href="{% url 'account:profile' %}">My Profile</a></li>
-              </ul>
-            </div>
-            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-              <h3>Contact Us</h3>
-              <ul class="social">
-                <li><a href="#"><i class=" fa fa-facebook"></i></a></li>
-                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
-                <li><a href="#"><i class="fa fa-youtube"></i></a></li>
               </ul>
             </div>
         </div>

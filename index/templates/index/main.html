@@ -29,7 +29,9 @@
     <div id="owl-no1" class="owl-carousel col-md-12">
       {% for mostPopularCourse in mostPopularCourses %}
         <div class="well well-sm">
-          <a href="{% url 'course:view_course' courseID=mostPopularCourse.courseID %}"><img src={{mostPopularCourse.courseThumbnail.url}} alt="{{mostPopularCourse.courseName}}" style="width:150px; height:150px; margin-left:5%;"> </a>
+          <a href="{% url 'course:view_course' courseID=mostPopularCourse.courseID %}">
+            <img src={{mostPopularCourse.courseThumbnail.url}} alt="{{mostPopularCourse.courseName}}" style="text-align:center;width:90%; height:90%; margin-left:5%;">
+          </a>
           <div><a href="{% url 'course:view_course' courseID=mostPopularCourse.courseID %}"><h4>{{mostPopularCourse.courseName}}</h4></a></div>
           <div>{{mostPopularCourse.courseShortDesc}}</div>
           <div>Price: ฿{{mostPopularCourse.coursePrice}}</div>
@@ -54,7 +56,7 @@
       {% endfor %}
     </div>
   </div>
-  {% endif %}
+  {% endif %}  
 {% endblock %}
 
 {% block script %}
@@ -63,8 +65,25 @@
     $("#owl-no1").owlCarousel({
       slideSpeed : 300,
       paginationSpeed : 400,
-      items : 5,
+      // items : 5,
+      responsiveClass:true,
+
       margin: 50,
+      responsive:{
+        0:{
+            items:1,
+            nav:true
+        },
+        600:{
+            items:3,
+            nav:false
+        },
+        1000:{
+            items:5,
+            nav:true,
+            loop:false
+        }
+      }
     });
   });
   $(document).ready(function() {
