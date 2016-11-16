@@ -1,0 +1,11 @@
+{% if courses.count > 0 %}
+{% for course in courses %}
+  <li>
+    <a href="{{course.object.get_absolute_url}}}">{{course.courseName}} by {{course.owner.profile.user}}</a>
+  </li>
+{% endfor %}
+{% else %}
+<li>
+  Nothing to show
+</li>
+{% endif %}

@@ -1,0 +1,4 @@
+{{ object.courseName }}
+{{ object.owner.profile.user }}
+{{ object.owner.profile.first_name }}
+{{ object.owner.profile.last_name }}

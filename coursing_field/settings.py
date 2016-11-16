@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'search.apps.SearchConfig',
     'account.apps.AccountConfig',
     'index.apps.IndexConfig',
     'ui.apps.UiConfig',
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'storages',
+    'haystack',
 ]
 
 MIDDLEWARE = [
@@ -161,3 +163,9 @@ MEDIA_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
 # you run `collectstatic`).
 STATICFILES_STORAGE = 'coursing_field.custom_storages.StaticStorage'
 DEFAULT_FILE_STORAGE = 'coursing_field.custom_storages.MediaStorage'
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
+    },
+}
