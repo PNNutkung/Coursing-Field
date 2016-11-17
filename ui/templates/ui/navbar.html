@@ -179,6 +179,30 @@
         font-weight: 200;
     }
     </style>
+    <script type="text/javascript">
+    $(document).ready(function(){
+      $('#search').keyup(function() {
+        if($('#search').val().length > 2){
+          $.ajax({
+              type: "POST",
+              url: "{% url 'search:search' %}",
+              data: {
+                'search_text' : $('#search').val(),
+                'csrfmiddlewaretoken' : $("input[name=csrfmiddlewaretoken]").val()
+              },
+              success: searchSuccess,
+              dataType: 'html'
+          });
+        } else {
+          $('#search-results').html({});
+        }
+      });
+    });
+
+    function searchSuccess(data, textStatus, jqXHR) {
+      $('#search-results').html(data);
+    }
+    </script>
 </head>
 
 <body id="the_body">
@@ -209,11 +233,11 @@
                   <li><a href="{% url 'browse:browseIndex' %}">Browse</a></li>
                   <li>
                     <section class="main">
-                    <form id="search" class="search navbar-form autocomplete-me" method="post" action="{% url 'search:autocomplete' %}">
+                    <form class="search navbar-form" method="post">
                       {% csrf_token %}
                           <div class="form-group">
                               <input type="text" class="form-control" id="search" placeholder="Search..." name="search" />
-                              <ul id="results"></ul>
+                              <ul id="search-results"></ul>
                               <!-- <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button> -->
                           </div>
                       </form>
@@ -242,26 +266,6 @@
 
 
   {% block carousel %}
-    <script type="text/javascript">
-    $(function(){
-      $('#search').keyup(function() {
-        $.ajax({
-            type: "POST",
-            url: "/search/",
-            data: {
-                'search_text' : $('#search').val(),
-                'csrfmiddlewaretoken' : $("input[name=csrfmiddlewaretoken]").val()
-            },
-            success: searchSuccess,
-            dataType: 'html'
-        });
-      });
-    });
-
-    function searchSuccess(data, textStatus, jqXHR) {
-      $('#results').html(data);
-    }
-    </script>
   {% endblock %}
 </body>
 

@@ -1,0 +1,11 @@
+{% if courses %}
+{% for course in courses %}
+  <li>
+    <a href="{% url 'course:view_course' courseID=course.courseID %}">{{course.courseName}} by {{course.username}}</a>
+  </li>
+{% endfor %}
+{% else %}
+<li>
+  Nothing to show
+</li>
+{% endif %}

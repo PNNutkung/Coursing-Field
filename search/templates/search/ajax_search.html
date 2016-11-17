@@ -1,8 +1,0 @@
-{% if articles.count > 0 %}
-{% for article in articles %}
-<li class="edo-trazi-artikal"><img class="edo-trazi-slika" src="/static/aktiva/{{ artikal.object.slika }}"/>
-<a class="edo-trazi-ime" href="/artikli/prikazi/{{ artikal.object.id }}/{{ artikal.object.slug }}/">{{ artikal.object.name }}</a>
-{% endfor %}
-{% else %}
-<li>No results!</li>
-{% endif %}
