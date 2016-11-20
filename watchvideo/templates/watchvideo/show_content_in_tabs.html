@@ -48,10 +48,80 @@
           <div id="overviewTab" class="tab-pane fade in active">
 
               {% if isOwner %}
-              <h3>
-                  <span class="glyphicon glyphicon-edit"></span>
-                  Course Information
-              </h3>
+              <div class="">
+                <div class="col-sm-3" style="font-size:150%">
+                    <span class="glyphicon glyphicon-edit"></span>
+                    <b>Course Information</b>
+                </div>
+                <div class="col-sm-9">
+                <!-- {% if isFeature %} -->
+                  <button type='button' class='btn btn btn-primary'  id="featureBtn" data-toggle='modal' data-target='#featureModal'>Upgrade This Course <span class="glyphicon glyphicon-fire" aria-hidden="true" style="color:red"></span> </button>
+                  <div id="featureModal" class="modal fade" role="dialog">
+                      <div class="modal-dialog">
+
+                          <div class="modal-content">
+                              <div class="modal-header">
+                                  <button type="button" class="close" data-dismiss="modal">
+                                      <span aria-hidden="true">&times;</span>
+                                      <span class="sr-only">Close</span>
+                                  </button>
+                                  <h4 class="modal-title" id="myModalLabel">
+                                      <b>Upgrade Your Course</b> <span class="glyphicon glyphicon-fire" aria-hidden="true" style="color:red"></span>
+                                  </h4>
+                              </div>
+                              <div class='modal-body'>
+                                  <form action={% url 'watchvideo:upgrade_course' courseID=course.courseID %} method="POST">
+                                      {% csrf_token %}
+                                      <table class="list">
+
+                                          <tr class="list-item">
+                                              <td class="list-left"><b>Course name</b></td>
+                                              <td class="list-right">{{course.courseName}}</td>
+                                          </tr>
+                                          <tr class="list-item">
+                                              <td class="list-left"><b>Feature Duration</b></td>
+                                              <td class="list-right">
+                                                <select id="feature_type" class="form-control" name='feature_type' required>
+                                                  <option value="500" selected="selected">30 Day - 500 Baht</option>
+                                                  <!-- <option value="900">60 Day - 900 Baht</option>
+                                                  <option value="1200">100 Day - 1,200 Baht</option>
+                                                  <option value="2000">150 Day - 2,000 Baht</option> -->
+                                                </select>
+                                              </td>
+                                          </tr>
+                                          <tr class="list-item">
+                                              <td class="list-left"><b>Your Balance : </td>
+                                              <td class="list-right">{{request.user.profile.balance}}</td>
+                                          </tr>
+                                          <tr class="list-item">
+                                              <td >
+                                                <input type="submit" class="btn btn-block btn-primary" value="Confirm">
+                                                <!-- {% if canTakeCourse %} -->
+                                                <!-- {% else %} -->
+                                                    <!-- <input type="submit" class="btn btn-block btn-danger" value="Not enough balance" disabled> -->
+                                                <!-- {% endif %} -->
+                                              </td>
+                                          </tr>
+
+                                      </table>
+                                      <!-- {% if canTakeCourse %} -->
+                                      <!-- {% else %} -->
+                                          <!-- <input type="submit" class="btn btn-block btn-danger" value="Not enough balance" disabled> -->
+                                      <!-- {% endif %} -->
+                                  </form>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                </div>
+                <style>
+                  #featureBtn{
+                    background: none;
+                    border: 2px solid #E53935;
+                  	color: black;
+                  }
+                </style>
+              </div>
                   <br>
                   <form action={% url 'course:edited_course' course.courseID %} method="POST" enctype="multipart/form-data">
                       {% csrf_token %}
