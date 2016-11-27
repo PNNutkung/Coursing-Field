@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from django.contrib.auth.models import User
-from .models import Course, Video, Category, FeaturedCourse, Comment, Review, Profile
+from .models import Course, Video, Category, FeaturedCourse, Comment, Review, Profile, Coupon
 # Register your models here.
 class VideoInline(admin.StackedInline):
     model = Video
@@ -35,7 +35,7 @@ class ProfileAdmin(admin.ModelAdmin):
 
 class CouponAdmin(admin.ModelAdmin):
     fields = ['serial', 'value']
-    list_display = ('value', 'transaction')
+    list_display = ('serial', 'transaction')
 
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Category, CategoryAdmin)
