@@ -33,9 +33,14 @@ class ProfileAdmin(admin.ModelAdmin):
     fields = ['profilePicture', 'balance', 'isBan']
     list_display = ('user', 'isBan')
 
+class CouponAdmin(admin.ModelAdmin):
+    fields = ['serial', 'value']
+    list_display = ('value', 'transaction')
+
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Review, ReviewAdmin)
 admin.site.register(Profile, ProfileAdmin)
+admin.site.register(Coupon, CouponAdmin)
 admin.site.register(FeaturedCourse)
