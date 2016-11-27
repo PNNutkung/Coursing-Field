@@ -117,3 +117,8 @@ class OrderVideoInCourse(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     video = models.ForeignKey(Video, on_delete=models.CASCADE)
     orderNo = models.IntegerField(default=0)
+
+class Coupon(models.Model):
+    serial = models.CharField(primary_key=True,max_length=11)
+    value = models.IntegerField()
+    transaction = models.ForeignKey('Transaction',null=True, blank=True, default = None)
