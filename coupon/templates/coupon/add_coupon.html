@@ -1,0 +1,26 @@
+{% extends 'ui/navbar.html' %}
+{% load staticfiles %}
+
+{% block body %}
+<div class="container-fluid" style="overflow:hidden">
+  {% if message %}
+    <div class="alert alert-success" role="alert">
+      {{ message }}
+      The serial is "{{ serial }}"
+    </div>
+  {% endif %}
+  <form action="{% url 'coupon:add_coupon' %}" method="post">
+    {% csrf_token %}
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <span>Add new coupon</span>
+      </div>
+      <div class="panel-body">
+        <label for="amount">Discount Percentage:</label>
+        <input id="amount" type="number" name="amount" placeholder="Type discount percentage" min="0" required />
+        <input type="submit" name="submit" value="Add"/>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}

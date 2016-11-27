@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^ui/', include('ui.urls')),
     url(r'^browse/', include('browse.urls')),
     url(r'^course/', include('course.urls')),
+    url(r'^coupon/', include('coupon.urls')),
     url(r'^watchvideo/',include('watchvideo.urls')),
     url(r'^takecourse/', include('takecourse.urls')),
     url(r'^admin/', admin.site.urls),
