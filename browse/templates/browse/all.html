@@ -61,7 +61,7 @@
           </nav>
 
           <div class="row center-block">
-              {% for course in courses %}
+              <!--{% for course in courses %}
               <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 card">
                   <div class="card-title">
                       <h4 class="card-title" style="text-overflow: ellipsis;">{{course.courseName}}</h4>
@@ -76,7 +76,24 @@
                       </p>
                   </div>
               </div>
-              {% endfor %}
+              {% endfor %}-->
+              {% if courses|length > 0 %}
+                <div class="col-lg-10">
+                    <div class="container" id="best_course"style="text-align:center;">
+                        <div id="course_text">Course</div>
+                        <div id="owl-no1" class="owl-carousel col-md-12">
+                        {% for course in courses %}
+                            <div class="well well-sm">
+                            <a href="{% url 'course:view_course' courseID=course.courseID %}"><img src="{{course.courseThumbnail.url}}" alt="{{course.courseName}}" style="width:150px; height:150px; margin-left:5%;"> </a>
+                                <div><h4><a href="{% url 'course:view_course' courseID=course.courseID %}">{{course.courseName}}</a></h4></div>
+                                <div>{{course.courseShortDesc}}</div>
+                                <div>Price: ฿{{course.coursePrice}}</div>
+                            </div>
+                        {% endfor %}
+                        </div>
+                    </div>
+                </div>
+               {% endif %}
           </div>
 
           <nav aria-label="Page navigation">
