@@ -300,7 +300,7 @@
           {% for lecture in lecturesList %}
               <div id="{{lecture.orderVideoInCourse.video.videoID}}Tab" class="tab-pane fade">
                   {% if isOwner %}
-                      <h3>Edit Video [{{lecture.orderVideoInCourse.video.videoName}}]</h3>
+                      <h3>Edit Video {{lecture.orderVideoInCourse.video.videoName}}</h3>
                       <br>
                       <div id="{{lecture.orderVideoInCourse.video_id}}"></div>
                       <script type="text/javascript">
@@ -353,13 +353,25 @@
                       <script type="text/javascript">
                           var playerInstance = jwplayer("{{lecture.orderVideoInCourse.video_id}}");
                           playerInstance.setup({
-                              file: "//example.com/uploads/myVideo.mp4",
+                              file: "{{lecture.orderVideoInCourse.video_id}}",
                           });
                       </script>
                       {% comment %}<video width="400" height="300" controls>
                           <source src="{{lecture.orderVideoInCourse.video.videoFile.url}}" type="video/mp4">
                       </video>{% endcomment %}
                   {% endif %}
+                  
+                  <nav>
+                    <ul class="pager">
+                        {% if lecture.nextAndPrev.0 is not None %}
+                            <li class="previous"><a data-toggle="pill" href="#{{lecture.nextAndPrev.0}}Tab"><span aria-hidden="true">&larr;</span> Previous Video</a></li>
+                        {% endif %}
+                        {% if lecture.nextAndPrev.1 is not None %}
+                            <li class="next"><a data-toggle="pill" href="#{{lecture.nextAndPrev.1}}Tab">Next Video <span aria-hidden="true">&rarr;</span></a></li>
+                        {% endif %}
+                    </ul>
+                  </nav>
+
                   <h4>Comment Section</h4>
                   {% for comment in lecture.comments %}
                       <li>
@@ -397,16 +409,19 @@
                   <h3>Upload New Video</h3>
                   <form action={% url 'course:upload_video' courseID=course.courseID %} method="POST" enctype="multipart/form-data">
                       {% csrf_token %}
-                      <div class="input-group  style="margin-top:1%"">
-                          <span class="input-group-addon">Video name: </span>
+                      <div class="input-group style="margin-top:1%"">
+                          <span class="input-group-addon">Video name </span>
                           <input class="form-control" type="text" name="videoName" placeholder="Video Name" required><br>
                       </div>
                       <div class="input-group" style="margin-top:1%">
-                          <span class="input-group-addon">Video description: </span>
+                          <span class="input-group-addon">Video Description </span>
                           <input type="text" class="form-control" name="videoDesc" placeholder="Video Description" required><br>
                       </div>
-
-                      <input  style="margin-top:1%;margin-bottom:1%" type="file" name="videoToUpload" required>
+                      <div class="input-group" style="margin-top:1%">
+                        <span class="input-group-addon">Video File</span>
+                        <input class="form-control" type="file" name="videoToUpload" required>
+                      </div>
+                      <br>
                       {% with lastLecture=lecturesList|last %}
                           <div class="alert alert-info" role="alert">Uploaded video will be added to orderNo: [{{lastLecture.orderVideoInCourse.orderNo|add:'1'}}]</div>
                       {% endwith %}

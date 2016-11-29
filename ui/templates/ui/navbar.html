@@ -121,7 +121,7 @@
   <div id="navbar">
     <nav id="navbar" class="navbar navbar-default navbar-default navbar-fixed-top">
       <div class="container-fluid">
-          <div class="col-md-3 navbar-header">
+          <div class="col-md-2 navbar-header">
             <div class="navbar-header">
                   <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1">
                       <span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>
@@ -132,7 +132,7 @@
             </div>
           </div>
           <!-- Collect the nav links, forms, and other content for toggling -->
-          <div class="nav navbar-nav collapse navbar-collapse pullRight col-md-6" id="bs-example-navbar-collapse-1">
+          <div class="nav navbar-nav collapse navbar-collapse pullRight col-md-5" id="bs-example-navbar-collapse-1">
               <!-- <div class="col-md-12"> -->
                 <ul class="nav navbar-nav">
                   <li><a href="{% url 'browse:browseIndex' %}">Browse</a></li>
@@ -149,10 +149,11 @@
                   </li>
                 </ul>
           </div>
-          <div class="col-md-3 nav navbar-nav navbar-right navbar-collapse pullRight collapse" id="navbar-collapse-1">
+          <div class="col-md-5 nav navbar-nav navbar-right navbar-collapse pullRight collapse" id="navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="{% url 'course:createCourse' %}" style="background-color: limegreen; color: white;">Create Course</a></li>
                 {% if user.is_authenticated %}
+                  <li><a href="{% url 'course:createCourse' %}" style="background-color: limegreen; color: white;">Create Course</a></li>
+                  <li><a href="{% url 'account:addBalanceView' %}" style="background-color: green; color: white; opacity: 0.75;"><i class="glyphicon glyphicon-plus-sign"></i> Balance</a></li>
                   <li><a href="{% url 'account:profile' %}">{{user}}</a></li>
                   <li><a href="{% url 'account:logout' %}" id="logout-btn">Logout</a></li>
                 {% else %}

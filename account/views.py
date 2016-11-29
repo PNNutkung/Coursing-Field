@@ -4,6 +4,7 @@ import django.contrib.auth as auth
 from mainmodels.models import Profile, Course, Category, Transaction
 from django.urls import reverse
 from datetime import datetime
+from django.db.models import F
 import json
 
 # Create your views here.
@@ -107,3 +108,22 @@ def updateProfilePicture(req):
 def logout(req):
     auth.logout(req)
     return redirect(reverse('index:index'))
+
+def addBalanceView(req):
+    if req.user.is_authenticated:
+        return render(req, 'account/addBalance.html',)
+    else:
+        return redirect(reverse('account:login'))
+
+def updateBalance(req):
+    if req.method == 'POST':
+        status = 'Successfully added your balance.'
+        balanceAmount = req.POST.get('balanceAmount')
+        user = User.objects.get(id=req.user.id)
+        print("Current:",user.profile.balance,"After:",(user.profile.balance+int(balanceAmount)))
+        user.profile.balance = F('balance') + int(balanceAmount)
+        user.save()
+        return render(req, 'account/addBalance.html', { 'status' : status } )
+    else:
+        status = 'Failed to add your balance.'
+        return render(req, 'account/addBalance.html', { 'status' : status } )

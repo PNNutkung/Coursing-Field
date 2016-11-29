@@ -31,7 +31,11 @@
 
           <div class="col-lg-10">
             <div class="col-md-4">
-              <h2 style="vertical-align: middle; font-size:250%;">Categories Name</h2>
+              {% if category is None %}
+                <h2 style="vertical-align: middle; font-size:250%;">Categories Name</h2>
+              {% else %}
+                <h2 style="vertical-align: middle; font-size:250%;">{{pageTitle}}</h2>
+              {% endif %}
               <hr />
             </div>
           </div>
@@ -85,7 +89,11 @@
               </div>
           </div>
       </div>
-      <a href="{% url 'browse:all' %}"><button type="button" class="btn btn-primary btn-block" style="margin-left:5em; margin-bottom=2%;">Browse All Course</button></a>
+      {% if category is None %}
+        <a href="{% url 'browse:all' %}"><button type="button" class="btn btn-primary btn-block" style="margin-left:5em; margin-bottom=2%;">Browse All Courses</button></a>  
+      {% else %}
+        <a href="{% url 'browse:browseCategoryAll' categoryID=category.categoryID %}"><button type="button" class="btn btn-primary btn-block" style="margin-left:5em; margin-bottom=2%;">Browse All Courses</button></a>
+      {% endif %}
     </div>
   </div>
 </div>
