@@ -4,7 +4,7 @@ from mainmodels.models import *
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.db.models import Avg, F
+from django.db.models import Avg
 # Create your views here.
 def createCourse(req):
     if not req.user.is_authenticated:
@@ -51,7 +51,7 @@ def view_course(req, courseID):
             leftBalance = int(userWithProfile.profile.balance - course.coursePrice)
         else:
             leftBalance = int(userWithProfile.profile.balance - course.discountPrice)
-        canTakeCourse = False 
+        canTakeCourse = False
         if leftBalance >= 0:
             canTakeCourse = True
         numberOfLectures = Video.objects.filter(course=course).count()
@@ -311,5 +311,5 @@ def remove_video(req, courseID, videoID):
             # orderVideo.update(orderNo=-1)
             orderVideo.orderNo = -1
             ordervideo.save()
-            
+
     return redirect(reverse('course:manage_course', kwargs={'courseID' : courseID}))

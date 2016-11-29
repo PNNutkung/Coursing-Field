@@ -1,0 +1,7 @@
+{% for course in courses %}
+  <li>
+    <span><a class="search-show-result" href="{% url 'course:view_course' courseID=course.courseID %}"><b>{{course.courseName}}</b> by {{course.username}}</a></span>
+  </li>
+{% empty %}
+<li>Nothing to show</li>
+{% endfor %}

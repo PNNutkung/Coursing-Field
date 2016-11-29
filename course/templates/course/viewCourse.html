@@ -46,7 +46,7 @@
                   <font style="font-weight:bold">Course Overview : </font>{{course.courseShortDesc}}
               </div>
               <div >
-                  <font style="font-weight:bold">Instructed by : </font><a href="">{{course.owner.first_name}} {{course.owner.last_name}}</a>
+                  <font style="font-weight:bold">Instructed by : </font>{{course.owner.first_name}} {{course.owner.last_name}}
               </div>
               <div >
                   <font style="font-weight:bold">Category : </font>{{inCategory}}
@@ -160,7 +160,7 @@
               <div style="font-size:160%; margin-bottom:1%">
                   <font style="font-weight:bold;">Current Rating : </font>
                   {% with avgRate=averageRating.rating__avg|floatformat:2|default_if_none:-1 %}
-                    {% if avgRate >= 0 %}
+                    {% if avgRate %}
                         {{avgRate}} star
                     {% else %}
                         No Reviews yet.
@@ -280,14 +280,6 @@
                     <label for="reviewRating" class="control-label">Give star(s) to this course</label>
                     <input id="reviewRating" name="reviewRating" value="0" class="rating-loading">
 
-                    <!-- <select id="reviewRating" class="dropdown form-control" name="reviewRating" required>
-                        <option value="">Rate for this course</option>
-                            <option value="5">5 Stars</option>
-                            <option value="4">4 Stars</option>
-                            <option value="3">3 Stars</option>
-                            <option value="2">2 Stars</option>
-                            <option value="1">1 Star</option>
-                    </select> -->
                 </div>
                 <div class="form-group">
                     <textarea id="reviewDesc" name="reviewDesc" rows="10" class="form-control" placeholder="Say something to this course..." required></textarea>

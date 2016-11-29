@@ -40,7 +40,8 @@
               </div>
           </div>
 
-          <nav aria-label="Page navigation">
+
+          <!--<nav aria-label="Page navigation">
               <div class="text-center">
                   <ul class="pagination">
                       <li {% if not courses.has_previous %} class="disabled" {% endif %}>
@@ -58,7 +59,7 @@
                       </li>
                   </ul>
               </div>
-          </nav>
+          </nav>-->
 
           <div class="row center-block">
               <!--{% for course in courses %}
@@ -80,7 +81,10 @@
               {% if courses|length > 0 %}
                 <div class="col-lg-10">
                     <div class="container" id="best_course"style="text-align:center;">
-                        <div id="course_text">Course</div>
+                        <br>
+                        <br>
+                        <br>
+                        <!--<div id="course_text">Available Courses</div>-->
                         <div id="owl-no1" class="owl-carousel col-md-12">
                         {% for course in courses %}
                             <div class="well well-sm">
@@ -96,7 +100,7 @@
                {% endif %}
           </div>
 
-          <nav aria-label="Page navigation">
+          <!--<nav aria-label="Page navigation">
               <div class="text-center">
                   <ul class="pagination">
                       <li {% if not courses.has_previous %} class="disabled" {% endif %}>
@@ -114,16 +118,34 @@
                       </li>
                   </ul>
               </div>
-          </nav>
+          </nav>-->
+
           {% else %}
-          <div class="row center-block">
+          <div class="row center-block" style="margin-bottom:40%">
               <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                   <h2><strong>No available course.</strong></h2>
               </div>
           </div>
+
           {% endif %}
       </div>
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block script %}
+<script>
+  $(document).ready(function() {
+    $("#owl-no1").owlCarousel({
+        slideSpeed : 300,
+        paginationSpeed : 400,
+        items : 5,
+        margin: 50,
+        dots: true,
+
+    });
+  });
+</script>
+
 {% endblock %}

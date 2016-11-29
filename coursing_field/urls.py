@@ -19,12 +19,12 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^', include('index.urls')),
     url(r'^', include('account.urls')),
+    url(r'^search/', include('search.urls')),
     url(r'^ui/', include('ui.urls')),
     url(r'^browse/', include('browse.urls')),
     url(r'^course/', include('course.urls')),
+    url(r'^coupon/', include('coupon.urls')),
     url(r'^watchvideo/',include('watchvideo.urls')),
-    url(r'^mockaccount/', include('mockaccount.urls')),
     url(r'^takecourse/', include('takecourse.urls')),
-    url(r'^login/', include('login.urls')),
     url(r'^admin/', admin.site.urls),
 ]

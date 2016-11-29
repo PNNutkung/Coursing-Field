@@ -102,6 +102,7 @@ tests/coverage_html/
 tests/.coverage
 build/
 tests/report/
+coursing_field/whoosh_index/
 db.sqlite3
 my.cnf
 test.cnf
