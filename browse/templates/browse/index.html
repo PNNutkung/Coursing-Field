@@ -42,10 +42,11 @@
                 <div id="owl-no1" class="owl-carousel col-md-12">
                   {% for featureCourse in featureCourses %}
                     <div class="well well-sm">
-                      <a href="{% url 'course:view_course' courseID=featureCourse.courseID %}"><img src="{{featureCourse.courseThumbnail.url}}" alt="{{featureCourse.courseName}}" style="width:150px; height:150px; margin-left:5%;"> </a>
+                        <a href="{% url 'course:view_course' courseID=featureCourse.courseID %}"><img src="{{featureCourse.courseThumbnail.url}}" alt="{{featureCourse.courseName}}"  style="text-align:center;width:90%; height:90%; margin-left:5%;"> </a>
                         <div><h4><a href="{% url 'course:view_course' courseID=featureCourse.courseID %}">{{featureCourse.courseName}}</a></h4></div>
                         <div>{{featureCourse.courseShortDesc}}</div>
                         <div>Price: ฿{{featureCourse.coursePrice}}</div>
+
                     </div>
                   {% endfor %}
                 </div>
@@ -59,10 +60,11 @@
                 <div id="owl-no2" class="owl-carousel col-md-12">
                   {% for mostPopularCourse in mostPopularCourses %}
                   <div class="well well-sm">
-                    <a href="{% url 'course:view_course' courseID=mostPopularCourse.courseID %}"><img src="{{mostPopularCourse.courseThumbnail.url}}" alt="{{mostPopularCourse.courseName}}" style="width:150px; height:150px; margin-left:5%;"></a>
+                    <a href="{% url 'course:view_course' courseID=mostPopularCourse.courseID %}"><img src="{{mostPopularCourse.courseThumbnail.url}}" alt="{{mostPopularCourse.courseName}}" style="width:90%; height:90%; margin-left:5%;"></a>
                     <div><a href="{% url 'course:view_course' courseID=mostPopularCourse.courseID %}"><h4>{{mostPopularCourse.courseName}}</h4></a></div>
                     <div>{{mostPopularCourse.courseShortDesc}}</div>
                     <div>Price: ฿{{mostPopularCourse.coursePrice}}</div>
+
                   </div>
                   {% endfor %}
                 </div>
@@ -75,7 +77,7 @@
                 <div id="owl-no3" class="owl-carousel col-md-12">
                   {% for bestRateCourse in bestRateCourses %}
                   <div class="well well-sm">
-                    <a href="{% url 'course:view_course' courseID=bestRateCourse.courseID %}"><img src="{{bestRateCourse.courseThumbnail.url}}" alt="{{bestRateCourse.courseName}}" style="width:150px; height:150px; margin-left:5%;"></a>
+                    <a href="{% url 'course:view_course' courseID=bestRateCourse.courseID %}"><img src="{{bestRateCourse.courseThumbnail.url}}" alt="{{bestRateCourse.courseName}}" style="width:90%; height:90%; margin-left:5%;"></a>
                     <div><a href="{% url 'course:view_course' courseID=bestRateCourse.courseID %}"><h4>{{bestRateCourse.courseName}}</h4></a></div>
                     <div>{{bestRateCourse.courseShortDesc}}</div>
                     <div>Price: ฿{{bestRateCourse.coursePrice}}</div>
@@ -99,9 +101,23 @@
   $("#owl-no1").owlCarousel({
       slideSpeed : 300,
       paginationSpeed : 400,
-      items : 5,
       margin: 50,
       dots: true,
+      responsive:{
+        0:{
+            items:1,
+            nav:false
+        },
+        600:{
+            items:3,
+            nav:false
+        },
+        1000:{
+            items:5,
+            nav:true,
+            loop:false
+        }
+      },
 
   });
   });
@@ -109,19 +125,46 @@
   $("#owl-no2").owlCarousel({
       slideSpeed : 300,
       paginationSpeed : 400,
-      items : 5,
       margin: 50,
       dots: true,
-
+      responsive:{
+        0:{
+            items:1,
+            nav:false
+        },
+        600:{
+            items:3,
+            nav:false
+        },
+        1000:{
+            items:5,
+            nav:true,
+            loop:false
+        }
+      },
   });
   });
   $(document).ready(function() {
   $("#owl-no3").owlCarousel({
       slideSpeed : 300,
       paginationSpeed : 400,
-      items : 5,
       margin: 50,
       dots: true,
+      responsive:{
+        0:{
+            items:1,
+            nav:false
+        },
+        600:{
+            items:3,
+            nav:false
+        },
+        1000:{
+            items:5,
+            nav:true,
+            loop:false
+        }
+      },
 
   });
   });

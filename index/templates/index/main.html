@@ -8,12 +8,12 @@
 {% block body %}
   <div class="jumbotron" id="banner">
     <div class="container" >
-        <div id="banner_text">
-          <div class="col-md-12">
-            <h1 id="welcome_text">Welcome to Coursing Field</h1>
+        <div style="text-align:center;color:white">
+          <div class="col-md-12" style="margin-top:3%">
+            <h1 >Welcome to Coursing Field</h1>
           </div>
           <div class="col-md-12">
-            <h2 id="header_text">Be the Educator! or the Educated!</h3>
+            <h2 >Be the Educator! or the Educated!</h3>
           </div>
           <div class="col-md-12">
             <a href="{% url 'browse:all' %}"><button type="button" class="btn btn-trans btn-trans-default" style="margin-left:0em;background: black; border: 2px solid white;"><div style="font-size:150%;color:white">Begin Your Journey Now !</div></button></a>
@@ -56,7 +56,7 @@
       {% endfor %}
     </div>
   </div>
-  {% endif %}  
+  {% endif %}
 {% endblock %}
 
 {% block script %}

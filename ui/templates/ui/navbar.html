@@ -28,7 +28,9 @@
     <link rel="stylesheet" href="{% static "ui/css/navstyle.css" %}"? "{% now "U" %}">
     {% block style %}
     {% endblock %}
+
     <style media="screen">
+
       #navbar {
         margin-bottom: 3%;
       }
@@ -67,6 +69,14 @@
       }
       .search-show-result {
         display: block;
+      }
+      @media only screen and (max-device-width: 480px) {
+        #navbar{
+            margin-bottom: 17%;
+        }
+        #coursing_footer{
+          display: none;
+        }
       }
     </style>
     <script type="text/javascript">
@@ -179,7 +189,7 @@
         <div class="container">
           <div class="row" style="">
             <div class="col-md-2 col-xs-2" style=""></div>
-            <div class="col-md-3 col-xs-2" style="">
+            <div class="col-md-3 col-xs-2" style="" id="coursing_footer">
               <a href="{% url 'index:index' %}">
                 <h3 style="text-align: left;">Coursing Field</h3>
               </a>
