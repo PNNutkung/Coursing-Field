@@ -116,7 +116,9 @@ def manage_course(req, courseID):
             if prevIndex >= 0 and nextIndex <= lastIndex:
                 next_prev = (orderVideosInCourse[currentIndex - 1].video_id, orderVideosInCourse[currentIndex + 1].video_id)
             elif prevIndex < 0:
-                next_prev = (None, orderVideosInCourse[currentIndex + 1].video_id)
+                if currentIndex + 1 <= orderVideosInCourse.count():
+                    next_prev = (None, orderVideosInCourse[currentIndex].video_id)
+                else: next_prev = (None, None)
             else:
                 next_prev = (orderVideosInCourse[currentIndex - 1].video_id, None)
             # print(next_prev)
