@@ -8,7 +8,7 @@ from django.db.models import Avg
 # Create your views here.
 def createCourse(req):
     if not req.user.is_authenticated:
-        return redirect(reverse('mockaccount:index'))
+        return redirect(reverse('index:index'))
     else:
         if req.method == 'POST':
             # try:
@@ -89,7 +89,7 @@ def view_course(req, courseID):
 
         return render(req, 'course/viewCourse.html', {'course' : course, 'hasTakenCourse' : hasTakencourse, 'inCategory' : inCategory, 'userWithProfile' : userWithProfile, 'leftBalance': leftBalance,'numberOfLectures':numberOfLectures, 'reviews':reviews, 'averageRating': averageRating,'reviewRateLevel':reviewRateLevel, 'isOwner' : isOwner, 'canTakeCourse': canTakeCourse, })
     else:
-        return redirect(reverse('mockaccount:index'))
+        return redirect(reverse('index:index'))
 
 def manage_course(req, courseID):
     if req.user.is_authenticated:
@@ -130,7 +130,7 @@ def manage_course(req, courseID):
         lecturesList = [{'orderVideoInCourse' : t[0], 'comments' : t[1], 'nextAndPrev' : t[2]} for t in zip (orderVideosInCourse,commentsList,nextAndPrevVideosIDList)]
         return render(req, 'watchvideo/show_content_in_tabs.html',{ 'course' : course, 'lecturesList' : lecturesList, 'isOwner' : isOwner, 'inCategory' : inCategory, 'categories' : categories, 'orderNoList' : orderNoList, 'orderVideosInCourse' : orderVideosInCourse })
     else:
-        return redirect(reverse('mockaccount:index'))
+        return redirect(reverse('index:index'))
 
 def manage_course_overview(req, courseID):
     if req.user.is_authenticated:
