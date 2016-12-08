@@ -349,7 +349,7 @@
                       <script type="text/javascript">
                           var playerInstance = jwplayer("{{lecture.orderVideoInCourse.video_id}}");
                           playerInstance.setup({
-                              file: "//example.com/uploads/myVideo.mp4",
+                              file: "{{lecture.orderVideoInCourse.video.videoFile.url}}",
                           });
                       </script>
                       {% comment %}<video width="400" height="300" controls>
