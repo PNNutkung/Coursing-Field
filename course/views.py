@@ -4,11 +4,11 @@ from mainmodels.models import *
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.db.models import Avg, F
+from django.db.models import Avg
 # Create your views here.
 def createCourse(req):
     if not req.user.is_authenticated:
-        return redirect(reverse('mockaccount:index'))
+        return redirect(reverse('index:index'))
     else:
         if req.method == 'POST':
             # try:
@@ -51,7 +51,7 @@ def view_course(req, courseID):
             leftBalance = int(userWithProfile.profile.balance - course.coursePrice)
         else:
             leftBalance = int(userWithProfile.profile.balance - course.discountPrice)
-        canTakeCourse = False 
+        canTakeCourse = False
         if leftBalance >= 0:
             canTakeCourse = True
         numberOfLectures = Video.objects.filter(course=course).count()
@@ -89,35 +89,48 @@ def view_course(req, courseID):
 
         return render(req, 'course/viewCourse.html', {'course' : course, 'hasTakenCourse' : hasTakencourse, 'inCategory' : inCategory, 'userWithProfile' : userWithProfile, 'leftBalance': leftBalance,'numberOfLectures':numberOfLectures, 'reviews':reviews, 'averageRating': averageRating,'reviewRateLevel':reviewRateLevel, 'isOwner' : isOwner, 'canTakeCourse': canTakeCourse, })
     else:
-        return redirect(reverse('mockaccount:index'))
+        return redirect(reverse('index:index'))
 
 def manage_course(req, courseID):
     if req.user.is_authenticated:
         course = Course.objects.get(courseID=courseID)
         isOwner = False
         if req.user.id == course.owner_id:
-            # print("You are the owner of this course")
             isOwner = True
         else:
             return redirect(reverse('course:view_course'))
-        # videos = Video.objects.filter(course=course, isDelete=False)
-        orderVideosInCourse = OrderVideoInCourse.objects.filter(course=course,orderNo__gte=1).order_by('orderNo')
+        orderVideosInCourse = OrderVideoInCourse.objects.filter(course=course,orderNo__gte=1).select_related('video').order_by('orderNo')
         commentsList = []
+        nextAndPrevVideosIDList = []
         inCategory = course.category.categoryName
         categories = Category.objects.all()
         orderNoList = []
-        orderNo = 1
-        # for video in videos:
+        orderNo = 0
+        currentIndex = 0
+        lastIndex = orderVideosInCourse.count() - 1
         for orderVideoInCourse in orderVideosInCourse:
+            orderNo += 1
             commentsOfVideo = Comment.objects.filter(video=orderVideoInCourse.video, isDelete=False)
+            prevIndex = currentIndex - 1
+            nextIndex = currentIndex + 1
+            if prevIndex >= 0 and nextIndex <= lastIndex:
+                next_prev = (orderVideosInCourse[currentIndex - 1].video_id, orderVideosInCourse[currentIndex + 1].video_id)
+            elif prevIndex < 0:
+                if currentIndex + 1 <= orderVideosInCourse.count():
+                    next_prev = (None, orderVideosInCourse[currentIndex].video_id)
+                else: next_prev = (None, None)
+            else:
+                next_prev = (orderVideosInCourse[currentIndex - 1].video_id, None)
+            # print(next_prev)
+            nextAndPrevVideosIDList.append(next_prev)
             commentsList.append(commentsOfVideo)
             orderNoList.append(orderNo)
-            orderNo += 1
+            currentIndex += 1
         # lecturesList = [{'video' : t[0], 'comments' : t[1]} for t in zip (videos,commentsList)]
-        lecturesList = [{'orderVideoInCourse' : t[0], 'comments' : t[1]} for t in zip (orderVideosInCourse,commentsList)]
+        lecturesList = [{'orderVideoInCourse' : t[0], 'comments' : t[1], 'nextAndPrev' : t[2]} for t in zip (orderVideosInCourse,commentsList,nextAndPrevVideosIDList)]
         return render(req, 'watchvideo/show_content_in_tabs.html',{ 'course' : course, 'lecturesList' : lecturesList, 'isOwner' : isOwner, 'inCategory' : inCategory, 'categories' : categories, 'orderNoList' : orderNoList, 'orderVideosInCourse' : orderVideosInCourse })
     else:
-        return redirect(reverse('mockaccount:index'))
+        return redirect(reverse('index:index'))
 
 def manage_course_overview(req, courseID):
     if req.user.is_authenticated:
@@ -300,5 +313,5 @@ def remove_video(req, courseID, videoID):
             # orderVideo.update(orderNo=-1)
             orderVideo.orderNo = -1
             ordervideo.save()
-            
+
     return redirect(reverse('course:manage_course', kwargs={'courseID' : courseID}))

@@ -10,4 +10,6 @@ urlpatterns = [
     url(r'^profileUpdate/', views.profileUpdate, name='profileUpdate'),
     url(r'^personalUpdate/', views.personalUpdate, name='personalUpdate'),
     url(r'^updateProfilePicture/', views.updateProfilePicture, name='updateProfilePicture'),
+    url(r'^addBalance/$', views.addBalanceView, name='addBalanceView'),
+    url(r'^updateBalance/$', views.updateBalance, name='updateBalance')
 ]

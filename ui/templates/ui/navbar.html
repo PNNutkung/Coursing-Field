@@ -1,9 +1,9 @@
 {% load staticfiles %}
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{pageTitle}}</title>
     {% block prescript %}
     {% endblock %}
@@ -36,49 +36,131 @@
         background-color: red;
         color: white;
       }
+
+      #search {
+          width:500px;
+          border:solid 1px #000;
+          padding:10px;
+          font-size:14px;
+      }
+      #search-results {
+          position:absolute;
+          width:500px;
+          padding:10px;
+          display:none;
+          margin-top:-1px;
+          border-top:0px;
+          overflow:hidden;
+          border:1px #CCC solid;
+          background-color: white;
+      }
+      .show {
+          padding:10px;
+          border-bottom:1px #999 dashed;
+          font-size:15px;
+          height:50px;
+      }
+      .show:hover {
+          background:#4c66a4;
+          color:#FFF;
+          cursor:pointer;
+      }
+      .search-show-result {
+        display: block;
+      }
     </style>
+    <script type="text/javascript">
+    $(document).ready(function(){
+      $('#search').keyup(function() {
+        if($('#search').val().length > 2){
+          $.ajax({
+              type: "POST",
+              url: "{% url 'search:search' %}",
+              data: {
+                'search_text' : $('#search').val(),
+                'csrfmiddlewaretoken' : $("input[name=csrfmiddlewaretoken]").val()
+              },
+              success: searchSuccess,
+              dataType: 'html'
+          });
+        }
+        return false;
+      });
+
+      function searchSuccess(data, textStatus, jqXHR) {
+        $('#search-results').html(data).show();
+      }
+
+      $('#search-results').on('click', function(e) {
+        var $clicked = $(e.target);
+        var $name = $clicked.find('.name').html();
+        var decoded = $('</div>').html($name).text();
+        $('#search').val(decoded);
+      });
+
+      $(document).on('click', 'a', function(e) {
+        var $clicked = $(e.target);
+        if (!$clicked.hasClass('searching')) {
+          $('#search-results').fadeOut();
+        }
+      });
+
+      $('#search').click(function() {
+        $('#search-results').fadeIn();
+      });
+
+      $('#search').focusout(function() {
+        $('#search-results').hide(500);
+      });
+    });
+
+    </script>
 </head>
 
-<body>
+<body id="the_body">
   <div id="navbar">
     <nav id="navbar" class="navbar navbar-default navbar-default navbar-fixed-top">
-        <!-- Handle Toggle -->
-    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1">
-    <!-- Do the toggle -->
-    </button>
-        <!-- End Handle Toggle -->
       <div class="container-fluid">
-          <div class="col-md-2">
-              <div class="navbar-header borderXwidth">
+          <div class="col-md-2 navbar-header">
+            <div class="navbar-header">
+                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1">
+                      <span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>
+                  </button>
                   <a class="navbar-brand" href="{% url 'index:index' %}">
                       <div id="head">Coursing Field</div>
                   </a>
-              </div>
+            </div>
           </div>
           <!-- Collect the nav links, forms, and other content for toggling -->
-          <div class="collapse navbar-collapse pullRight" id="bs-example-navbar-collapse-1">
-              <div class="col-md-1">
+          <div class="nav navbar-nav collapse navbar-collapse pullRight col-md-5" id="bs-example-navbar-collapse-1">
+              <!-- <div class="col-md-12"> -->
                 <ul class="nav navbar-nav">
                   <li><a href="{% url 'browse:browseIndex' %}">Browse</a></li>
+                  <li>
+                    <section class="main">
+                    <form class="search navbar-form" autocomplete="off">
+                      {% csrf_token %}
+                          <div class="form-group content">
+                            <input type="text" class="form-control searching" id="search" placeholder="Search..." name="search" autocomplete="off" />
+                            <ul id="search-results"></ul>
+                          </div>
+                      </form>
+                    </section>
+                  </li>
                 </ul>
-              </div>
-              <div class="col-md-5">
-                  <form class="navbar-form navbar-left">
-                      <div class="form-group">
-                          <input type="text" class="form-control" id="searchfield" placeholder="Search"><button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
-                      </div>
-                  </form>
-              </div>
-              <ul class="nav navbar-nav navbar-right">
+          </div>
+          <div class="col-md-5 nav navbar-nav navbar-right navbar-collapse pullRight collapse" id="navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                {% if user.is_authenticated %}
                   <li><a href="{% url 'course:createCourse' %}" style="background-color: limegreen; color: white;">Create Course</a></li>
-                  {% if user.is_authenticated %}
-                    <li><a href="{% url 'account:profile' %}">{{user}}</a></li>
-                    <li><a href="{% url 'account:logout' %}" id="logout-btn">Logout</a></li>
-                  {% else %}
-                    <li><a href="{% url 'account:register' %}">Register</a></li>
-                    <li><a href="{% url 'account:login' %}">Login</a></li>
-                  {% endif %}
-              </ul>
+                  <li><a href="{% url 'account:addBalanceView' %}" style="background-color: green; color: white; opacity: 0.75;"><i class="glyphicon glyphicon-plus-sign"></i> Balance</a></li>
+                  <li><a href="{% url 'account:profile' %}">{{user}}</a></li>
+                  <li><a href="{% url 'account:logout' %}" id="logout-btn">Logout</a></li>
+                {% else %}
+                  <li><a href="{% url 'account:register' %}">Register</a></li>
+                  <li><a href="{% url 'account:login' %}">Login</a></li>
+                {% endif %}
+            </ul>
           </div>
       </div>
     </nav>
@@ -87,19 +169,27 @@
   {% block body %}
   {% endblock %}
 
-  <footer>
-    <div class="footer" id="footer">
+
+  {% block carousel %}
+  {% endblock %}
+</body>
+
+
+  <footer style="margin-top:2%;">
+    <div class="footer" id="footer" style="z-index:-1">
         <div class="container">
-          <div class="row">
-            <div class="col-lg-4  col-md-4 col-sm-4 col-xs-6">
+          <div class="row" style="">
+            <div class="col-md-2 col-xs-2" style=""></div>
+            <div class="col-md-3 col-xs-2" style="">
               <a href="{% url 'index:index' %}">
-                <h3 style="text-align: center;">Coursing Field</h3>
+                <h3 style="text-align: left;">Coursing Field</h3>
               </a>
-              <div style="text-align: center;">
-                Cousing Field is the platform that allow any user to take any interested course they want and teaching any other individuals at the same time
+              <div style="text-align: left;">
+                Cousing Field is the platform that allow any user to take any courses they want and teaching anything at the same time
               </div>
             </div>
-            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">
+            <div class="col-md-2 col-xs-2" style=""></div>
+            <div class="col-md-2 col-xs-2">
               <h3>Course</h3>
               <ul>
                 <li><a href="{% url 'browse:browseIndex' %}">Browse Course</a></li>
@@ -107,28 +197,16 @@
                 <li><a href="{% url 'course:createCourse' %}">Create Course</a></li>
               </ul>
             </div>
-            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">
+            <div class="col-md-1 col-xs-2" style=""></div>
+            <div class="col-md-2 col-xs-2">
               <h3>Profile</h3>
               <ul>
                 <li><a href="{% url 'account:profile' %}">My Profile</a></li>
-              </ul>
-            </div>
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-              <h3>Contact Us</h3>
-              <ul class="social">
-                <li><a href="#"><i class=" fa fa-facebook"></i></a></li>
-                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
-                <li><a href="#"><i class="fa fa-youtube"></i></a></li>
               </ul>
             </div>
         </div>
       </div>
     </div>
   </footer>
-  {% block carousel %}
-  {% endblock %}
-</body>
 
 </html>

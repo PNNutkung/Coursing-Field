@@ -4,6 +4,7 @@ import django.contrib.auth as auth
 from mainmodels.models import Profile, Course, Category, Transaction
 from django.urls import reverse
 from datetime import datetime
+from django.db.models import F
 import json
 
 # Create your views here.
@@ -60,7 +61,8 @@ def profile(req):
     for course in findTakingCourses:
         joinCourse = Course.objects.filter(courseID=course.courseID)
         takingCourses.append(joinCourse)
-    return render(req, 'account/profile.html', {'teachingCourses': teachingCourses, 'takingCourses': takingCourses})
+    transactions = Course.objects.raw('SELECT * FROM mainmodels_transaction as main_tran JOIN mainmodels_course as main_course ON main_course.courseID = main_tran.courseID WHERE %s = main_tran.takerID ORDER BY main_tran.transactionDate DESC',[req.user.id])
+    return render(req, 'account/profile.html', {'teachingCourses': teachingCourses, 'takingCourses': takingCourses, 'transactions': transactions})
 
 def personalUpdate(req):
     user = User.objects.filter(username=req.user, email=req.user.email)
@@ -106,3 +108,22 @@ def updateProfilePicture(req):
 def logout(req):
     auth.logout(req)
     return redirect(reverse('index:index'))
+
+def addBalanceView(req):
+    if req.user.is_authenticated:
+        return render(req, 'account/addBalance.html',)
+    else:
+        return redirect(reverse('account:login'))
+
+def updateBalance(req):
+    if req.method == 'POST':
+        status = 'Successfully added your balance.'
+        balanceAmount = req.POST.get('balanceAmount')
+        user = User.objects.get(id=req.user.id)
+        print("Current:",user.profile.balance,"After:",(user.profile.balance+int(balanceAmount)))
+        user.profile.balance = F('balance') + int(balanceAmount)
+        user.save()
+        return render(req, 'account/addBalance.html', { 'status' : status } )
+    else:
+        status = 'Failed to add your balance.'
+        return render(req, 'account/addBalance.html', { 'status' : status } )

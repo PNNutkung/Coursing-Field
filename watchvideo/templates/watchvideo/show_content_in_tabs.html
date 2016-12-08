@@ -11,10 +11,13 @@
     }
 </style>
 <link rel="stylesheet" href="{% static "ui/css/navbar-fixed-side.css" %}"?"{% now "U" %}">
+<link href="{% static "ui/switch/bootstrap-switch.css" %}" rel="stylesheet">
+<script src="{% static "ui/switch/bootstrap-switch.js" %}"></script>
 
 {% endblock %}
 
 {% block body %}
+
 
 <div class="container-fluid">
   <div class="row" >
@@ -45,10 +48,79 @@
           <div id="overviewTab" class="tab-pane fade in active">
 
               {% if isOwner %}
-              <h3>
-                  <span class="glyphicon glyphicon-edit"></span>
-                  Course Information
-              </h3>
+              <div class="">
+                <div class="col-sm-3" style="font-size:150%">
+                    <span class="glyphicon glyphicon-edit"></span>
+                    <b>Course Information</b>
+                </div>
+                <div class="col-sm-9">
+                  <button type='button' class='btn btn btn-primary'  id="featureBtn" data-toggle='modal' data-target='#featureModal'>Upgrade This Course <span class="glyphicon glyphicon-fire" aria-hidden="true" style="color:red"></span> </button>
+                  <div id="featureModal" class="modal fade" role="dialog">
+                      <div class="modal-dialog">
+
+                          <div class="modal-content">
+                              <div class="modal-header">
+                                  <button type="button" class="close" data-dismiss="modal">
+                                      <span aria-hidden="true">&times;</span>
+                                      <span class="sr-only">Close</span>
+                                  </button>
+                                  <h4 class="modal-title" id="myModalLabel">
+                                      <b>Upgrade Your Course</b> <span class="glyphicon glyphicon-fire" aria-hidden="true" style="color:red"></span>
+                                  </h4>
+                              </div>
+                              <div class='modal-body'>
+                                  <form action={% url 'watchvideo:upgrade_course' courseID=course.courseID %} method="POST">
+                                      {% csrf_token %}
+                                      <table class="list">
+
+                                          <tr class="list-item">
+                                              <td class="list-left"><b>Course name</b></td>
+                                              <td class="list-right">{{course.courseName}}</td>
+                                          </tr>
+                                          <tr class="list-item">
+                                              <td class="list-left"><b>Feature Duration</b></td>
+                                              <td class="list-right">
+                                                <select id="feature_type" class="form-control" name='feature_type' required>
+                                                  <option value="500" selected="selected">30 Day - 500 Baht</option>
+                                                  <!-- <option value="900">60 Day - 900 Baht</option>
+                                                  <option value="1200">100 Day - 1,200 Baht</option>
+                                                  <option value="2000">150 Day - 2,000 Baht</option> -->
+                                                </select>
+                                              </td>
+                                          </tr>
+                                          <tr class="list-item">
+                                              <td class="list-left"><b>Your Balance : </td>
+                                              <td class="list-right">{{request.user.profile.balance}}</td>
+                                          </tr>
+                                          <tr class="list-item">
+                                              <td >
+                                                <input type="submit" class="btn btn-block btn-primary" value="Confirm">
+                                                <!-- {% if canTakeCourse %} -->
+                                                <!-- {% else %} -->
+                                                    <!-- <input type="submit" class="btn btn-block btn-danger" value="Not enough balance" disabled> -->
+                                                <!-- {% endif %} -->
+                                              </td>
+                                          </tr>
+
+                                      </table>
+                                      <!-- {% if canTakeCourse %} -->
+                                      <!-- {% else %} -->
+                                          <!-- <input type="submit" class="btn btn-block btn-danger" value="Not enough balance" disabled> -->
+                                      <!-- {% endif %} -->
+                                  </form>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                </div>
+                <style>
+                  #featureBtn{
+                    background: none;
+                    border: 2px solid #E53935;
+                  	color: black;
+                  }
+                </style>
+              </div>
                   <br>
                   <form action={% url 'course:edited_course' course.courseID %} method="POST" enctype="multipart/form-data">
                       {% csrf_token %}
@@ -101,7 +173,7 @@
                           <div class="col-md-1">
                               <div class="input-group">
                                   <span class="input-group-addon">
-                                      <input type="checkbox" name="isPublish">
+                                      <input type="checkbox"  name="isPublish">
                                   </span>
                                   <span class="input-group-addon">Publish Status</span>
                               </div>
@@ -170,19 +242,16 @@
                 <h3>
                     Course Information
                 </h3>
-                  <p>{{course.courseName}}<br>
+                <div id="{{course.previewVideoFile.name}}"></div>
+                <script type="text/javascript">
+                    var playerInstance = jwplayer("{{course.previewVideoFile.name}}");
+                    playerInstance.setup({
+                        file: "{{course.previewVideoFile.url}}",
+                    });
+                </script>
                   <p>{{courseInCategory.category.categoryName}}</p><br>
-                  <video width="400" height="300" controls>
-                      <source src="{{course.previewVideoFile.url}}" type="video/mp4">
-                  </video>
                   <p>{{course.courseDesc}}</p>
                   <p>Owned by {{course.owner.first_name}} {{course.owner.last_name}}</p>
-                  <div class="col-sm-9 col-lg-10" style="text-align:center;margin-left:10%">
-                    <h1>{{course.courseName}}</h1><hr />
-                  </div>
-                    <div class="col-sm-9 col-lg-10" style="margin-bottom:3%">
-                      <a href="#"><img src="{{course.courseThumbnail.url}}" alt="" style="width:700px; height:400px; margin-left:20%;"> </a>
-                    </div>
                     <!-- Course Desciption -->
                     <div class="col-sm-9 col-lg-10 well" style="text-align:left; margin-left:10%; margin-bottom:3%">
                       <div class="col-lg-4">
@@ -280,7 +349,7 @@
                       <script type="text/javascript">
                           var playerInstance = jwplayer("{{lecture.orderVideoInCourse.video_id}}");
                           playerInstance.setup({
-                              file: "//example.com/uploads/myVideo.mp4",
+                              file: "{{lecture.orderVideoInCourse.video.videoFile.url}}",
                           });
                       </script>
                       {% comment %}<video width="400" height="300" controls>
@@ -346,7 +415,21 @@
     </div>
 </div>
 
-
+<script type="text/javascript">
+ var a = "{{course.isPublish}}" ;
+ var value;
+ if( a === "True")
+ {
+   value = true;
+ }
+ else {
+   value = false;
+ }
+ console.log(value);
+  $("[name='isPublish']").bootstrapSwitch({
+    state: value,
+  });
+</script>
 
 {% endblock %}
 {% block script %}
@@ -372,7 +455,7 @@
                     $(this).append( $('<option>', {value:valueToRemove, text:valueToRemove}) );
                     $(this).find('option[value='+valueToRemove+']').prop('selected', true);
                 });
-                $('#resetBtn').click(function() {
+                // $('#resetBtn').click(function() {
                     console.log("resetting order...");
                     $('.orderVideo').empty();
                     for(i=0; i<originalOrderNoOptions.length; i++) {
@@ -382,5 +465,6 @@
                 });
             });
         </script>
+
     {% endif %}
 {% endblock %}

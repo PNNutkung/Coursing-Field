@@ -14,8 +14,6 @@
 <!-- optionally if you need to use a theme, then include the theme file as mentioned below -->
 <script src="{% static "ui/kartik/themes/krajee-svg/theme.js" %}"></script>
 
-
-
 <style media="screen">
     .center-cropped {
         height: 150px;
@@ -48,7 +46,7 @@
                   <font style="font-weight:bold">Course Overview : </font>{{course.courseShortDesc}}
               </div>
               <div >
-                  <font style="font-weight:bold">Instructed by : </font><a href="">{{course.owner.first_name}} {{course.owner.last_name}}</a>
+                  <font style="font-weight:bold">Instructed by : </font>{{course.owner.first_name}} {{course.owner.last_name}}
               </div>
               <div >
                   <font style="font-weight:bold">Category : </font>{{inCategory}}
@@ -56,15 +54,23 @@
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
-            {% comment %}<div class="center-cropped" style="background-image: url({{course.courseThumbnail.url}});">
-                <img src="{{course.courseThumbnail.url}}" alt="Course Thumbmail">
-            </div>{% endcomment %}
-            <div>
+            <!--<div>
                 <img class="center-cropped" src="{{course.courseThumbnail.url}}" alt="Course Thumbmail" height="400" width="300">
-            </div>
+            </div>-->
+            <div id="{{course.previewVideoFile.name}}"></div>
+            <script type="text/javascript">
+                var playerInstance = jwplayer("{{course.previewVideoFile.name}}");
+                playerInstance.setup({
+                    file: "{{course.previewVideoFile.url}}",
+                });
+            </script>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-            <span><h3><b>฿ {{course.coursePrice}}</b></h3></span>
+            {% if course.coursePrice > 0 %}
+                <span><h3><b>฿ {{course.coursePrice}}</b></h3></span>
+            {% else %}
+                <span><h3><b> FREE </b></h3></span>
+            {% endif %}
             {% if isOwner %}
                 <a class="btn btn-primary" href={% url 'course:manage_course' courseID=course.courseID %}>Manage Course</a>
             {% else %}
@@ -154,7 +160,7 @@
               <div style="font-size:160%; margin-bottom:1%">
                   <font style="font-weight:bold;">Current Rating : </font>
                   {% with avgRate=averageRating.rating__avg|floatformat:2|default_if_none:-1 %}
-                    {% if avgRate >= 0 %}
+                    {% if avgRate %}
                         {{avgRate}} star
                     {% else %}
                         No Reviews yet.
@@ -274,14 +280,6 @@
                     <label for="reviewRating" class="control-label">Give star(s) to this course</label>
                     <input id="reviewRating" name="reviewRating" value="0" class="rating-loading">
 
-                    <!-- <select id="reviewRating" class="dropdown form-control" name="reviewRating" required>
-                        <option value="">Rate for this course</option>
-                            <option value="5">5 Stars</option>
-                            <option value="4">4 Stars</option>
-                            <option value="3">3 Stars</option>
-                            <option value="2">2 Stars</option>
-                            <option value="1">1 Star</option>
-                    </select> -->
                 </div>
                 <div class="form-group">
                     <textarea id="reviewDesc" name="reviewDesc" rows="10" class="form-control" placeholder="Say something to this course..." required></textarea>
@@ -300,6 +298,8 @@
 
 
 {% block script %}
+{{block.super}}
+<script src="https://content.jwplatform.com/libraries/7QfOxDsK.js"> </script>
 <script>
 $(document).on('ready', function(){
     $('#rating').rating({displayOnly: true, step: 0.5});
